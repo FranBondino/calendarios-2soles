@@ -7,21 +7,23 @@ function App() {
   // Side-effect to set theme classes on document body
   useEffect(() => {
     document.body.className = theme === 'prestige'
-      ? 'bg-[#FAF9F7] text-gray-800 theme-prestige overflow-x-hidden'
+      ? 'bg-[#F8FAFC] text-gray-800 theme-prestige overflow-x-hidden'
       : 'bg-[#0C0C0D] text-gray-100 theme-crimson overflow-x-hidden';
   }, [theme]);
 
+
   return (
     <div className={`min-h-screen py-8 md:py-16 px-4 md:px-8 transition-all duration-500 relative ${
-      theme === 'prestige' ? 'bg-[#FAF9F7]' : 'bg-[#0C0C0D]'
+      theme === 'prestige' ? 'bg-[#F8FAFC]' : 'bg-[#0C0C0D]'
     }`}>
       
       {/* Luxury Ambient Glow Backgrounds */}
       {theme === 'prestige' ? (
         <>
-          <div className="absolute top-[-100px] left-[10%] w-[500px] h-[500px] bg-[#C5A880]/10 rounded-full blur-[120px] pointer-events-none -z-10" />
-          <div className="absolute bottom-[-100px] right-[10%] w-[600px] h-[600px] bg-[#E3E0DB]/40 rounded-full blur-[140px] pointer-events-none -z-10" />
+          <div className="absolute top-[-100px] left-[10%] w-[500px] h-[500px] bg-brand-crimson-red/5 rounded-full blur-[120px] pointer-events-none -z-10" />
+          <div className="absolute bottom-[-100px] right-[10%] w-[600px] h-[600px] bg-[#E2E8F0]/40 rounded-full blur-[140px] pointer-events-none -z-10" />
         </>
+
       ) : (
         <>
           <div className="absolute top-[-200px] left-[5%] w-[600px] h-[600px] bg-brand-crimson-red/10 rounded-full blur-[160px] pointer-events-none -z-10" />

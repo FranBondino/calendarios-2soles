@@ -10,13 +10,14 @@ export default {
         brand: {
           // Logo 03 - Prestige Slate & Gold Style
           prestige: {
-            dark: '#524E48',      // Deep warm slate/charcoal
-            medium: '#62594E',    // Primary warm bronze/taupe
-            gold: '#C5A880',      // Gold/champagne accent
-            goldhover: '#B5966E', // Darker gold for hover states
-            light: '#F7F6F4',     // Ultra-light luxury gray/white
-            border: '#E3E0DB',    // Elegant soft border
+            dark: '#1F2937',      // Deep slate/charcoal (Zinc 800)
+            medium: '#374151',    // Slate gray (Zinc 700)
+            gold: '#E13731',      // Crimson Red (from logo)
+            goldhover: '#C02C26', // Darker red for hover states
+            light: '#F8FAFC',     // Clean cool gray
+            border: '#E2E8F0',    // Slate border
           },
+
           // Logo 04 - Crimson Sunset Style
           crimson: {
             red: '#E13731',       // High-energy vibrant red
