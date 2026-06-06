@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { 
   Calendar as CalendarIcon, 
   List, 
@@ -123,6 +123,11 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const isPrestige = activeTheme === 'prestige';
+  const [logoError, setLogoError] = useState(false);
+
+  useEffect(() => {
+    setLogoError(false);
+  }, [activeTheme]);
 
   // Generate the full list of days in June 2026
   // June 1st, 2026 is a Monday (Lunes)
@@ -215,7 +220,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
   const subtitleTextClass = isPrestige ? 'text-gray-500' : 'text-gray-400';
   
   const toggleBtnActive = isPrestige
-    ? 'bg-brand-prestige-gold text-white shadow-sm'
+    ? 'bg-brand-prestige-crimson text-white shadow-sm'
     : 'bg-brand-crimson-red text-white shadow-sm';
 
   const toggleBtnInactive = isPrestige
@@ -231,30 +236,30 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 pb-6 border-b border-dashed border-gray-300 dark:border-gray-800">
         <div className="flex items-center space-x-5">
           {/* Real Logo display with fallback */}
-          <div className={`h-16 w-16 rounded-xl overflow-hidden flex items-center justify-center border-2 ${
+          <div className={`h-16 w-16 rounded-xl overflow-hidden flex items-center justify-center p-1.5 border-2 ${
             isPrestige 
-              ? 'border-brand-prestige-gold bg-white shadow-[0_4px_10px_rgba(0,0,0,0.05)]' 
+              ? 'border-brand-prestige-crimson bg-white shadow-[0_4px_10px_rgba(0,0,0,0.05)]' 
               : 'border-brand-crimson-red bg-[#E13731] shadow-[0_0_15px_rgba(225,55,49,0.25)]'
           } shadow-lg shadow-black/10`}>
-            <img 
-              src={isPrestige ? 'logo-03.jpg' : 'logo-04.jpg'} 
-              alt="Dos Soles Logo" 
-              className="h-full w-full object-cover"
-              onError={(e) => {
-                // Inline SVG fallback if file fails to load
-                e.target.style.display = 'none';
-                e.target.parentNode.innerHTML = `<span class="font-bold text-center leading-none ${
-                  isPrestige ? 'text-brand-prestige-gold text-xs' : 'text-brand-crimson-red text-xs'
-                }">Dos<br/>Soles</span>`;
-              }}
-            />
+            {logoError ? (
+              <span className={`font-bold text-center leading-none ${
+                isPrestige ? 'text-brand-prestige-crimson text-xs' : 'text-brand-crimson-red text-xs'
+              }`}>Dos<br/>Soles</span>
+            ) : (
+              <img 
+                src={isPrestige ? 'logo-03.jpg' : 'logo-04.jpg'} 
+                alt="Dos Soles Logo" 
+                className="h-full w-full object-contain"
+                onError={() => setLogoError(true)}
+              />
+            )}
           </div>
           <div>
             <h1 className={`text-2xl md:text-3.5xl tracking-tight leading-tight ${headerTextClass}`}>
               Dos Soles • Planificación de Redes
             </h1>
             <p className={`text-sm mt-1 flex items-center space-x-1.5 ${subtitleTextClass}`}>
-              <CalendarDays size={14} className={isPrestige ? 'text-brand-prestige-gold' : 'text-brand-crimson-red'} />
+              <CalendarDays size={14} className={isPrestige ? 'text-brand-prestige-crimson' : 'text-brand-crimson-red'} />
               <span>Cronograma Estratégico de Contenidos • Junio 2026</span>
             </p>
           </div>
@@ -369,11 +374,11 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
             placeholder="Buscar por contenido, marca, objetivo..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-sm transition-all focus:outline-none focus:ring-1 ${
-              isPrestige 
-                ? 'bg-white border border-brand-prestige-border focus:border-brand-prestige-gold focus:ring-brand-prestige-gold' 
-                : 'bg-brand-crimson-bg border border-brand-crimson-border focus:border-brand-crimson-red focus:ring-brand-crimson-red text-white'
-            }`}
+              className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-sm transition-all focus:outline-none focus:ring-1 ${
+                isPrestige 
+                  ? 'bg-white border border-brand-prestige-border focus:border-brand-prestige-crimson focus:ring-brand-prestige-crimson' 
+                  : 'bg-brand-crimson-bg border border-brand-crimson-border focus:border-brand-crimson-red focus:ring-brand-crimson-red text-white'
+              }`}
           />
         </div>
 
@@ -473,7 +478,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
               let anniversaryHighlight = '';
               if (isAnniversaryDay) {
                 anniversaryHighlight = isPrestige 
-                  ? 'ring-2 ring-brand-prestige-gold/50 bg-amber-50/50' 
+                  ? 'ring-2 ring-brand-prestige-crimson/50 bg-slate-100/50' 
                   : 'ring-2 ring-brand-crimson-red/50 bg-brand-crimson-red/5';
               }
 
@@ -504,10 +509,10 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                     {isAnniversaryDay && (
                       <span className="flex h-2 w-2 relative">
                         <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
-                          isPrestige ? 'bg-brand-prestige-gold' : 'bg-brand-crimson-red'
+                          isPrestige ? 'bg-brand-prestige-crimson' : 'bg-brand-crimson-red'
                         }`}></span>
                         <span className={`relative inline-flex rounded-full h-2 w-2 ${
-                          isPrestige ? 'bg-brand-prestige-gold' : 'bg-brand-crimson-red'
+                          isPrestige ? 'bg-brand-prestige-crimson' : 'bg-brand-crimson-red'
                         }`}></span>
                       </span>
                     )}
@@ -553,9 +558,10 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                   ) : (
                     /* Cell Content Empty */
                     <div className="flex-1 flex items-center justify-center py-2 sm:py-0">
-                      <span className="text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-gray-300 dark:text-zinc-800">
+                      <span className="hidden sm:inline text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-gray-300 dark:text-zinc-800">
                         {dayObj.weekday === 'Dom' && dayObj.day !== 28 ? 'Descanso' : 'Sin post'}
                       </span>
+                      <span className="sm:hidden h-1.5 w-1.5 rounded-full bg-gray-200 dark:bg-zinc-800" />
                     </div>
                   )}
 
@@ -619,7 +625,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button 
                         className={`text-xs font-bold uppercase tracking-wider transition-colors ${
-                          isPrestige ? 'text-brand-prestige-gold hover:text-brand-prestige-dark' : 'text-brand-crimson-red hover:text-white'
+                          isPrestige ? 'text-brand-prestige-crimson hover:text-brand-prestige-dark' : 'text-brand-crimson-red hover:text-white'
                         }`}
                       >
                         Ver Detalle
@@ -643,10 +649,10 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
       {/* 5. Info Box (Anniversary Callout) */}
       <div className={`mt-8 p-5 rounded-2xl flex items-start space-x-4 border border-dashed ${
         isPrestige 
-          ? 'bg-brand-prestige-light/40 border-brand-prestige-gold/40 text-brand-prestige-dark' 
+          ? 'bg-brand-prestige-light/40 border-brand-prestige-crimson/40 text-brand-prestige-dark' 
           : 'bg-brand-crimson-red/5 border-brand-crimson-red/30 text-gray-200'
       }`}>
-        <div className={isPrestige ? 'text-brand-prestige-gold' : 'text-brand-crimson-red'}>
+        <div className={isPrestige ? 'text-brand-prestige-crimson' : 'text-brand-crimson-red'}>
           <Flame size={20} />
         </div>
         <div className="space-y-1">

@@ -12,8 +12,8 @@ export default {
           prestige: {
             dark: '#1F2937',      // Deep slate/charcoal (Zinc 800)
             medium: '#374151',    // Slate gray (Zinc 700)
-            gold: '#E13731',      // Crimson Red (from logo)
-            goldhover: '#C02C26', // Darker red for hover states
+            crimson: '#E13731',      // Crimson Red (from logo)
+            crimsonhover: '#C02C26', // Darker red for hover states
             light: '#F8FAFC',     // Clean cool gray
             border: '#E2E8F0',    // Slate border
           },

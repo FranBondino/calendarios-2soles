@@ -115,7 +115,7 @@ const PostDetailDrawer = ({ post, isOpen, onClose, theme }) => {
   const textSubClass = isPrestige ? 'text-gray-500' : 'text-gray-400';
   const contentBgClass = isPrestige ? 'bg-brand-prestige-light/60 border border-brand-prestige-border' : 'bg-brand-crimson-bg border border-brand-crimson-border';
   const primaryButtonClass = isPrestige 
-    ? 'bg-brand-prestige-gold hover:bg-brand-prestige-goldhover text-white' 
+    ? 'bg-brand-prestige-crimson hover:bg-brand-prestige-crimsonhover text-white' 
     : 'bg-brand-crimson-red hover:bg-brand-crimson-hover text-white';
 
   return (
@@ -136,7 +136,7 @@ const PostDetailDrawer = ({ post, isOpen, onClose, theme }) => {
       >
         <div className={`flex items-center justify-between border-b p-6 ${borderClass}`}>
           <div>
-            <span className={`text-xs font-bold tracking-widest uppercase ${isPrestige ? 'text-brand-prestige-gold' : 'text-brand-crimson-red'}`}>
+            <span className={`text-xs font-bold tracking-widest uppercase ${isPrestige ? 'text-brand-prestige-crimson' : 'text-brand-crimson-red'}`}>
               Detalle del Posteo
             </span>
             <h3 className={`text-xl ${textTitleClass} mt-0.5`}>
@@ -157,7 +157,7 @@ const PostDetailDrawer = ({ post, isOpen, onClose, theme }) => {
           {/* Metadata Badges */}
           <div className="grid grid-cols-2 gap-4">
             <div className={`p-4 rounded-xl flex items-center space-x-3 ${contentBgClass}`}>
-              <div className={isPrestige ? 'text-brand-prestige-gold' : 'text-brand-crimson-red'}>
+              <div className={isPrestige ? 'text-brand-prestige-crimson' : 'text-brand-crimson-red'}>
                 <Clock size={20} />
               </div>
               <div>
@@ -167,7 +167,7 @@ const PostDetailDrawer = ({ post, isOpen, onClose, theme }) => {
             </div>
 
             <div className={`p-4 rounded-xl flex items-center space-x-3 ${contentBgClass}`}>
-              <div className={isPrestige ? 'text-brand-prestige-gold' : 'text-brand-crimson-red'}>
+              <div className={isPrestige ? 'text-brand-prestige-crimson' : 'text-brand-crimson-red'}>
                 <Target size={20} />
               </div>
               <div>
@@ -177,14 +177,14 @@ const PostDetailDrawer = ({ post, isOpen, onClose, theme }) => {
             </div>
 
             <div className={`p-4 rounded-xl flex items-center space-x-3 ${contentBgClass}`}>
-              <div className={isPrestige ? 'text-brand-prestige-gold' : 'text-brand-crimson-red'}>
+              <div className={isPrestige ? 'text-brand-prestige-crimson' : 'text-brand-crimson-red'}>
                 <Sparkles size={20} />
               </div>
               <div>
                 <p className="text-[10px] uppercase font-bold tracking-wider text-gray-400">Formato</p>
                 <span className={`inline-block px-2 py-0.5 mt-0.5 rounded text-xs font-semibold uppercase ${
                   isPrestige 
-                    ? 'bg-brand-prestige-gold/20 text-brand-prestige-dark border border-brand-prestige-gold/30' 
+                    ? 'bg-brand-prestige-crimson/20 text-brand-prestige-dark border border-brand-prestige-crimson/30' 
                     : 'bg-brand-crimson-red/20 text-brand-crimson-red border border-brand-crimson-red/30'
                 }`}>
                   {post.format}
@@ -193,7 +193,7 @@ const PostDetailDrawer = ({ post, isOpen, onClose, theme }) => {
             </div>
 
             <div className={`p-4 rounded-xl flex items-center space-x-3 ${contentBgClass}`}>
-              <div className={isPrestige ? 'text-brand-prestige-gold' : 'text-brand-crimson-red'}>
+              <div className={isPrestige ? 'text-brand-prestige-crimson' : 'text-brand-crimson-red'}>
                 <Award size={20} />
               </div>
               <div>
@@ -240,7 +240,7 @@ const PostDetailDrawer = ({ post, isOpen, onClose, theme }) => {
                   key={idx}
                   className={`text-xs px-2.5 py-1 rounded-full font-medium ${
                     isPrestige 
-                      ? 'bg-gray-100 text-gray-600 hover:bg-brand-prestige-gold/10 hover:text-brand-prestige-dark' 
+                      ? 'bg-gray-100 text-gray-600 hover:bg-brand-prestige-crimson/10 hover:text-brand-prestige-dark' 
                       : 'bg-brand-crimson-bg text-gray-300 hover:bg-brand-crimson-red/10 hover:text-brand-crimson-red'
                   } transition-colors cursor-pointer`}
                 >
@@ -255,7 +255,7 @@ const PostDetailDrawer = ({ post, isOpen, onClose, theme }) => {
             isPrestige ? 'bg-white border-brand-prestige-border' : 'bg-brand-crimson-card border-brand-crimson-border'
           }`}>
             <div className="flex items-center space-x-2 pb-2 border-b border-dashed border-gray-300 dark:border-gray-700">
-              <ListTodo size={16} className={isPrestige ? 'text-brand-prestige-gold' : 'text-brand-crimson-red'} />
+              <ListTodo size={16} className={isPrestige ? 'text-brand-prestige-crimson' : 'text-brand-crimson-red'} />
               <h4 className="text-xs font-bold uppercase tracking-wider">Checklist de Producción ({post.format})</h4>
             </div>
             
@@ -271,7 +271,7 @@ const PostDetailDrawer = ({ post, isOpen, onClose, theme }) => {
                     onChange={() => toggleCheck(item.id)}
                     className={`mt-0.5 h-4 w-4 rounded transition-colors focus:ring-0 ${
                       isPrestige 
-                        ? 'text-brand-prestige-gold border-gray-300 focus:ring-offset-0' 
+                        ? 'text-brand-prestige-crimson border-gray-300 focus:ring-offset-0' 
                         : 'text-brand-crimson-red border-brand-crimson-border bg-brand-crimson-bg focus:ring-offset-0'
                     }`}
                   />
