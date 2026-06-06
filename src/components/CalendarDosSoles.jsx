@@ -513,14 +513,23 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
 
                   {/* Cell Content (If post scheduled) */}
                   {post ? (
-                    <div className="flex-1 flex flex-col justify-between mt-2 space-y-2">
-                      <p className={`text-[10px] md:text-xs leading-snug line-clamp-3 md:line-clamp-4 ${
+                    <div className="flex-1 flex flex-col justify-between mt-1 md:mt-2 space-y-1.5 md:space-y-2">
+                      {/* Desktop/Tablet only: full text description */}
+                      <p className={`text-[10px] md:text-xs leading-snug line-clamp-3 md:line-clamp-4 hidden sm:block ${
                         isPrestige ? 'text-gray-700' : 'text-gray-300'
                       }`}>
                         {post.content}
                       </p>
                       
-                      <div className="flex flex-col space-y-1">
+                      {/* Mobile only: simplified clean icon badge */}
+                      <div className="flex-1 flex items-center justify-center sm:hidden py-2">
+                        <span className={`p-1.5 rounded-full border shadow-sm ${badge.colorClass}`}>
+                          {badge.icon}
+                        </span>
+                      </div>
+                      
+                      {/* Desktop/Tablet only: badges footer */}
+                      <div className="hidden sm:flex flex-col space-y-1 mt-auto">
                         {/* Format Indicator Badge */}
                         <div className="flex items-center space-x-1">
                           <span className={`flex items-center space-x-1 text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded border uppercase tracking-wider ${badge.colorClass}`}>
@@ -541,12 +550,13 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                     </div>
                   ) : (
                     /* Cell Content Empty */
-                    <div className="flex-1 flex items-center justify-center">
-                      <span className="text-[10px] uppercase font-bold tracking-widest text-gray-300 dark:text-zinc-800 group-hover:text-gray-500">
+                    <div className="flex-1 flex items-center justify-center py-2 sm:py-0">
+                      <span className="text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-gray-300 dark:text-zinc-800">
                         {dayObj.weekday === 'Dom' && dayObj.day !== 28 ? 'Descanso' : 'Sin post'}
                       </span>
                     </div>
                   )}
+
                 </div>
               );
             })}
