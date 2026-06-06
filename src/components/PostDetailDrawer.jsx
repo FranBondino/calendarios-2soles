@@ -130,11 +130,12 @@ const PostDetailDrawer = ({ post, isOpen, onClose, theme }) => {
 
       {/* Slide-over panel */}
       <div 
-        className={`fixed inset-y-0 right-0 z-50 w-full max-w-lg overflow-y-auto shadow-2xl transition-transform duration-300 ease-out transform ${
+        className={`fixed inset-y-0 right-0 z-50 w-full max-w-lg h-full shadow-2xl transition-transform duration-300 ease-out transform flex flex-col ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         } ${isPrestige ? 'bg-white text-gray-800' : 'bg-brand-crimson-card text-gray-200'}`}
       >
-        <div className={`flex items-center justify-between border-b p-4 sm:p-6 ${borderClass}`}>
+        {/* Header (Static) */}
+        <div className={`flex items-center justify-between border-b p-4 sm:p-6 shrink-0 ${borderClass}`}>
           <div>
             <span className={`text-xs font-bold tracking-widest uppercase ${isPrestige ? 'text-brand-prestige-crimson' : 'text-brand-crimson-red'}`}>
               Detalle del Posteo
@@ -153,16 +154,17 @@ const PostDetailDrawer = ({ post, isOpen, onClose, theme }) => {
           </button>
         </div>
 
-        <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
+        {/* Scrollable Body */}
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
           {/* Metadata Badges */}
           <div className="grid grid-cols-2 gap-3 sm:gap-4">
             <div className={`p-3 sm:p-4 rounded-xl flex items-center space-x-2 sm:space-x-3 ${contentBgClass}`}>
               <div className="text-brand-crimson-red shrink-0">
                 <Clock size={18} className="sm:w-5 sm:h-5" />
               </div>
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className="text-[8px] sm:text-[10px] uppercase font-bold tracking-wider text-gray-400 truncate">Fecha Planificada</p>
-                <p className="font-semibold text-xs sm:text-sm truncate">{post.date}</p>
+                <p className="font-semibold text-xs sm:text-sm text-white leading-tight break-words">{post.date}</p>
               </div>
             </div>
 
@@ -170,9 +172,9 @@ const PostDetailDrawer = ({ post, isOpen, onClose, theme }) => {
               <div className="text-brand-crimson-red shrink-0">
                 <Target size={18} className="sm:w-5 sm:h-5" />
               </div>
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className="text-[8px] sm:text-[10px] uppercase font-bold tracking-wider text-gray-400 truncate">Público Objetivo</p>
-                <p className="font-semibold text-xs sm:text-sm truncate">{post.target}</p>
+                <p className="font-semibold text-xs sm:text-sm text-white leading-tight break-words">{post.target}</p>
               </div>
             </div>
 
@@ -180,7 +182,7 @@ const PostDetailDrawer = ({ post, isOpen, onClose, theme }) => {
               <div className="text-brand-crimson-red shrink-0">
                 <Sparkles size={18} className="sm:w-5 sm:h-5" />
               </div>
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className="text-[8px] sm:text-[10px] uppercase font-bold tracking-wider text-gray-400 truncate">Formato</p>
                 <span className="inline-block px-1.5 py-0.5 mt-0.5 rounded text-[10px] font-semibold uppercase bg-brand-crimson-red/20 text-brand-crimson-red border border-brand-crimson-red/30 truncate">
                   {post.format}
@@ -192,9 +194,9 @@ const PostDetailDrawer = ({ post, isOpen, onClose, theme }) => {
               <div className="text-brand-crimson-red shrink-0">
                 <Award size={18} className="sm:w-5 sm:h-5" />
               </div>
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className="text-[8px] sm:text-[10px] uppercase font-bold tracking-wider text-gray-400 truncate">Objetivo del Post</p>
-                <p className="font-semibold text-xs sm:text-sm italic truncate">{post.objective}</p>
+                <p className="font-semibold text-xs sm:text-sm text-white leading-tight break-words italic">{post.objective}</p>
               </div>
             </div>
           </div>
@@ -217,7 +219,7 @@ const PostDetailDrawer = ({ post, isOpen, onClose, theme }) => {
                 <span>{copied ? 'Copiado' : 'Copiar Texto'}</span>
               </button>
             </div>
-            <div className={`p-4 rounded-xl min-h-[100px] text-sm leading-relaxed whitespace-pre-line ${
+            <div className={`p-4 rounded-xl min-h-[100px] text-xs sm:text-sm leading-relaxed whitespace-pre-line ${
               isPrestige ? 'bg-brand-prestige-light text-gray-800 border border-brand-prestige-border' : 'bg-[#151517] text-gray-200 border border-brand-crimson-border'
             }`}>
               {post.content}
@@ -247,7 +249,7 @@ const PostDetailDrawer = ({ post, isOpen, onClose, theme }) => {
           </div>
 
           {/* Production Checklist */}
-          <div className={`p-5 rounded-xl border space-y-3 ${
+          <div className={`p-4 sm:p-5 rounded-xl border space-y-3 ${
             isPrestige ? 'bg-white border-brand-prestige-border' : 'bg-brand-crimson-card border-brand-crimson-border'
           }`}>
             <div className="flex items-center space-x-2 pb-2 border-b border-dashed border-gray-300 dark:border-gray-700">
@@ -284,8 +286,8 @@ const PostDetailDrawer = ({ post, isOpen, onClose, theme }) => {
           </div>
         </div>
 
-        {/* Footer Actions */}
-        <div className={`sticky bottom-0 border-t p-4 sm:p-6 ${borderClass} ${isPrestige ? 'bg-white' : 'bg-brand-crimson-card'}`}>
+        {/* Footer Actions (Static) */}
+        <div className={`border-t p-4 sm:p-6 shrink-0 ${borderClass} ${isPrestige ? 'bg-white' : 'bg-brand-crimson-card'}`}>
           <div className="flex space-x-3">
             <button 
               onClick={onClose}
