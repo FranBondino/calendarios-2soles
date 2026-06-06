@@ -211,7 +211,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
     ? 'bg-white hover:bg-brand-prestige-light/30 border border-brand-prestige-border shadow-sm' 
     : 'bg-brand-crimson-card hover:bg-[#252528] border border-brand-crimson-border shadow-md';
 
-  const headerTextClass = isPrestige ? 'text-brand-prestige-dark font-serif' : 'text-white font-sans font-bold';
+  const headerTextClass = isPrestige ? 'text-brand-prestige-dark font-serif' : 'text-white font-serif font-bold';
   const subtitleTextClass = isPrestige ? 'text-gray-500' : 'text-gray-400';
   
   const toggleBtnActive = isPrestige
@@ -231,13 +231,15 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 pb-6 border-b border-dashed border-gray-300 dark:border-gray-800">
         <div className="flex items-center space-x-5">
           {/* Real Logo display with fallback */}
-          <div className={`h-16 w-16 rounded-full overflow-hidden flex items-center justify-center p-0.5 border-2 ${
-            isPrestige ? 'border-brand-prestige-gold bg-white' : 'border-brand-crimson-red bg-black'
+          <div className={`h-16 w-16 rounded-xl overflow-hidden flex items-center justify-center border-2 ${
+            isPrestige 
+              ? 'border-brand-prestige-gold bg-white shadow-[0_4px_10px_rgba(0,0,0,0.05)]' 
+              : 'border-brand-crimson-red bg-[#E13731] shadow-[0_0_15px_rgba(225,55,49,0.25)]'
           } shadow-lg shadow-black/10`}>
             <img 
               src={isPrestige ? '/logo-03.jpg' : '/logo-04.jpg'} 
               alt="Dos Soles Logo" 
-              className="h-full w-full object-cover rounded-full"
+              className="h-full w-full object-cover"
               onError={(e) => {
                 // Inline SVG fallback if file fails to load
                 e.target.style.display = 'none';

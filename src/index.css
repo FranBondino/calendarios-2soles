@@ -44,20 +44,21 @@
 }
 
 /* Dynamic custom fonts binding based on active theme class */
-.theme-prestige {
+.theme-prestige, .theme-crimson {
   font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .theme-prestige h1, 
 .theme-prestige h2, 
 .theme-prestige h3, 
-.theme-prestige .serif-font {
-  font-family: 'Marcellus', Georgia, serif;
+.theme-prestige .serif-font,
+.theme-crimson h1,
+.theme-crimson h2,
+.theme-crimson h3,
+.theme-crimson .serif-font {
+  font-family: 'Cinzel', Georgia, serif;
 }
 
-.theme-crimson {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-}
 
 /* Micro animations for hover states */
 .scale-hover {

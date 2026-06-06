@@ -29,9 +29,10 @@ export default {
         }
       },
       fontFamily: {
-        serif: ['Marcellus', 'Playfair Display', 'Georgia', 'serif'],
+        serif: ['Cinzel', 'Playfair Display', 'Georgia', 'serif'],
         sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
       }
+
     },
   },
   plugins: [],

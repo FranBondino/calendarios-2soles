@@ -111,7 +111,7 @@ const PostDetailDrawer = ({ post, isOpen, onClose, theme }) => {
 
   // Theme styling definitions
   const borderClass = isPrestige ? 'border-brand-prestige-border' : 'border-brand-crimson-border';
-  const textTitleClass = isPrestige ? 'text-brand-prestige-dark font-serif' : 'text-white font-sans font-bold';
+  const textTitleClass = isPrestige ? 'text-brand-prestige-dark font-serif' : 'text-white font-serif font-bold';
   const textSubClass = isPrestige ? 'text-gray-500' : 'text-gray-400';
   const contentBgClass = isPrestige ? 'bg-brand-prestige-light/60 border border-brand-prestige-border' : 'bg-brand-crimson-bg border border-brand-crimson-border';
   const primaryButtonClass = isPrestige 
