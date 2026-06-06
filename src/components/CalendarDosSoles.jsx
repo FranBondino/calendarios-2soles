@@ -237,7 +237,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
               : 'border-brand-crimson-red bg-[#E13731] shadow-[0_0_15px_rgba(225,55,49,0.25)]'
           } shadow-lg shadow-black/10`}>
             <img 
-              src={isPrestige ? '/logo-03.jpg' : '/logo-04.jpg'} 
+              src={isPrestige ? 'logo-03.jpg' : 'logo-04.jpg'} 
               alt="Dos Soles Logo" 
               className="h-full w-full object-cover"
               onError={(e) => {
