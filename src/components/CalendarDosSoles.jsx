@@ -257,8 +257,8 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
           </div>
         </div>
 
-        {/* Header Controls (View Toggles Only) */}
-        <div className="flex items-center justify-end sm:justify-start">
+        {/* Header Controls (View Toggles Only - hidden on mobile) */}
+        <div className="hidden sm:flex items-center justify-end sm:justify-start">
           {/* View Mode Toggle (Grid vs List) */}
           <div className="p-1 rounded-xl flex items-center bg-brand-crimson-bg border border-brand-crimson-border/60">
             <button 
@@ -387,135 +387,140 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
       </div>
 
       {/* 4. Main Views (Grid or List) */}
-      {viewMode === 'grid' ? (
-        /* VISTA CALENDARIO MENSUAL */
-        <div className="w-full overflow-x-auto scrollbar-none pb-2">
-          <div className="min-w-[640px] sm:min-w-0 space-y-4">
-            {/* Grid Header (Weekdays) */}
-            <div className="grid grid-cols-7 gap-2 md:gap-4 text-center">
-              {['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map((day) => (
-                <div 
-                  key={day}
-                  className="py-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gray-400 border-b border-brand-crimson-border"
-                >
-                  {day}
-                </div>
-              ))}
-            </div>
+      
+      {/* Monthly Grid View (hidden on mobile, visible on sm and up when viewMode === 'grid') */}
+      <div className={`w-full overflow-x-auto scrollbar-none pb-2 ${
+        viewMode === 'grid' ? 'sm:block' : 'sm:hidden'
+      } hidden`}>
+        <div className="min-w-[640px] sm:min-w-0 space-y-4">
+          {/* Grid Header (Weekdays) */}
+          <div className="grid grid-cols-7 gap-2 md:gap-4 text-center">
+            {['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'].map((day) => (
+              <div 
+                key={day}
+                className="py-2 text-[10px] sm:text-xs font-bold uppercase tracking-widest text-gray-400 border-b border-brand-crimson-border"
+              >
+                {day}
+              </div>
+            ))}
+          </div>
 
-            {/* Grid Cells */}
-            <div className="grid grid-cols-7 gap-2 md:gap-4 auto-rows-fr">
-              {juneDays.map((dayObj) => {
-                const post = dayObj.post;
+          {/* Grid Cells */}
+          <div className="grid grid-cols-7 gap-2 md:gap-4 auto-rows-fr">
+            {juneDays.map((dayObj) => {
+              const post = dayObj.post;
+              
+              // Apply active filtering states visually
+              let isFilteredOut = false;
+              if (post) {
+                const matchesSearch = 
+                  post.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  post.objective.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                  post.format.toLowerCase().includes(searchQuery.toLowerCase());
                 
-                // Apply active filtering states visually
-                let isFilteredOut = false;
-                if (post) {
-                  const matchesSearch = 
-                    post.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    post.objective.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    post.format.toLowerCase().includes(searchQuery.toLowerCase());
-                  
-                  const matchesFormat = selectedFormat === 'All' || post.format.toLowerCase().includes(selectedFormat.toLowerCase());
-                  
-                  const matchesTarget = selectedTarget === 'All' || 
-                    (selectedTarget === 'Ambos' && (post.target === 'Ambos' || post.target === 'B2B / B2C')) ||
-                    post.target === selectedTarget;
+                const matchesFormat = selectedFormat === 'All' || post.format.toLowerCase().includes(selectedFormat.toLowerCase());
+                
+                const matchesTarget = selectedTarget === 'All' || 
+                  (selectedTarget === 'Ambos' && (post.target === 'Ambos' || post.target === 'B2B / B2C')) ||
+                  post.target === selectedTarget;
 
-                  if (!matchesSearch || !matchesFormat || !matchesTarget) {
-                    isFilteredOut = true;
-                  }
+                if (!matchesSearch || !matchesFormat || !matchesTarget) {
+                  isFilteredOut = true;
                 }
+              }
 
-                // Specific badge details
-                const badge = post ? getFormatBadgeDetails(post.format) : null;
+              // Specific badge details
+              const badge = post ? getFormatBadgeDetails(post.format) : null;
 
-                // Anniversary special background indicators
-                const isAnniversaryDay = dayObj.day === 12 || dayObj.day === 13;
-                let anniversaryHighlight = '';
-                if (isAnniversaryDay) {
-                  anniversaryHighlight = 'ring-2 ring-brand-crimson-red/50 bg-brand-crimson-red/5';
-                }
+              // Anniversary special background indicators
+              const isAnniversaryDay = dayObj.day === 12 || dayObj.day === 13;
+              let anniversaryHighlight = '';
+              if (isAnniversaryDay) {
+                anniversaryHighlight = 'ring-2 ring-brand-crimson-red/50 bg-brand-crimson-red/5';
+              }
 
-                return (
-                  <div
-                    key={dayObj.day}
-                    onClick={() => handleDayClick(dayObj)}
-                    className={`min-h-[64px] sm:min-h-[120px] md:min-h-[160px] p-1.5 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl cursor-pointer flex flex-col justify-between transition-all scale-hover ${
-                      post 
-                        ? `${cardClass} ${isFilteredOut ? 'opacity-25' : 'opacity-100'}` 
-                        : 'border border-dashed border-zinc-800 bg-[#0F0F10]/50 hover:bg-[#1a1a1c]/50 text-gray-400'
-                    } ${anniversaryHighlight}`}
-                  >
-                    {/* Cell Header: Day Number and Anniversary Indicators */}
-                    <div className="flex items-center justify-between">
-                      <span className={`text-[10px] sm:text-xs md:text-sm font-bold ${
-                        post ? 'text-white' : 'text-gray-400'
-                      }`}>
-                        {dayObj.day}
+              return (
+                <div
+                  key={dayObj.day}
+                  onClick={() => handleDayClick(dayObj)}
+                  className={`min-h-[64px] sm:min-h-[120px] md:min-h-[160px] p-1.5 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl cursor-pointer flex flex-col justify-between transition-all scale-hover ${
+                    post 
+                      ? `${cardClass} ${isFilteredOut ? 'opacity-25' : 'opacity-100'}` 
+                      : 'border border-dashed border-zinc-800 bg-[#0F0F10]/50 hover:bg-[#1a1a1c]/50 text-gray-400'
+                  } ${anniversaryHighlight}`}
+                >
+                  {/* Cell Header: Day Number and Anniversary Indicators */}
+                  <div className="flex items-center justify-between">
+                    <span className={`text-[10px] sm:text-xs md:text-sm font-bold ${
+                      post ? 'text-white' : 'text-gray-400'
+                    }`}>
+                      {dayObj.day}
+                    </span>
+                    
+                    {isAnniversaryDay && (
+                      <span className="flex h-1.5 w-1.5 sm:h-2 sm:w-2 relative">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-brand-crimson-red"></span>
+                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-brand-crimson-red"></span>
                       </span>
-                      
-                      {isAnniversaryDay && (
-                        <span className="flex h-1.5 w-1.5 sm:h-2 sm:w-2 relative">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-brand-crimson-red"></span>
-                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-brand-crimson-red"></span>
-                        </span>
-                      )}
-                    </div>
+                    )}
+                  </div>
 
-                    {/* Cell Content (If post scheduled) */}
-                    {post ? (
-                      <div className="flex-1 flex flex-col justify-between mt-1 md:mt-2 space-y-1.5 md:space-y-2">
-                        {/* Desktop/Tablet only: full text description */}
-                        <p className="text-[10px] md:text-xs leading-snug line-clamp-3 md:line-clamp-4 hidden sm:block text-gray-300">
-                          {post.content}
-                        </p>
-                        
-                        {/* Mobile only: simplified clean icon badge */}
-                        <div className="flex-1 flex items-center justify-center sm:hidden py-1">
-                          <span className={`p-1 rounded-full border shadow-sm ${badge.colorClass}`}>
+                  {/* Cell Content (If post scheduled) */}
+                  {post ? (
+                    <div className="flex-1 flex flex-col justify-between mt-1 md:mt-2 space-y-1.5 md:space-y-2">
+                      {/* Desktop/Tablet only: full text description */}
+                      <p className="text-[10px] md:text-xs leading-snug line-clamp-3 md:line-clamp-4 hidden sm:block text-gray-300">
+                        {post.content}
+                      </p>
+                      
+                      {/* Mobile only: simplified clean icon badge */}
+                      <div className="flex-1 flex items-center justify-center sm:hidden py-1">
+                        <span className={`p-1 rounded-full border shadow-sm ${badge.colorClass}`}>
+                          {badge.icon}
+                        </span>
+                      </div>
+                      
+                      {/* Desktop/Tablet only: badges footer */}
+                      <div className="hidden sm:flex flex-col space-y-1 mt-auto">
+                        {/* Format Indicator Badge */}
+                        <div className="flex items-center space-x-1">
+                          <span className={`flex items-center space-x-1 text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded border uppercase tracking-wider ${badge.colorClass}`}>
                             {badge.icon}
+                            <span className="hidden md:inline">{badge.label}</span>
                           </span>
                         </div>
-                        
-                        {/* Desktop/Tablet only: badges footer */}
-                        <div className="hidden sm:flex flex-col space-y-1 mt-auto">
-                          {/* Format Indicator Badge */}
-                          <div className="flex items-center space-x-1">
-                            <span className={`flex items-center space-x-1 text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded border uppercase tracking-wider ${badge.colorClass}`}>
-                              {badge.icon}
-                              <span className="hidden md:inline">{badge.label}</span>
-                            </span>
-                          </div>
 
-                          {/* Audience Indicator Badge */}
-                          <div className="flex">
-                            <span className={`text-[8px] md:text-[9px] font-extrabold px-1.5 py-0.5 rounded-full border uppercase ${
-                              getTargetBadgeStyles(post.target, activeTheme)
-                            }`}>
-                              {post.target}
-                            </span>
-                          </div>
+                        {/* Audience Indicator Badge */}
+                        <div className="flex">
+                          <span className={`text-[8px] md:text-[9px] font-extrabold px-1.5 py-0.5 rounded-full border uppercase ${
+                            getTargetBadgeStyles(post.target, activeTheme)
+                          }`}>
+                            {post.target}
+                          </span>
                         </div>
                       </div>
-                    ) : (
-                      /* Cell Content Empty */
-                      <div className="flex-1 flex items-center justify-center py-1 sm:py-0">
-                        <span className="hidden sm:inline text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-gray-400 dark:text-zinc-800">
-                          {dayObj.weekday === 'Dom' && dayObj.day !== 28 ? 'Descanso' : 'Sin post'}
-                        </span>
-                        <span className="sm:hidden h-1.5 w-1.5 rounded-full bg-zinc-700/60" />
-                      </div>
-                    )}
+                    </div>
+                  ) : (
+                    /* Cell Content Empty */
+                    <div className="flex-1 flex items-center justify-center py-1 sm:py-0">
+                      <span className="hidden sm:inline text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-gray-400 dark:text-zinc-800">
+                        {dayObj.weekday === 'Dom' && dayObj.day !== 28 ? 'Descanso' : 'Sin post'}
+                      </span>
+                      <span className="sm:hidden h-1.5 w-1.5 rounded-full bg-zinc-700/60" />
+                    </div>
+                  )}
 
-                  </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
           </div>
         </div>
-      ) : (
-        /* VISTA DE LISTA / TABLA DETALLADA */
+      </div>
+
+      {/* List / Table View (always visible on mobile as card list, visible on desktop when viewMode === 'list') */}
+      <div className={`${
+        viewMode === 'list' ? 'sm:block' : 'sm:hidden'
+      } block`}>
         <div className="space-y-3 sm:space-y-0 sm:overflow-x-auto sm:rounded-2xl sm:border sm:border-brand-crimson-border sm:bg-brand-crimson-card">
           {/* Mobile List View (rendered only on mobile) */}
           <div className="flex flex-col gap-3 sm:hidden">
@@ -627,7 +632,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
             </tbody>
           </table>
         </div>
-      )}
+      </div>
 
       {/* 5. Info Box (Anniversary Callout) */}
       <div className="mt-8 p-4 md:p-5 rounded-2xl flex items-start space-x-3 md:space-x-4 border border-dashed bg-brand-crimson-red/5 border-brand-crimson-red/30 text-gray-200">
