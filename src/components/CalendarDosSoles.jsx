@@ -14,12 +14,23 @@ import {
   CalendarDays,
   Sparkles,
   PieChart,
-  Grid
+  Grid,
+  Settings,
+  History,
+  Lock,
+  Unlock,
+  Check,
+  X,
+  Trash2,
+  Plus,
+  Edit,
+  AlertTriangle,
+  ClipboardList
 } from 'lucide-react';
 import PostDetailDrawer from './PostDetailDrawer';
 
-// Base Structured Social Media Calendar Data
-const scheduleData = [
+// Base Structured Social Media Calendar Data (Fallback)
+const fallbackScheduleData = [
   { id: 1, date: 'Lun 08/06', format: 'Reel', content: 'Capacitación Truss: Resumen dinámico del evento.', target: 'B2B', objective: 'Fidelización' },
   { id: 2, date: 'Mar 09/06', format: 'Story', content: 'Entrevista Truss: Fragmentos con sticker de preguntas.', target: 'B2B / B2C', objective: 'Autoridad' },
   { id: 3, date: 'Mié 10/06', format: 'Story', content: 'Detrás de escena (Logística): Armado de pedidos.', target: 'B2B', objective: 'Confianza/Conversión' },
@@ -125,9 +136,293 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
   const isPrestige = activeTheme === 'prestige';
   const [logoError, setLogoError] = useState(false);
 
+  // Cloud database states
+  const [dbData, setDbData] = useState({ posts: [], proposals: [], auditLog: [] });
+  const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [adminModalOpen, setAdminModalOpen] = useState(false);
+  const [adminPassword, setAdminPassword] = useState('');
+  const [adminName, setAdminName] = useState(localStorage.getItem('dosSolesAdminName') || '');
+  const [adminTab, setAdminTab] = useState('proposals'); // 'proposals' or 'audit'
+  const [pinError, setPinError] = useState(false);
+
   useEffect(() => {
     setLogoError(false);
   }, [activeTheme]);
+
+  // Load cloud data on mount
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch('https://jsonblob.com/api/jsonBlob/019ea784-734a-7d37-95c8-50aef155c92b');
+        if (!response.ok) throw new Error('Failed to fetch from jsonblob');
+        let data = await response.json();
+        
+        // Handle fallback/migration from legacy flat array
+        if (Array.isArray(data)) {
+          data = {
+            posts: data,
+            proposals: [],
+            auditLog: []
+          };
+        } else {
+          data = {
+            posts: data.posts || [],
+            proposals: data.proposals || [],
+            auditLog: data.auditLog || []
+          };
+        }
+        setDbData(data);
+      } catch (error) {
+        console.error('Error fetching calendar data:', error);
+        // Resilient fallback to local static data
+        setDbData({
+          posts: fallbackScheduleData,
+          proposals: [],
+          auditLog: []
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const saveToCloud = async (updatedData) => {
+    try {
+      const response = await fetch('https://jsonblob.com/api/jsonBlob/019ea784-734a-7d37-95c8-50aef155c92b', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedData)
+      });
+      if (!response.ok) throw new Error('Error PUTing to jsonblob');
+      setDbData(updatedData);
+      return true;
+    } catch (error) {
+      console.error('Error saving data:', error);
+      alert('Hubo un error al guardar los cambios en la nube. Revisa tu conexión.');
+      return false;
+    }
+  };
+
+  // Direct edit/create (Admin only)
+  const handleSavePostDirectly = async (editedPost, editorName) => {
+    if (!editorName) {
+      alert('Debes ingresar tu nombre de administrador para registrar la auditoría.');
+      return false;
+    }
+    
+    let updatedPosts = [...dbData.posts];
+    const isNew = typeof editedPost.id === 'string' && editedPost.id.startsWith('NEW-');
+    
+    let finalPostId = editedPost.id;
+    if (isNew) {
+      const maxId = dbData.posts.reduce((max, p) => p.id > max ? p.id : max, 0);
+      finalPostId = maxId + 1;
+      const cleanPost = {
+        ...editedPost,
+        id: finalPostId
+      };
+      updatedPosts.push(cleanPost);
+    } else {
+      updatedPosts = updatedPosts.map(p => p.id === editedPost.id ? editedPost : p);
+    }
+    
+    // Create audit entry
+    const timestamp = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
+    const auditEntry = {
+      id: `audit-${Date.now()}`,
+      timestamp,
+      user: `${editorName} (Admin)`,
+      action: isNew ? 'Creación de Posteo' : 'Edición de Posteo',
+      details: isNew 
+        ? `Creó posteo #${finalPostId} para el día ${editedPost.date}` 
+        : `Editó posteo #${editedPost.id} (${editedPost.format})`
+    };
+    
+    const updatedData = {
+      ...dbData,
+      posts: updatedPosts,
+      auditLog: [auditEntry, ...dbData.auditLog].slice(0, 50)
+    };
+    
+    const success = await saveToCloud(updatedData);
+    if (success) {
+      setIsDrawerOpen(false);
+      setSelectedPost(null);
+    }
+    return success;
+  };
+
+  // Delete post (Admin only)
+  const handleDeletePostDirectly = async (postId, editorName) => {
+    if (!editorName) {
+      alert('Debes ingresar tu nombre de administrador para registrar la auditoría.');
+      return false;
+    }
+    
+    const postToDelete = dbData.posts.find(p => p.id === postId);
+    if (!postToDelete) return false;
+    
+    const updatedPosts = dbData.posts.filter(p => p.id !== postId);
+    
+    // Create audit entry
+    const timestamp = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
+    const auditEntry = {
+      id: `audit-${Date.now()}`,
+      timestamp,
+      user: `${editorName} (Admin)`,
+      action: 'Eliminación de Posteo',
+      details: `Eliminó posteo #${postId} del día ${postToDelete.date}`
+    };
+    
+    const updatedData = {
+      ...dbData,
+      posts: updatedPosts,
+      auditLog: [auditEntry, ...dbData.auditLog].slice(0, 50)
+    };
+    
+    const success = await saveToCloud(updatedData);
+    if (success) {
+      setIsDrawerOpen(false);
+      setSelectedPost(null);
+    }
+    return success;
+  };
+
+  // Submit new proposal (General User)
+  const handleProposeChange = async (proposal) => {
+    const newProposal = {
+      id: `prop-${Date.now()}`,
+      ...proposal,
+      timestamp: new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })
+    };
+    
+    const updatedProposals = [...dbData.proposals, newProposal];
+    const updatedData = {
+      ...dbData,
+      proposals: updatedProposals
+    };
+    
+    const success = await saveToCloud(updatedData);
+    if (success) {
+      alert('Propuesta enviada con éxito. Un administrador la revisará.');
+      setIsDrawerOpen(false);
+      setSelectedPost(null);
+    }
+    return success;
+  };
+
+  // Approve proposal (Admin)
+  const handleApproveProposal = async (proposalId) => {
+    if (!adminName) {
+      alert('Por favor ingresa tu nombre en el Panel Admin antes de aprobar.');
+      return;
+    }
+    
+    const prop = dbData.proposals.find(p => p.id === proposalId);
+    if (!prop) return;
+    
+    let updatedPosts = [...dbData.posts];
+    const isNew = typeof prop.postId === 'string' && prop.postId.startsWith('NEW-');
+    
+    let finalPostId = prop.postId;
+    if (isNew) {
+      const maxId = dbData.posts.reduce((max, p) => p.id > max ? p.id : max, 0);
+      finalPostId = maxId + 1;
+      const cleanPost = {
+        id: finalPostId,
+        date: prop.date,
+        format: prop.format,
+        content: prop.content,
+        target: prop.target,
+        objective: prop.objective
+      };
+      updatedPosts.push(cleanPost);
+    } else {
+      updatedPosts = updatedPosts.map(p => {
+        if (p.id === prop.postId) {
+          return {
+            ...p,
+            format: prop.format,
+            content: prop.content,
+            target: prop.target,
+            objective: prop.objective
+          };
+        }
+        return p;
+      });
+    }
+    
+    const updatedProposals = dbData.proposals.filter(p => p.id !== proposalId);
+    
+    // Create audit entry
+    const timestamp = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
+    const auditEntry = {
+      id: `audit-${Date.now()}`,
+      timestamp,
+      user: `${adminName} (Admin)`,
+      action: 'Aprobación de Propuesta',
+      details: `Aprobó propuesta de ${prop.proposer} para el posteo #${finalPostId} (${prop.date})`
+    };
+    
+    const updatedData = {
+      posts: updatedPosts,
+      proposals: updatedProposals,
+      auditLog: [auditEntry, ...dbData.auditLog].slice(0, 50)
+    };
+    
+    await saveToCloud(updatedData);
+  };
+
+  // Reject proposal (Admin)
+  const handleRejectProposal = async (proposalId) => {
+    if (!adminName) {
+      alert('Por favor ingresa tu nombre en el Panel Admin antes de rechazar.');
+      return;
+    }
+    
+    const prop = dbData.proposals.find(p => p.id === proposalId);
+    if (!prop) return;
+    
+    const updatedProposals = dbData.proposals.filter(p => p.id !== proposalId);
+    
+    // Create audit entry
+    const timestamp = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
+    const auditEntry = {
+      id: `audit-${Date.now()}`,
+      timestamp,
+      user: `${adminName} (Admin)`,
+      action: 'Rechazo de Propuesta',
+      details: `Rechazó la propuesta de ${prop.proposer} para el posteo #${prop.postId}`
+    };
+    
+    const updatedData = {
+      ...dbData,
+      proposals: updatedProposals,
+      auditLog: [auditEntry, ...dbData.auditLog].slice(0, 50)
+    };
+    
+    await saveToCloud(updatedData);
+  };
+
+  const handleAdminNameChange = (name) => {
+    setAdminName(name);
+    localStorage.setItem('dosSolesAdminName', name);
+  };
+
+  const handleLoginAdmin = (e) => {
+    e.preventDefault();
+    if (adminPassword === '2soles2026') {
+      setIsAdmin(true);
+      setPinError(false);
+      setAdminPassword('');
+    } else {
+      setPinError(true);
+    }
+  };
 
   // Generate the full list of days in June 2026
   // June 1st, 2026 is a Monday (Lunes)
@@ -138,7 +433,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
       const paddedDay = d < 10 ? `0${d}` : `${d}`;
       const dateStr = `${paddedDay}/06`;
       
-      const post = scheduleData.find(item => getDayFromDate(item.date) === d);
+      const post = dbData.posts.find(item => getDayFromDate(item.date) === d);
       const weekday = weekdays[(d - 1) % 7];
 
       days.push({
@@ -149,11 +444,11 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
       });
     }
     return days;
-  }, []);
+  }, [dbData.posts]);
 
   // Filtered post data for list view and statistics
   const filteredData = useMemo(() => {
-    return scheduleData.filter(item => {
+    return dbData.posts.filter(item => {
       const matchesSearch = 
         item.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.objective.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -167,36 +462,36 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
 
       return matchesSearch && matchesFormat && matchesTarget;
     });
-  }, [searchQuery, selectedFormat, selectedTarget]);
+  }, [dbData.posts, searchQuery, selectedFormat, selectedTarget]);
 
   // Dynamic status / stats for metrics dashboard
   const statistics = useMemo(() => {
-    const total = scheduleData.length;
-    const reels = scheduleData.filter(p => p.format.toLowerCase().includes('reel')).length;
-    const stories = scheduleData.filter(p => p.format.toLowerCase().includes('story')).length;
-    const carruseles = scheduleData.filter(p => p.format.toLowerCase().includes('carrusel')).length;
+    const total = dbData.posts.length;
+    const reels = dbData.posts.filter(p => p.format.toLowerCase().includes('reel')).length;
+    const stories = dbData.posts.filter(p => p.format.toLowerCase().includes('story')).length;
+    const carruseles = dbData.posts.filter(p => p.format.toLowerCase().includes('carrusel')).length;
     const others = total - reels - stories - carruseles;
 
-    const b2b = scheduleData.filter(p => p.target === 'B2B').length;
-    const b2c = scheduleData.filter(p => p.target === 'B2C').length;
-    const ambos = scheduleData.filter(p => p.target === 'Ambos' || p.target === 'B2B / B2C').length;
+    const b2b = dbData.posts.filter(p => p.target === 'B2B').length;
+    const b2c = dbData.posts.filter(p => p.target === 'B2C').length;
+    const ambos = dbData.posts.filter(p => p.target === 'Ambos' || p.target === 'B2B / B2C').length;
 
     return { total, reels, stories, carruseles, others, b2b, b2c, ambos };
-  }, []);
+  }, [dbData.posts]);
 
   const handleDayClick = (dayObj) => {
     if (dayObj.post) {
       setSelectedPost(dayObj.post);
       setIsDrawerOpen(true);
     } else {
-      // Mock feature to add post on empty day
+      // Create a fresh blank structure for empty days
       const tempPost = {
         id: `NEW-${dayObj.day}`,
         date: `${dayObj.weekday} ${dayObj.day < 10 ? '0' + dayObj.day : dayObj.day}/06`,
         format: 'Reel',
-        content: `Nueva propuesta de posteo para el día de ${dayObj.weekday}.\nMarca sugerida: Truss o L'Oréal.`,
+        content: '',
         target: 'B2B',
-        objective: 'Interacción / Venta'
+        objective: 'Interacción'
       };
       setSelectedPost(tempPost);
       setIsDrawerOpen(true);
@@ -226,6 +521,15 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
   const toggleBtnInactive = isPrestige
     ? 'bg-gray-100 hover:bg-gray-200 text-gray-600'
     : 'bg-[#252528] hover:bg-zinc-700 text-gray-300';
+
+  if (loading) {
+    return (
+      <div className="w-full max-w-7xl mx-auto p-12 text-center bg-brand-crimson-card border border-brand-crimson-border rounded-3xl flex flex-col items-center justify-center space-y-4">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-crimson-red"></div>
+        <p className="text-gray-400 font-medium text-sm tracking-wider uppercase">Sincronizando con la nube...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-7xl mx-auto p-3.5 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl transition-all duration-500 shadow-xl bg-brand-crimson-card/85 border border-brand-crimson-border">
@@ -257,10 +561,23 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
           </div>
         </div>
 
-        {/* Header Controls (View Toggles Only - hidden on mobile) */}
-        <div className="hidden sm:flex items-center justify-end sm:justify-start">
-          {/* View Mode Toggle (Grid vs List) */}
-          <div className="p-1 rounded-xl flex items-center bg-brand-crimson-bg border border-brand-crimson-border/60">
+        {/* Header Controls */}
+        <div className="flex items-center gap-3">
+          {/* Admin Panel Button */}
+          <button
+            onClick={() => setAdminModalOpen(true)}
+            className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all border ${
+              isAdmin 
+                ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' 
+                : 'bg-brand-crimson-bg text-gray-300 border-brand-crimson-border hover:bg-[#252528]'
+            }`}
+          >
+            {isAdmin ? <Unlock size={14} className="text-emerald-400" /> : <Lock size={14} />}
+            <span>{isAdmin ? 'Modo Admin Activo' : 'Panel Admin'}</span>
+          </button>
+
+          {/* View Mode Toggle (Grid vs List - hidden on mobile) */}
+          <div className="hidden sm:flex p-1 rounded-xl items-center bg-brand-crimson-bg border border-brand-crimson-border/60">
             <button 
               onClick={() => setViewMode('grid')}
               className={`p-2 rounded-lg transition-all ${
@@ -432,6 +749,12 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
               // Specific badge details
               const badge = post ? getFormatBadgeDetails(post.format) : null;
 
+              // Check for pending proposals
+              const postProposals = post 
+                ? dbData.proposals.filter(p => p.postId === post.id) 
+                : dbData.proposals.filter(p => p.postId === `NEW-${dayObj.day}`);
+              const hasPendingProposal = postProposals.length > 0;
+
               // Anniversary special background indicators
               const isAnniversaryDay = dayObj.day === 12 || dayObj.day === 13;
               let anniversaryHighlight = '';
@@ -450,19 +773,26 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                   } ${anniversaryHighlight}`}
                 >
                   {/* Cell Header: Day Number and Anniversary Indicators */}
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between w-full">
                     <span className={`text-[10px] sm:text-xs md:text-sm font-bold ${
                       post ? 'text-white' : 'text-gray-400'
                     }`}>
                       {dayObj.day}
                     </span>
                     
-                    {isAnniversaryDay && (
-                      <span className="flex h-1.5 w-1.5 sm:h-2 sm:w-2 relative">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-brand-crimson-red"></span>
-                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-brand-crimson-red"></span>
-                      </span>
-                    )}
+                    <div className="flex items-center space-x-1 font-semibold">
+                      {hasPendingProposal && (
+                        <span className="text-[10px] text-amber-400 animate-pulse" title="Propuesta Pendiente">
+                          📝
+                        </span>
+                      )}
+                      {isAnniversaryDay && (
+                        <span className="flex h-1.5 w-1.5 sm:h-2 sm:w-2 relative">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-brand-crimson-red"></span>
+                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-brand-crimson-red"></span>
+                        </span>
+                      )}
+                    </div>
                   </div>
 
                   {/* Cell Content (If post scheduled) */}
@@ -482,6 +812,13 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                       
                       {/* Desktop/Tablet only: badges footer */}
                       <div className="hidden sm:flex flex-col space-y-1 mt-auto">
+                        {hasPendingProposal && (
+                          <div className="flex">
+                            <span className="text-[8px] font-extrabold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 uppercase tracking-wide">
+                              📝 Propuesta
+                            </span>
+                          </div>
+                        )}
                         {/* Format Indicator Badge */}
                         <div className="flex items-center space-x-1">
                           <span className={`flex items-center space-x-1 text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded border uppercase tracking-wider ${badge.colorClass}`}>
@@ -502,11 +839,20 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                     </div>
                   ) : (
                     /* Cell Content Empty */
-                    <div className="flex-1 flex items-center justify-center py-1 sm:py-0">
-                      <span className="hidden sm:inline text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-gray-400 dark:text-zinc-800">
-                        {dayObj.weekday === 'Dom' && dayObj.day !== 28 ? 'Descanso' : 'Sin post'}
-                      </span>
-                      <span className="sm:hidden h-1.5 w-1.5 rounded-full bg-zinc-700/60" />
+                    <div className="flex-1 flex flex-col justify-center py-1 sm:py-0 space-y-1">
+                      {hasPendingProposal && (
+                        <div className="flex justify-center sm:justify-start">
+                          <span className="text-[8px] font-extrabold px-1 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 uppercase tracking-wide">
+                            📝 Propuesta
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex items-center justify-center">
+                        <span className="hidden sm:inline text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-gray-400 dark:text-zinc-800">
+                          {dayObj.weekday === 'Dom' && dayObj.day !== 28 ? 'Descanso' : 'Sin post'}
+                        </span>
+                        <span className="sm:hidden h-1.5 w-1.5 rounded-full bg-zinc-700/60" />
+                      </div>
                     </div>
                   )}
 
@@ -526,6 +872,8 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
           <div className="flex flex-col gap-3 sm:hidden">
             {filteredData.map((item) => {
               const badge = getFormatBadgeDetails(item.format);
+              const postProposals = dbData.proposals.filter(p => p.postId === item.id);
+              const hasPendingProposal = postProposals.length > 0;
               return (
                 <div 
                   key={item.id}
@@ -533,17 +881,24 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                     setSelectedPost(item);
                     setIsDrawerOpen(true);
                   }}
-                  className="p-4 rounded-2xl border border-brand-crimson-border bg-brand-crimson-card hover:bg-[#252528] transition-colors cursor-pointer flex flex-col gap-3"
+                  className="p-4 rounded-2xl border border-brand-crimson-border bg-brand-crimson-card hover:bg-[#252528] transition-colors cursor-pointer flex flex-col gap-3 font-semibold text-left"
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-bold text-white">{item.date}</span>
-                    <span className={`inline-flex items-center space-x-1 text-[9px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${badge.colorClass}`}>
-                      {badge.icon}
-                      <span>{badge.label}</span>
-                    </span>
+                    <div className="flex items-center space-x-2">
+                      {hasPendingProposal && (
+                        <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 uppercase tracking-wider">
+                          Propuesta
+                        </span>
+                      )}
+                      <span className={`inline-flex items-center space-x-1 text-[9px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${badge.colorClass}`}>
+                        {badge.icon}
+                        <span>{badge.label}</span>
+                      </span>
+                    </div>
                   </div>
                   <p className="text-xs text-gray-300 leading-relaxed line-clamp-2">
-                    {item.content}
+                    {item.content || <span className="italic text-gray-500">Posteo sin copy asignado aún.</span>}
                   </p>
                   <div className="flex items-center justify-between pt-2.5 border-t border-brand-crimson-border/40">
                     <div className="flex flex-wrap items-center gap-1.5">
@@ -567,20 +922,22 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
           </div>
 
           {/* Desktop Table View (hidden on mobile, visible on sm and up) */}
-          <table className="min-w-full divide-y divide-zinc-800 hidden sm:table">
+          <table className="min-w-full divide-y divide-zinc-800 hidden sm:table text-left">
             <thead>
               <tr className="bg-brand-crimson-bg">
-                <th scope="col" className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500">Fecha</th>
-                <th scope="col" className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500">Formato</th>
-                <th scope="col" className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500">Contenido</th>
-                <th scope="col" className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500">Público</th>
-                <th scope="col" className="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-500">Objetivo</th>
+                <th scope="col" className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">Fecha</th>
+                <th scope="col" className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">Formato</th>
+                <th scope="col" className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">Contenido</th>
+                <th scope="col" className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">Público</th>
+                <th scope="col" className="px-6 py-4 text-xs font-bold uppercase tracking-wider text-gray-500">Objetivo</th>
                 <th scope="col" className="px-6 py-4 text-right text-xs font-bold uppercase tracking-wider text-gray-500">Acciones</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-800">
               {filteredData.map((item) => {
                 const badge = getFormatBadgeDetails(item.format);
+                const postProposals = dbData.proposals.filter(p => p.postId === item.id);
+                const hasPendingProposal = postProposals.length > 0;
                 return (
                   <tr 
                     key={item.id}
@@ -590,17 +947,27 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                     }}
                     className="cursor-pointer transition-colors hover:bg-zinc-800/40"
                   >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold">
-                      {item.date}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold flex items-center space-x-2">
+                      {hasPendingProposal && (
+                        <span className="text-amber-400 animate-pulse" title="Propuesta Pendiente">📝</span>
+                      )}
+                      <span>{item.date}</span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex items-center space-x-1 text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${badge.colorClass}`}>
-                        {badge.icon}
-                        <span>{badge.label}</span>
-                      </span>
+                      <div className="flex items-center space-x-2">
+                        {hasPendingProposal && (
+                          <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 uppercase tracking-wider">
+                            Propuesta
+                          </span>
+                        )}
+                        <span className={`inline-flex items-center space-x-1 text-[10px] font-bold px-2 py-0.5 rounded border uppercase tracking-wider ${badge.colorClass}`}>
+                          {badge.icon}
+                          <span>{badge.label}</span>
+                        </span>
+                      </div>
                     </td>
                     <td className="px-6 py-4 text-sm max-w-md truncate">
-                      {item.content}
+                      {item.content || <span className="italic text-gray-500">Posteo sin copy asignado aún.</span>}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`text-[10px] font-bold px-2.5 py-0.5 rounded-full border uppercase ${
@@ -647,12 +1014,262 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
         </div>
       </div>
 
+      {/* 6. Admin Panel Modal */}
+      {adminModalOpen && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[#111113] border border-brand-crimson-border rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+            
+            {/* Modal Header */}
+            <div className="p-5 border-b border-brand-crimson-border/60 flex items-center justify-between shrink-0">
+              <div className="flex items-center space-x-2">
+                <Settings className="text-brand-crimson-red" size={20} />
+                <h3 className="text-lg font-serif font-bold text-white">
+                  Panel de Control Administrativo
+                </h3>
+              </div>
+              <button 
+                onClick={() => { setAdminModalOpen(false); setPinError(false); }}
+                className="p-1.5 rounded-full hover:bg-zinc-800 text-gray-400 hover:text-white transition-colors"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 overflow-y-auto flex-1 space-y-5">
+              {!isAdmin ? (
+                /* Login Form */
+                <form onSubmit={handleLoginAdmin} className="space-y-4 max-w-sm mx-auto py-8">
+                  <div className="text-center space-y-2 mb-6 text-gray-300">
+                    <Lock size={36} className="mx-auto text-brand-crimson-red" />
+                    <p className="text-sm">
+                      Ingresa el PIN de administrador para habilitar las modificaciones directas y revisar propuestas.
+                    </p>
+                  </div>
+                  <div className="space-y-1.5 text-left">
+                    <label className="text-xs font-bold uppercase tracking-wider text-gray-400">PIN de Acceso</label>
+                    <input 
+                      type="password"
+                      placeholder="••••••••"
+                      value={adminPassword}
+                      onChange={(e) => setAdminPassword(e.target.value)}
+                      className="w-full px-4 py-2.5 rounded-xl text-center text-lg tracking-widest focus:outline-none focus:ring-1 bg-brand-crimson-bg border border-brand-crimson-border focus:border-brand-crimson-red focus:ring-brand-crimson-red text-white"
+                      autoFocus
+                    />
+                    {pinError && (
+                      <p className="text-xs text-brand-crimson-red font-semibold text-center mt-1">
+                        PIN incorrecto. Intenta de nuevo.
+                      </p>
+                    )}
+                  </div>
+                  <button 
+                    type="submit"
+                    className="w-full py-2.5 rounded-xl text-sm font-semibold bg-brand-crimson-red hover:bg-brand-crimson-hover text-white transition-colors shadow-lg shadow-black/20"
+                  >
+                    Desbloquear Panel
+                  </button>
+                </form>
+              ) : (
+                /* Authenticated Admin view */
+                <div className="space-y-5">
+                  {/* Admin details & logs */}
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl bg-brand-crimson-bg border border-brand-crimson-border/60 text-left">
+                    <div className="flex-1 space-y-1">
+                      <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">Tu Nombre de Editor (Requerido)</label>
+                      <input 
+                        type="text"
+                        placeholder="Ej: Pedro"
+                        value={adminName}
+                        onChange={(e) => handleAdminNameChange(e.target.value)}
+                        className="w-full sm:max-w-xs px-3 py-1.5 rounded-lg text-xs focus:outline-none focus:ring-1 bg-[#1a1a1c] border border-brand-crimson-border focus:border-brand-crimson-red focus:ring-brand-crimson-red text-white font-semibold"
+                      />
+                    </div>
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={() => {
+                          setIsAdmin(false);
+                          setAdminModalOpen(false);
+                        }}
+                        className="px-3.5 py-1.5 rounded-lg text-xs font-bold border border-zinc-700 hover:bg-zinc-800 text-gray-300 transition-colors"
+                      >
+                        Cerrar Sesión
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Tabs Selector */}
+                  <div className="flex border-b border-brand-crimson-border/40">
+                    <button
+                      onClick={() => setAdminTab('proposals')}
+                      className={`flex items-center space-x-1.5 px-4 py-2 text-xs font-bold uppercase tracking-wider border-b-2 transition-all ${
+                        adminTab === 'proposals' 
+                          ? 'border-brand-crimson-red text-white' 
+                          : 'border-transparent text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      <ClipboardList size={14} />
+                      <span>Cola de Propuestas ({dbData.proposals.length})</span>
+                    </button>
+                    <button
+                      onClick={() => setAdminTab('audit')}
+                      className={`flex items-center space-x-1.5 px-4 py-2 text-xs font-bold uppercase tracking-wider border-b-2 transition-all ${
+                        adminTab === 'audit' 
+                          ? 'border-brand-crimson-red text-white' 
+                          : 'border-transparent text-gray-400 hover:text-white'
+                      }`}
+                    >
+                      <History size={14} />
+                      <span>Auditoría</span>
+                    </button>
+                  </div>
+
+                  {/* Tab Contents */}
+                  {adminTab === 'proposals' ? (
+                    <div className="space-y-3">
+                      {dbData.proposals.length === 0 ? (
+                        <div className="p-8 text-center text-gray-500 border border-dashed border-brand-crimson-border/60 rounded-xl">
+                          No hay propuestas pendientes de revisión. ¡Buen trabajo!
+                        </div>
+                      ) : (
+                        dbData.proposals.map((prop) => {
+                          const existingPost = dbData.posts.find(p => p.id === prop.postId);
+                          const isNewPost = typeof prop.postId === 'string' && prop.postId.startsWith('NEW-');
+                          return (
+                            <div key={prop.id} className="p-4 rounded-xl border border-brand-crimson-border bg-brand-crimson-bg/40 flex flex-col gap-3 text-left">
+                              <div className="flex items-center justify-between text-xs font-bold">
+                                <span className="text-gray-400">
+                                  Propuesto por: <span className="text-white font-extrabold">{prop.proposer}</span>
+                                </span>
+                                <span className="text-gray-500">{prop.timestamp}</span>
+                              </div>
+
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                                <div>
+                                  <h4 className="font-extrabold text-brand-crimson-red mb-1 uppercase tracking-wide">
+                                    {isNewPost ? 'Nuevo Posteo Propuesto' : `Posteo original #${prop.postId}`}
+                                  </h4>
+                                  <div className="p-2.5 rounded bg-black/30 border border-zinc-800 text-gray-400 space-y-1">
+                                    <p><strong>Fecha:</strong> {prop.date}</p>
+                                    {!isNewPost && existingPost && (
+                                      <>
+                                        <p><strong>Formato:</strong> {existingPost.format}</p>
+                                        <p><strong>Público:</strong> {existingPost.target}</p>
+                                        <p><strong>Objetivo:</strong> {existingPost.objective}</p>
+                                        <p className="line-clamp-3"><strong>Copy:</strong> {existingPost.content}</p>
+                                      </>
+                                    )}
+                                    {isNewPost && <p className="italic">Día vacío en el calendario</p>}
+                                  </div>
+                                </div>
+
+                                <div>
+                                  <h4 className="font-extrabold text-green-400 mb-1 uppercase tracking-wide">Cambios Sugeridos</h4>
+                                  <div className="p-2.5 rounded bg-black/40 border border-zinc-800 text-gray-200 space-y-1">
+                                    <p><strong>Formato:</strong> {prop.format}</p>
+                                    <p><strong>Público:</strong> {prop.target}</p>
+                                    <p><strong>Objetivo:</strong> {prop.objective}</p>
+                                    <p><strong>Copy Sugerido:</strong></p>
+                                    <p className="text-white whitespace-pre-wrap font-serif italic mt-1 leading-snug">{prop.content || '(Vacío)'}</p>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Proposal actions */}
+                              <div className="flex justify-end gap-2 pt-2 border-t border-brand-crimson-border/30">
+                                <button
+                                  onClick={() => handleRejectProposal(prop.id)}
+                                  className="flex items-center space-x-1 px-3 py-1.5 rounded-lg text-xs font-bold bg-brand-crimson-red/25 hover:bg-brand-crimson-red/40 text-brand-crimson-red transition-colors border border-brand-crimson-red/20"
+                                >
+                                  <X size={13} className="text-brand-crimson-red" />
+                                  <span>Rechazar</span>
+                                </button>
+                                <button
+                                  onClick={() => handleApproveProposal(prop.id)}
+                                  className="flex items-center space-x-1 px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-500 hover:bg-emerald-600 text-white transition-colors shadow shadow-black/20"
+                                >
+                                  <Check size={13} className="text-white" />
+                                  <span>Aprobar y Aplicar</span>
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
+                  ) : (
+                    /* Audit Log */
+                    <div className="overflow-x-auto border border-brand-crimson-border/60 rounded-xl bg-brand-crimson-bg/20">
+                      <table className="min-w-full divide-y divide-zinc-800 text-left text-xs">
+                        <thead>
+                          <tr className="bg-brand-crimson-bg">
+                            <th className="px-4 py-3 font-bold text-gray-400 uppercase tracking-wider">Fecha</th>
+                            <th className="px-4 py-3 font-bold text-gray-400 uppercase tracking-wider">Usuario</th>
+                            <th className="px-4 py-3 font-bold text-gray-400 uppercase tracking-wider">Acción</th>
+                            <th className="px-4 py-3 font-bold text-gray-400 uppercase tracking-wider">Detalles</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-zinc-800 text-gray-300">
+                          {dbData.auditLog.map((log) => (
+                            <tr key={log.id} className="hover:bg-zinc-800/20">
+                              <td className="px-4 py-3 whitespace-nowrap text-gray-500">{log.timestamp}</td>
+                              <td className="px-4 py-3 whitespace-nowrap font-semibold text-white">{log.user}</td>
+                              <td className="px-4 py-3 whitespace-nowrap">
+                                <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                                  log.action.includes('Creación') 
+                                    ? 'bg-blue-500/15 text-blue-400 border border-blue-500/20'
+                                    : log.action.includes('Eliminación')
+                                      ? 'bg-brand-crimson-red/15 text-brand-crimson-red border border-brand-crimson-red/20'
+                                      : log.action.includes('Aprobación')
+                                        ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20'
+                                        : 'bg-amber-500/15 text-amber-400 border border-amber-500/20'
+                                }`}>
+                                  {log.action}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3">{log.details}</td>
+                            </tr>
+                          ))}
+                          {dbData.auditLog.length === 0 && (
+                            <tr>
+                              <td colSpan="4" className="px-4 py-8 text-center text-gray-500">
+                                Aún no se registran acciones en la auditoría.
+                              </td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-5 border-t border-brand-crimson-border/60 flex justify-end shrink-0 bg-[#0c0c0d]">
+              <button
+                onClick={() => { setAdminModalOpen(false); setPinError(false); }}
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-[#1d1d20] hover:bg-[#27272a] text-gray-200 transition-colors"
+              >
+                Cerrar Panel
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
+
       {/* Slide-over Drawer component integration */}
       <PostDetailDrawer 
         post={selectedPost}
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
         theme={activeTheme}
+        isAdmin={isAdmin}
+        proposals={dbData.proposals}
+        adminName={adminName}
+        onSavePost={handleSavePostDirectly}
+        onDeletePost={handleDeletePostDirectly}
+        onProposeChange={handleProposeChange}
       />
     </div>
   );
