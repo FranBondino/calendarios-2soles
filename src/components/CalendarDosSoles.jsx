@@ -149,11 +149,19 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
   useEffect(() => {
     setLogoError(false);
   }, [activeTheme]);
-
   // Load cloud data on mount
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // Get local fallback first to show immediately
+        const localRaw = localStorage.getItem('dosSolesCalendarData');
+        let localData = null;
+        if (localRaw) {
+          try {
+            localData = JSON.parse(localRaw);
+          } catch(e) {}
+        }
+
         const response = await fetch('https://jsonblob.com/api/jsonBlob/019ed701-d38a-77bc-a854-83e9c6ef4fef');
         if (!response.ok) throw new Error('Failed to fetch from jsonblob');
         let data = await response.json();
@@ -163,19 +171,36 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
           data = {
             posts: data,
             proposals: [],
-            auditLog: []
+            auditLog: [],
+            lastUpdated: 0
           };
         } else {
           data = {
             posts: data.posts || [],
             proposals: data.proposals || [],
-            auditLog: data.auditLog || []
+            auditLog: data.auditLog || [],
+            lastUpdated: data.lastUpdated || 0
           };
         }
-        setDbData(data);
+
+        if (localData && localData.lastUpdated > data.lastUpdated) {
+          console.log('Using newer local changes');
+          setDbData(localData);
+        } else {
+          setDbData(data);
+          localStorage.setItem('dosSolesCalendarData', JSON.stringify(data));
+        }
       } catch (error) {
         console.error('Error fetching calendar data:', error);
-        // Resilient fallback to local static data
+        // Fallback to local storage or fallbackScheduleData
+        const localRaw = localStorage.getItem('dosSolesCalendarData');
+        if (localRaw) {
+          try {
+            setDbData(JSON.parse(localRaw));
+            return;
+          } catch(e) {}
+        }
+        
         setDbData({
           posts: fallbackScheduleData,
           proposals: [],
@@ -189,24 +214,34 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
   }, []);
 
   const saveToCloud = async (updatedData) => {
+    // Add lastUpdated timestamp
+    const dataWithTimestamp = {
+      ...updatedData,
+      lastUpdated: Date.now()
+    };
+    
+    // Always save to localStorage first
+    localStorage.setItem('dosSolesCalendarData', JSON.stringify(dataWithTimestamp));
+    
     try {
       const response = await fetch('https://jsonblob.com/api/jsonBlob/019ed701-d38a-77bc-a854-83e9c6ef4fef', {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
-        body: JSON.stringify(updatedData)
+        body: JSON.stringify(dataWithTimestamp)
       });
-      if (!response.ok) throw new Error('Error PUTing to jsonblob');
-      setDbData(updatedData);
+      if (!response.ok) throw new Error('Error de servidor: ' + response.statusText);
+      setDbData(dataWithTimestamp);
       return true;
     } catch (error) {
-      console.error('Error saving data:', error);
-      alert('Hubo un error al guardar los cambios en la nube. Revisa tu conexión.');
-      return false;
+      console.error('Error saving data to cloud:', error);
+      alert('Sugerencia: Los cambios se guardaron localmente en tu navegador, pero no pudieron sincronizarse en la nube (Error: ' + error.message + '). Asegúrate de no tener un bloqueador de anuncios activo para este sitio.');
+      setDbData(dataWithTimestamp); // Update local state anyway
+      return true; // Return true so drawer closes and flow continues
     }
   };
-
   // Direct edit/create (Admin only)
   const handleSavePostDirectly = async (editedPost, editorName) => {
     if (!editorName) {
