@@ -162,8 +162,9 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
           } catch(e) {}
         }
 
-        const response = await fetch('https://jsonblob.com/api/jsonBlob/019ed701-d38a-77bc-a854-83e9c6ef4fef');
-        if (!response.ok) throw new Error('Failed to fetch from jsonblob');
+        const response = await fetch('https://kvdb.io/EkzRKn42MmxEpmfnvPpCsL/calendar');
+        if (response.status === 404) throw new Error('No data found in cloud storage');
+        if (!response.ok) throw new Error('Failed to fetch from cloud storage');
         let data = await response.json();
         
         // Handle fallback/migration from legacy flat array
@@ -224,7 +225,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
     localStorage.setItem('dosSolesCalendarData', JSON.stringify(dataWithTimestamp));
     
     try {
-      const response = await fetch('https://jsonblob.com/api/jsonBlob/019ed701-d38a-77bc-a854-83e9c6ef4fef', {
+      const response = await fetch('https://kvdb.io/EkzRKn42MmxEpmfnvPpCsL/calendar', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -237,7 +238,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
       return true;
     } catch (error) {
       console.error('Error saving data to cloud:', error);
-      alert('Sugerencia: Los cambios se guardaron localmente en tu navegador, pero no pudieron sincronizarse en la nube (Error: ' + error.message + '). Asegúrate de no tener un bloqueador de anuncios activo para este sitio.');
+      alert('Nota: Los cambios se guardaron localmente en tu navegador, pero no pudieron sincronizarse en la nube (Error: ' + error.message + '). Si es tu primera vez, asegúrate de haber verificado tu dirección de correo electrónico haciendo clic en el mail enviado por kvdb.io a franbondino@gmail.com.');
       setDbData(dataWithTimestamp); // Update local state anyway
       return true; // Return true so drawer closes and flow continues
     }
