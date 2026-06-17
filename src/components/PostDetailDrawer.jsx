@@ -37,6 +37,7 @@ const PostDetailDrawer = ({
   const [editTarget, setEditTarget] = useState('B2B');
   const [editObjective, setEditObjective] = useState('Interacción');
   const [editorName, setEditorName] = useState(adminName || '');
+  const [editPublished, setEditPublished] = useState(false);
 
   // User proposal states
   const [isProposing, setIsProposing] = useState(false);
@@ -87,6 +88,7 @@ const PostDetailDrawer = ({
       setEditContent(post.content || '');
       setEditTarget(post.target || 'B2B');
       setEditObjective(post.objective || 'Interacción');
+      setEditPublished(post.published || false);
       setIsProposing(false);
     }
     setCopied(false);
@@ -113,6 +115,17 @@ const PostDetailDrawer = ({
     ));
   };
 
+  const handleTogglePublishedDirectly = async () => {
+    const updated = {
+      ...post,
+      published: !post.published
+    };
+    const success = await onSavePost(updated, editorName || adminName || 'Admin');
+    if (success) {
+      onClose();
+    }
+  };
+
   const handleAdminSave = async () => {
     if (!editorName.trim()) {
       alert('Por favor, ingresa tu nombre de administrador para registrar la auditoría.');
@@ -123,7 +136,8 @@ const PostDetailDrawer = ({
       format: editFormat,
       target: editTarget,
       objective: editObjective,
-      content: editContent
+      content: editContent,
+      published: editPublished
     };
     const success = await onSavePost(edited, editorName);
     if (success) {
@@ -313,6 +327,20 @@ const PostDetailDrawer = ({
                 />
               </div>
 
+              {/* Published state toggle */}
+              <div className="flex items-center space-x-2.5 p-3 rounded-lg bg-[#1a1a1c] border border-brand-crimson-border text-left">
+                <input
+                  type="checkbox"
+                  id="editPublished"
+                  checked={editPublished}
+                  onChange={(e) => setEditPublished(e.target.checked)}
+                  className="h-4 w-4 rounded text-brand-crimson-red border-brand-crimson-border bg-zinc-900 focus:ring-offset-0 focus:ring-0 cursor-pointer"
+                />
+                <label htmlFor="editPublished" className="text-xs font-bold uppercase tracking-wider text-gray-300 cursor-pointer select-none">
+                  Marcar como Publicado
+                </label>
+              </div>
+
               <div className="space-y-1.5 text-left p-3 rounded-lg bg-zinc-900 border border-brand-crimson-border/60">
                 <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">Tu Nombre de Editor (Requerido para Auditoría)</label>
                 <input
@@ -406,6 +434,31 @@ const PostDetailDrawer = ({
           ) : (
             /* Normal Visitor Detail View */
             <div className="space-y-4 sm:space-y-6">
+              
+              {/* Publication Status Card */}
+              <div className={`p-3.5 rounded-xl flex items-center justify-between text-left ${contentBgClass}`}>
+                <span className={`text-xs font-bold uppercase tracking-wider ${textSubClass}`}>Estado de Publicación</span>
+                <div className="flex items-center space-x-3">
+                  {post.published ? (
+                    <span className="inline-flex items-center space-x-1 text-xs font-bold px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
+                      <Check size={12} className="stroke-[3.5]" />
+                      <span>Publicado</span>
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center space-x-1 text-xs font-bold px-2.5 py-1 rounded bg-zinc-800 text-zinc-400 border border-zinc-700 uppercase tracking-wider">
+                      <span>Planificado</span>
+                    </span>
+                  )}
+                  {isAdmin && (
+                    <button
+                      onClick={handleTogglePublishedDirectly}
+                      className="text-[10px] font-bold text-brand-crimson-red hover:text-brand-crimson-hover hover:underline uppercase tracking-wider pl-2 transition-colors focus:outline-none shrink-0"
+                    >
+                      {post.published ? 'Cambiar a Planificado' : 'Marcar Publicado'}
+                    </button>
+                  )}
+                </div>
+              </div>
               
               {/* Proposal Warning Banner if proposal active */}
               {activeProposal && (

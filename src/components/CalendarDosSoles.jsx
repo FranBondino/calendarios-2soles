@@ -471,12 +471,13 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
     const stories = dbData.posts.filter(p => p.format.toLowerCase().includes('story')).length;
     const carruseles = dbData.posts.filter(p => p.format.toLowerCase().includes('carrusel')).length;
     const others = total - reels - stories - carruseles;
+    const published = dbData.posts.filter(p => p.published).length;
 
     const b2b = dbData.posts.filter(p => p.target === 'B2B').length;
     const b2c = dbData.posts.filter(p => p.target === 'B2C').length;
     const ambos = dbData.posts.filter(p => p.target === 'Ambos' || p.target === 'B2B / B2C').length;
 
-    return { total, reels, stories, carruseles, others, b2b, b2c, ambos };
+    return { total, reels, stories, carruseles, others, b2b, b2c, ambos, published };
   }, [dbData.posts]);
 
   const handleDayClick = (dayObj) => {
@@ -551,8 +552,8 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
             )}
           </div>
           <div>
-            <h1 className="text-lg sm:text-2xl md:text-3.5xl tracking-tight leading-tight text-white font-serif font-bold">
-              Dos Soles • Planificación de Redes
+            <h1 className="text-sm sm:text-2xl md:text-3.5xl tracking-tight leading-tight text-white font-serif font-bold">
+              Dos Soles • <br className="sm:hidden" />Planificación de Redes
             </h1>
             <p className="text-[10px] sm:text-sm mt-1.5 flex items-center space-x-1.5 text-gray-400">
               <CalendarDays size={14} className="text-brand-crimson-red shrink-0" />
@@ -608,6 +609,10 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
             <span className="text-3xl font-bold tracking-tight">{statistics.total}</span>
             <span className="text-xs text-gray-400">programados</span>
           </div>
+          <p className="text-[10px] text-emerald-400 font-semibold mt-1.5 flex items-center space-x-1">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 inline-block animate-pulse"></span>
+            <span>{statistics.published} de ellos publicados</span>
+          </p>
         </div>
         <div className="space-y-1">
           <p className="text-[10px] uppercase font-bold tracking-wider text-gray-400">Formatos Cortos</p>
@@ -646,9 +651,9 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
       </div>
 
       {/* 3. Search and Filters Toolbar */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 mb-6 md:mb-8">
+      <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4 mb-6 md:mb-8">
         {/* Search Input */}
-        <div className="relative w-full lg:max-w-md">
+        <div className="relative w-full md:max-w-xs">
           <Search size={16} className="absolute left-3.5 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input 
             type="text"
@@ -660,11 +665,11 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
         </div>
 
         {/* Filter Badges Container */}
-        <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto overflow-hidden">
+        <div className="flex flex-col sm:flex-row gap-4 w-full xl:w-auto overflow-hidden">
           {/* Format Filter */}
           <div className="flex items-center space-x-2 w-full sm:w-auto min-w-0">
             <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-gray-400 shrink-0">Formato:</span>
-            <div className="flex gap-1.5 overflow-x-auto scrollbar-none py-1 shrink-0 max-w-full">
+            <div className="flex gap-1.5 overflow-x-auto scrollbar-none py-1 min-w-0 max-w-full">
               {formats.map((fmt) => (
                 <button
                   key={fmt}
@@ -684,7 +689,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
           {/* Target Audience Filter */}
           <div className="flex items-center space-x-2 w-full sm:w-auto min-w-0">
             <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-gray-400 shrink-0">Público:</span>
-            <div className="flex gap-1.5 overflow-x-auto scrollbar-none py-1 shrink-0 max-w-full">
+            <div className="flex gap-1.5 overflow-x-auto scrollbar-none py-1 min-w-0 max-w-full">
               {targets.map((tgt) => (
                 <button
                   key={tgt}
@@ -774,11 +779,18 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                 >
                   {/* Cell Header: Day Number and Anniversary Indicators */}
                   <div className="flex items-center justify-between w-full">
-                    <span className={`text-[10px] sm:text-xs md:text-sm font-bold ${
-                      post ? 'text-white' : 'text-gray-400'
-                    }`}>
-                      {dayObj.day}
-                    </span>
+                    <div className="flex items-center space-x-1">
+                      <span className={`text-[10px] sm:text-xs md:text-sm font-bold ${
+                        post ? 'text-white' : 'text-gray-400'
+                      }`}>
+                        {dayObj.day}
+                      </span>
+                      {post?.published && (
+                        <span className="text-[9px] sm:text-[10px] text-emerald-400 flex items-center shrink-0" title="Publicado">
+                          <Check size={11} className="stroke-[3.5]" />
+                        </span>
+                      )}
+                    </div>
                     
                     <div className="flex items-center space-x-1 font-semibold">
                       {hasPendingProposal && (
@@ -820,11 +832,18 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                           </div>
                         )}
                         {/* Format Indicator Badge */}
-                        <div className="flex items-center space-x-1">
+                        <div className="flex flex-wrap gap-1 items-center">
                           <span className={`flex items-center space-x-1 text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded border uppercase tracking-wider ${badge.colorClass}`}>
                             {badge.icon}
                             <span className="hidden md:inline">{badge.label}</span>
                           </span>
+                          {post.published && (
+                            <span className="flex items-center space-x-0.5 text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wide">
+                              <Check size={9} className="stroke-[3.5]" />
+                              <span className="hidden md:inline">Publicado</span>
+                              <span className="md:hidden">Pub.</span>
+                            </span>
+                          )}
                         </div>
 
                         {/* Audience Indicator Badge */}
@@ -886,6 +905,12 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-bold text-white">{item.date}</span>
                     <div className="flex items-center space-x-2">
+                      {item.published && (
+                        <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider flex items-center space-x-1">
+                          <Check size={9} className="stroke-[3.5]" />
+                          <span>Publicado</span>
+                        </span>
+                      )}
                       {hasPendingProposal && (
                         <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 uppercase tracking-wider">
                           Propuesta
@@ -953,8 +978,14 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                       )}
                       <span>{item.date}</span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
+                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center space-x-2">
+                        {item.published && (
+                          <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider flex items-center space-x-1">
+                            <Check size={10} className="stroke-[3.5]" />
+                            <span>Publicado</span>
+                          </span>
+                        )}
                         {hasPendingProposal && (
                           <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 uppercase tracking-wider">
                             Propuesta
