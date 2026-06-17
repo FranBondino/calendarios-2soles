@@ -795,11 +795,13 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                 : dbData.proposals.filter(p => p.postId === `NEW-${dayObj.day}`);
               const hasPendingProposal = postProposals.length > 0;
 
-              // Anniversary special background indicators
+              // Anniversary special background indicators or client review highlights
               const isAnniversaryDay = dayObj.day === 12 || dayObj.day === 13;
-              let anniversaryHighlight = '';
+              let highlightClasses = '';
               if (isAnniversaryDay) {
-                anniversaryHighlight = 'ring-2 ring-brand-crimson-red/50 bg-brand-crimson-red/5';
+                highlightClasses = 'ring-2 ring-brand-crimson-red/50 bg-brand-crimson-red/5';
+              } else if (post?.needsReview) {
+                highlightClasses = 'ring-2 ring-amber-500/45 bg-amber-500/5 border-amber-500/30';
               }
 
               return (
@@ -810,7 +812,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                     post 
                       ? `${cardClass} ${isFilteredOut ? 'opacity-25' : 'opacity-100'}` 
                       : 'border border-dashed border-zinc-800 bg-[#0F0F10]/50 hover:bg-[#1a1a1c]/50 text-gray-400'
-                  } ${anniversaryHighlight}`}
+                  } ${highlightClasses}`}
                 >
                   {/* Cell Header: Day Number and Anniversary Indicators */}
                   <div className="flex items-center justify-between w-full">
@@ -823,6 +825,11 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                       {post?.published && (
                         <span className="text-[9px] sm:text-[10px] text-emerald-400 flex items-center shrink-0" title="Publicado">
                           <Check size={11} className="stroke-[3.5]" />
+                        </span>
+                      )}
+                      {post?.needsReview && (
+                        <span className="text-[9px] sm:text-[10px] text-amber-400 flex items-center shrink-0" title="Revisar">
+                          ⚠️
                         </span>
                       )}
                     </div>
@@ -877,6 +884,13 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                               <Check size={9} className="stroke-[3.5]" />
                               <span className="hidden md:inline">Publicado</span>
                               <span className="md:hidden">Pub.</span>
+                            </span>
+                          )}
+                          {post.needsReview && (
+                            <span className="flex items-center space-x-0.5 text-[9px] md:text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-400 border border-amber-500/20 uppercase tracking-wide">
+                              <Info size={9} className="stroke-[3.5]" />
+                              <span className="hidden md:inline">Revisar</span>
+                              <span className="md:hidden">Rev.</span>
                             </span>
                           )}
                         </div>
@@ -940,6 +954,12 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                   <div className="flex items-center justify-between">
                     <span className="text-sm font-bold text-white">{item.date}</span>
                     <div className="flex items-center space-x-2">
+                      {item.needsReview && (
+                        <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 uppercase tracking-wider flex items-center space-x-1 animate-pulse">
+                          <Info size={9} className="stroke-[3.5]" />
+                          <span>Revisar</span>
+                        </span>
+                      )}
                       {item.published && (
                         <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider flex items-center space-x-1">
                           <Check size={9} className="stroke-[3.5]" />
@@ -1015,6 +1035,12 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                     </td>
                      <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center space-x-2">
+                        {item.needsReview && (
+                          <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30 uppercase tracking-wider flex items-center space-x-1 animate-pulse">
+                            <Info size={10} className="stroke-[3.5]" />
+                            <span>Revisar</span>
+                          </span>
+                        )}
                         {item.published && (
                           <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 uppercase tracking-wider flex items-center space-x-1">
                             <Check size={10} className="stroke-[3.5]" />

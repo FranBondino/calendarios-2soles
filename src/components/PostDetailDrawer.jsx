@@ -38,6 +38,7 @@ const PostDetailDrawer = ({
   const [editObjective, setEditObjective] = useState('Interacción');
   const [editorName, setEditorName] = useState(adminName || '');
   const [editPublished, setEditPublished] = useState(false);
+  const [editNeedsReview, setEditNeedsReview] = useState(false);
 
   // User proposal states
   const [isProposing, setIsProposing] = useState(false);
@@ -89,6 +90,7 @@ const PostDetailDrawer = ({
       setEditTarget(post.target || 'B2B');
       setEditObjective(post.objective || 'Interacción');
       setEditPublished(post.published || false);
+      setEditNeedsReview(post.needsReview || false);
       setIsProposing(false);
     }
     setCopied(false);
@@ -126,6 +128,17 @@ const PostDetailDrawer = ({
     }
   };
 
+  const handleToggleNeedsReviewDirectly = async () => {
+    const updated = {
+      ...post,
+      needsReview: !post.needsReview
+    };
+    const success = await onSavePost(updated, editorName || adminName || 'Admin');
+    if (success) {
+      onClose();
+    }
+  };
+
   const handleAdminSave = async () => {
     if (!editorName.trim()) {
       alert('Por favor, ingresa tu nombre de administrador para registrar la auditoría.');
@@ -137,7 +150,8 @@ const PostDetailDrawer = ({
       target: editTarget,
       objective: editObjective,
       content: editContent,
-      published: editPublished
+      published: editPublished,
+      needsReview: editNeedsReview
     };
     const success = await onSavePost(edited, editorName);
     if (success) {
@@ -341,6 +355,20 @@ const PostDetailDrawer = ({
                 </label>
               </div>
 
+              {/* Needs Review toggle */}
+              <div className="flex items-center space-x-2.5 p-3 rounded-lg bg-[#1a1a1c] border border-brand-crimson-border text-left">
+                <input
+                  type="checkbox"
+                  id="editNeedsReview"
+                  checked={editNeedsReview}
+                  onChange={(e) => setEditNeedsReview(e.target.checked)}
+                  className="h-4 w-4 rounded text-amber-500 border-brand-crimson-border bg-zinc-900 focus:ring-offset-0 focus:ring-0 cursor-pointer"
+                />
+                <label htmlFor="editNeedsReview" className="text-xs font-bold uppercase tracking-wider text-amber-400 cursor-pointer select-none">
+                  Marcar para revisión de cliente
+                </label>
+              </div>
+
               <div className="space-y-1.5 text-left p-3 rounded-lg bg-zinc-900 border border-brand-crimson-border/60">
                 <label className="text-[10px] font-bold uppercase tracking-wider text-gray-400 block">Tu Nombre de Editor (Requerido para Auditoría)</label>
                 <input
@@ -435,30 +463,69 @@ const PostDetailDrawer = ({
             /* Normal Visitor Detail View */
             <div className="space-y-4 sm:space-y-6">
               
-              {/* Publication Status Card */}
-              <div className={`p-3.5 rounded-xl flex items-center justify-between text-left ${contentBgClass}`}>
-                <span className={`text-xs font-bold uppercase tracking-wider ${textSubClass}`}>Estado de Publicación</span>
-                <div className="flex items-center space-x-3">
-                  {post.published ? (
-                    <span className="inline-flex items-center space-x-1 text-xs font-bold px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
-                      <Check size={12} className="stroke-[3.5]" />
-                      <span>Publicado</span>
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center space-x-1 text-xs font-bold px-2.5 py-1 rounded bg-zinc-800 text-zinc-400 border border-zinc-700 uppercase tracking-wider">
-                      <span>Planificado</span>
-                    </span>
-                  )}
-                  {isAdmin && (
-                    <button
-                      onClick={handleTogglePublishedDirectly}
-                      className="text-[10px] font-bold text-brand-crimson-red hover:text-brand-crimson-hover hover:underline uppercase tracking-wider pl-2 transition-colors focus:outline-none shrink-0"
-                    >
-                      {post.published ? 'Cambiar a Planificado' : 'Marcar Publicado'}
-                    </button>
-                  )}
+              {/* Publication & Review Status Card */}
+              <div className={`p-3.5 rounded-xl flex flex-col gap-3 text-left ${contentBgClass}`}>
+                <div className="flex items-center justify-between">
+                  <span className={`text-xs font-bold uppercase tracking-wider ${textSubClass}`}>Estado de Publicación</span>
+                  <div className="flex items-center space-x-2">
+                    {post.published ? (
+                      <span className="inline-flex items-center space-x-1 text-xs font-bold px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
+                        <Check size={12} className="stroke-[3.5]" />
+                        <span>Publicado</span>
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center space-x-1 text-xs font-bold px-2.5 py-1 rounded bg-zinc-800 text-zinc-400 border border-zinc-700 uppercase tracking-wider">
+                        <span>Planificado</span>
+                      </span>
+                    )}
+                    {isAdmin && (
+                      <button
+                        onClick={handleTogglePublishedDirectly}
+                        className="text-[10px] font-bold text-brand-crimson-red hover:text-brand-crimson-hover hover:underline uppercase tracking-wider pl-2 transition-colors focus:outline-none shrink-0"
+                      >
+                        {post.published ? 'Cambiar a Planificado' : 'Marcar Publicado'}
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between border-t border-brand-crimson-border/30 pt-2.5">
+                  <span className={`text-xs font-bold uppercase tracking-wider ${textSubClass}`}>Revisión de Cliente</span>
+                  <div className="flex items-center space-x-2">
+                    {post.needsReview ? (
+                      <span className="inline-flex items-center space-x-1 text-xs font-bold px-2.5 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 uppercase tracking-wider animate-pulse">
+                        <Info size={12} className="stroke-[3]" />
+                        <span>Requiere Revisión</span>
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center space-x-1 text-xs font-bold px-2.5 py-1 rounded bg-zinc-800 text-zinc-400 border border-zinc-700 uppercase tracking-wider">
+                        <span>Revisado / Sin marcas</span>
+                      </span>
+                    )}
+                    {isAdmin && (
+                      <button
+                        onClick={handleToggleNeedsReviewDirectly}
+                        className="text-[10px] font-bold text-amber-400 hover:text-amber-300 hover:underline uppercase tracking-wider pl-2 transition-colors focus:outline-none shrink-0"
+                      >
+                        {post.needsReview ? 'Quitar Marca' : 'Marcar para Revisar'}
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
+
+              {/* Client Review Banner Instruction */}
+              {post.needsReview && (
+                <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-left flex items-start space-x-3">
+                  <Info size={18} className="text-amber-400 mt-0.5 shrink-0" />
+                  <div>
+                    <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider">Este día requiere tu revisión</h4>
+                    <p className="text-xs text-gray-300 mt-1 leading-relaxed">
+                      Por favor, revisa el contenido propuesto para esta fecha. Si tienes comentarios o deseas cambiar el texto/formato, puedes proponer una modificación haciendo clic en **"Proponer Cambio"** abajo.
+                    </p>
+                  </div>
+                </div>
+              )}
               
               {/* Proposal Warning Banner if proposal active */}
               {activeProposal && (
