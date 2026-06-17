@@ -31,11 +31,11 @@ import PostDetailDrawer from './PostDetailDrawer';
 
 // Base Structured Social Media Calendar Data (Fallback)
 const fallbackScheduleData = [
-  { id: 1, date: 'Lun 08/06', format: 'Reel', content: 'Capacitación Truss: Resumen dinámico del evento.', target: 'B2B', objective: 'Fidelización' },
-  { id: 2, date: 'Mar 09/06', format: 'Story', content: 'Entrevista Truss: Fragmentos con sticker de preguntas.', target: 'B2B / B2C', objective: 'Autoridad' },
+  { id: 1, date: 'Lun 08/06', format: 'Reel', content: 'Capacitación Truss: Resumen dinámico del evento.', target: 'B2B', objective: 'Fidelización', published: true },
+  { id: 2, date: 'Mar 09/06', format: 'Story', content: 'Entrevista Truss: Fragmentos con sticker de preguntas.', target: 'B2B / B2C', objective: 'Autoridad', published: true },
   { id: 3, date: 'Mié 10/06', format: 'Story', content: 'Detrás de escena (Logística): Armado de pedidos.', target: 'B2B', objective: 'Confianza/Conversión' },
-  { id: 4, date: 'Jue 11/06', format: 'Carrusel', content: 'Antes y Después Truss: Resultado y productos.', target: 'Ambos', objective: 'Prueba Social' },
-  { id: 5, date: 'Vie 12/06', format: 'Story', content: 'Caja de Preguntas Aniversario 19.', target: 'Ambos', objective: 'Interacción' },
+  { id: 4, date: 'Jue 11/06', format: 'Carrusel', content: 'Antes y Después Truss: Resultado y productos.', target: 'Ambos', objective: 'Prueba Social', published: true },
+  { id: 5, date: 'Vie 12/06', format: 'Story', content: 'Caja de Preguntas Aniversario 19.', target: 'Ambos', objective: 'Interacción', published: true },
   { id: 6, date: 'Sáb 13/06', format: 'Video', content: '¡Aniversario 19!: Video institucional humano.', target: 'Ambos', objective: 'Branding' },
   { id: 7, date: 'Lun 15/06', format: 'Reel', content: 'Familia Liss Expert: Presentación de la línea.', target: 'B2B', objective: 'Venta/Educación' },
   { id: 8, date: 'Mar 16/06', format: 'Reel / Post', content: 'Caso de Éxito de Profesional: Testimonio de salón.', target: 'B2B', objective: 'Comunidad' },
@@ -43,7 +43,7 @@ const fallbackScheduleData = [
   { id: 10, date: 'Jue 18/06', format: 'Story', content: 'Encuesta / Trivia B2B: Alisado vs. Color.', target: 'B2B', objective: 'Engagement' },
   { id: 11, date: 'Vie 19/06', format: 'Reel / Post', content: 'Promos Mundial Matrix: Equipos ganadores.', target: 'Ambos', objective: 'Conversión' },
   { id: 12, date: 'Sáb 20/06', format: 'Carrusel', content: 'Los 3 rubios más pedidos este invierno + stock.', target: 'B2B', objective: 'Estrategia' },
-  { id: 13, date: 'Lun 22/06', format: 'Reel', content: 'Lanzamiento Keratin Alpha Sleek: Innovación.', target: 'B2B', objective: 'Novedad' },
+  { id: 13, date: 'Lun 22/06', format: 'Reel', content: 'Lanzamiento Keratin Alpha Sleek: Innovación.', target: 'B2B', objective: 'Novedad', published: true },
   { id: 14, date: 'Mar 23/06', format: 'Carrusel', content: 'Si tenés este problema -> Pedile a tu estilista.', target: 'B2C', objective: 'Demanda' },
   { id: 15, date: 'Mié 24/06', format: 'Reel', content: 'Organico ASMR "La pelu en tu casa".', target: 'B2C', objective: 'Engagement' },
   { id: 16, date: 'Jue 25/06', format: 'Reel', content: 'Unboxing "La pelu en tu casa": Packaging.', target: 'B2C', objective: 'Deseo/Retail' },
