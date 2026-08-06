@@ -56,7 +56,15 @@ const fallbackScheduleData = [
 
 // Utility: Parses the day number from the date string, e.g. "Lun 08/06" -> 8
 const getDayFromDate = (dateStr) => {
+  if (!dateStr) return null;
   const match = dateStr.match(/(\d+)\/\d+/);
+  return match ? parseInt(match[1], 10) : null;
+};
+
+// Utility: Parses the month number from the date string, e.g. "Lun 08/06" -> 6
+const getMonthFromDate = (dateStr) => {
+  if (!dateStr) return null;
+  const match = dateStr.match(/\d+\/(\d+)/);
   return match ? parseInt(match[1], 10) : null;
 };
 
