@@ -123,7 +123,15 @@ const getFormatBadgeDetails = (format) => {
   };
 };
 
+// Configuration map for available calendar months
+const MONTH_CONFIG = {
+  '06': { name: 'Junio 2026', monthNum: 6, suffix: '/06', days: 30, offset: 0 },
+  '07': { name: 'Julio 2026', monthNum: 7, suffix: '/07', days: 31, offset: 2 },
+  '08': { name: 'Agosto 2026', monthNum: 8, suffix: '/08', days: 31, offset: 5 },
+};
+
 const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
+  const [activeMonthTab, setActiveMonthTab] = useState('06'); // '06' (June), '07' (July), or '08' (August)
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFormat, setSelectedFormat] = useState('All');
@@ -460,17 +468,37 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
     }
   };
 
-  // Generate the full list of days in June 2026
-  // June 1st, 2026 is a Monday (Lunes)
-  const juneDays = useMemo(() => {
+  // Generate the full list of days in active month
+  const activeMonthDays = useMemo(() => {
     const days = [];
     const weekdays = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
-    for (let d = 1; d <= 30; d++) {
+    const currentConfig = MONTH_CONFIG[activeMonthTab] || MONTH_CONFIG['06'];
+    const totalDays = currentConfig.days;
+    const offset = currentConfig.offset;
+    const monthSuffix = currentConfig.suffix;
+    const monthNum = currentConfig.monthNum;
+
+    // Add empty padding days for grid alignment
+    for (let p = 0; p < offset; p++) {
+      days.push({
+        isPadding: true,
+        day: null,
+        dateStr: '',
+        weekday: '',
+        post: null
+      });
+    }
+
+    for (let d = 1; d <= totalDays; d++) {
       const paddedDay = d < 10 ? `0${d}` : `${d}`;
-      const dateStr = `${paddedDay}/06`;
+      const dateStr = `${paddedDay}${monthSuffix}`;
+      const weekday = weekdays[(d - 1 + offset) % 7];
       
-      const post = dbData.posts.find(item => getDayFromDate(item.date) === d);
-      const weekday = weekdays[(d - 1) % 7];
+      const post = dbData.posts.find(item => {
+        const day = getDayFromDate(item.date);
+        const month = getMonthFromDate(item.date);
+        return day === d && (month ? month === monthNum : monthNum === 6);
+      });
 
       days.push({
         day: d,
@@ -480,11 +508,15 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
       });
     }
     return days;
-  }, [dbData.posts]);
+  }, [dbData.posts, activeMonthTab]);
 
-  // Filtered post data for list view and statistics
+  // Filtered post data for list view and statistics (filtered by month as well)
   const filteredData = useMemo(() => {
+    const targetMonth = (MONTH_CONFIG[activeMonthTab] || MONTH_CONFIG['06']).monthNum;
     return dbData.posts.filter(item => {
+      const month = getMonthFromDate(item.date) || 6;
+      if (month !== targetMonth) return false;
+
       const matchesSearch = 
         item.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.objective.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -498,33 +530,38 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
 
       return matchesSearch && matchesFormat && matchesTarget;
     });
-  }, [dbData.posts, searchQuery, selectedFormat, selectedTarget]);
+  }, [dbData.posts, searchQuery, selectedFormat, selectedTarget, activeMonthTab]);
 
-  // Dynamic status / stats for metrics dashboard
+  // Dynamic status / stats for metrics dashboard (filtered by month)
   const statistics = useMemo(() => {
-    const total = dbData.posts.length;
-    const reels = dbData.posts.filter(p => p.format.toLowerCase().includes('reel')).length;
-    const stories = dbData.posts.filter(p => p.format.toLowerCase().includes('story')).length;
-    const carruseles = dbData.posts.filter(p => p.format.toLowerCase().includes('carrusel')).length;
+    const targetMonth = (MONTH_CONFIG[activeMonthTab] || MONTH_CONFIG['06']).monthNum;
+    const monthPosts = dbData.posts.filter(p => (getMonthFromDate(p.date) || 6) === targetMonth);
+    
+    const total = monthPosts.length;
+    const reels = monthPosts.filter(p => p.format.toLowerCase().includes('reel')).length;
+    const stories = monthPosts.filter(p => p.format.toLowerCase().includes('story')).length;
+    const carruseles = monthPosts.filter(p => p.format.toLowerCase().includes('carrusel')).length;
     const others = total - reels - stories - carruseles;
-    const published = dbData.posts.filter(p => p.published).length;
+    const published = monthPosts.filter(p => p.published).length;
 
-    const b2b = dbData.posts.filter(p => p.target === 'B2B').length;
-    const b2c = dbData.posts.filter(p => p.target === 'B2C').length;
-    const ambos = dbData.posts.filter(p => p.target === 'Ambos' || p.target === 'B2B / B2C').length;
+    const b2b = monthPosts.filter(p => p.target === 'B2B').length;
+    const b2c = monthPosts.filter(p => p.target === 'B2C').length;
+    const ambos = monthPosts.filter(p => p.target === 'Ambos' || p.target === 'B2B / B2C').length;
 
     return { total, reels, stories, carruseles, others, b2b, b2c, ambos, published };
-  }, [dbData.posts]);
+  }, [dbData.posts, activeMonthTab]);
 
   const handleDayClick = (dayObj) => {
+    if (dayObj.isPadding) return;
     if (dayObj.post) {
       setSelectedPost(dayObj.post);
       setIsDrawerOpen(true);
     } else {
+      const monthSuffix = (MONTH_CONFIG[activeMonthTab] || MONTH_CONFIG['06']).suffix;
       // Create a fresh blank structure for empty days
       const tempPost = {
-        id: `NEW-${dayObj.day}`,
-        date: `${dayObj.weekday} ${dayObj.day < 10 ? '0' + dayObj.day : dayObj.day}/06`,
+        id: `NEW-${dayObj.day}-${activeMonthTab}`,
+        date: `${dayObj.weekday} ${dayObj.day < 10 ? '0' + dayObj.day : dayObj.day}${monthSuffix}`,
         format: 'Reel',
         content: '',
         target: 'B2B',
@@ -593,7 +630,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
             </h1>
             <p className="text-[10px] sm:text-sm mt-1.5 flex items-center space-x-1.5 text-gray-400">
               <CalendarDays size={14} className="text-brand-crimson-red shrink-0" />
-              <span className="truncate">Cronograma Estratégico de Contenidos • Junio 2026</span>
+              <span className="truncate">Cronograma Estratégico de Contenidos • {MONTH_CONFIG[activeMonthTab]?.name || 'Junio 2026'}</span>
             </p>
           </div>
         </div>
@@ -635,6 +672,40 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
             </button>
           </div>
         </div>
+      </div>
+
+      {/* Month Switcher Tabs */}
+      <div className="flex space-x-2 p-1.5 mb-8 rounded-xl bg-brand-crimson-bg border border-brand-crimson-border/60 max-w-md">
+        <button
+          onClick={() => setActiveMonthTab('06')}
+          className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-extrabold uppercase tracking-wider text-center transition-all ${
+            activeMonthTab === '06'
+              ? toggleBtnActive
+              : 'text-gray-400 hover:text-gray-200'
+          }`}
+        >
+          Junio 2026
+        </button>
+        <button
+          onClick={() => setActiveMonthTab('07')}
+          className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-extrabold uppercase tracking-wider text-center transition-all ${
+            activeMonthTab === '07'
+              ? toggleBtnActive
+              : 'text-gray-400 hover:text-gray-200'
+          }`}
+        >
+          Julio 2026
+        </button>
+        <button
+          onClick={() => setActiveMonthTab('08')}
+          className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-extrabold uppercase tracking-wider text-center transition-all ${
+            activeMonthTab === '08'
+              ? toggleBtnActive
+              : 'text-gray-400 hover:text-gray-200'
+          }`}
+        >
+          Agosto 2026
+        </button>
       </div>
 
       {/* 2. Stats Dashboard Panel */}
@@ -765,7 +836,16 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
 
           {/* Grid Cells */}
           <div className="grid grid-cols-7 gap-2 md:gap-4 auto-rows-fr">
-            {juneDays.map((dayObj) => {
+            {activeMonthDays.map((dayObj) => {
+              if (dayObj.isPadding) {
+                return (
+                  <div 
+                    key={`pad-${Math.random()}`}
+                    className="min-h-[64px] sm:min-h-[120px] md:min-h-[160px] p-1.5 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl border border-transparent bg-transparent opacity-0 pointer-events-none"
+                  />
+                );
+              }
+
               const post = dayObj.post;
               
               // Apply active filtering states visually
@@ -793,11 +873,11 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
               // Check for pending proposals
               const postProposals = post 
                 ? dbData.proposals.filter(p => p.postId === post.id) 
-                : dbData.proposals.filter(p => p.postId === `NEW-${dayObj.day}`);
+                : dbData.proposals.filter(p => p.postId === `NEW-${dayObj.day}-${activeMonthTab}` || p.postId === `NEW-${dayObj.day}`);
               const hasPendingProposal = postProposals.length > 0;
 
-              // Anniversary special background indicators or client review highlights
-              const isAnniversaryDay = dayObj.day === 12 || dayObj.day === 13;
+              // Anniversary special background indicators or client review highlights (June 12 & 13)
+              const isAnniversaryDay = activeMonthTab === '06' && (dayObj.day === 12 || dayObj.day === 13);
               let highlightClasses = '';
               if (isAnniversaryDay) {
                 highlightClasses = 'ring-2 ring-brand-crimson-red/50 bg-brand-crimson-red/5';
@@ -1094,18 +1174,44 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
         </div>
       </div>
 
-      {/* 5. Info Box (Anniversary Callout) */}
-      <div className="mt-8 p-4 md:p-5 rounded-2xl flex items-start space-x-3 md:space-x-4 border border-dashed bg-brand-crimson-red/5 border-brand-crimson-red/30 text-gray-200">
-        <div className="text-brand-crimson-red shrink-0">
-          <Flame size={20} />
+      {/* 5. Info Box (Anniversary Callout / July & August Planning Guide) */}
+      {activeMonthTab === '06' ? (
+        <div className="mt-8 p-4 md:p-5 rounded-2xl flex items-start space-x-3 md:space-x-4 border border-dashed bg-brand-crimson-red/5 border-brand-crimson-red/30 text-gray-200">
+          <div className="text-brand-crimson-red shrink-0">
+            <Flame size={20} />
+          </div>
+          <div className="space-y-1 text-left">
+            <h4 className="text-sm font-bold uppercase tracking-wider">Hito de Junio: ¡19º Aniversario de Dos Soles!</h4>
+            <p className="text-xs leading-relaxed text-gray-400">
+              Los días 12 y 13 de junio se concentran posteos específicos de interacción e institucionales de branding humano por los 19 años de trayectoria de la empresa. Asegurar que las piezas visuales tengan el logo conmemorativo y transmitan el recorrido de la distribuidora.
+            </p>
+          </div>
         </div>
-        <div className="space-y-1">
-          <h4 className="text-sm font-bold uppercase tracking-wider">Hito de Junio: ¡19º Aniversario de Dos Soles!</h4>
-          <p className="text-xs leading-relaxed text-gray-400">
-            Los días 12 y 13 de junio se concentran posteos específicos de interacción e institucionales de branding humano por los 19 años de trayectoria de la empresa. Asegurar que las piezas visuales tengan el logo conmemorativo y transmitan el recorrido de la distribuidora.
-          </p>
+      ) : activeMonthTab === '07' ? (
+        <div className="mt-8 p-4 md:p-5 rounded-2xl flex items-start space-x-3 md:space-x-4 border border-dashed bg-emerald-500/5 border-emerald-500/30 text-gray-200">
+          <div className="text-emerald-400 shrink-0">
+            <ClipboardList size={20} />
+          </div>
+          <div className="space-y-1 text-left">
+            <h4 className="text-sm font-bold uppercase tracking-wider text-emerald-400">Planificación de Julio: ¡Calendario Abierto!</h4>
+            <p className="text-xs leading-relaxed text-gray-400">
+              Este espacio está listo para la diagramación de contenidos de Julio 2026. Los administradores pueden agregar posteos oficiales directamente, y el resto del equipo o clientes pueden dejar sugerencias y propuestas utilizando el botón correspondiente en cada día.
+            </p>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="mt-8 p-4 md:p-5 rounded-2xl flex items-start space-x-3 md:space-x-4 border border-dashed bg-cyan-500/5 border-cyan-500/30 text-gray-200">
+          <div className="text-cyan-400 shrink-0">
+            <ClipboardList size={20} />
+          </div>
+          <div className="space-y-1 text-left">
+            <h4 className="text-sm font-bold uppercase tracking-wider text-cyan-400">Planificación de Agosto: ¡Estructura de Agosto 2026 Lista!</h4>
+            <p className="text-xs leading-relaxed text-gray-400">
+              La estructura del mes de Agosto 2026 está completamente configurada y habilitada. Administradores y colaboradores pueden organizar la parrilla estratégica de contenidos, agregar sugerencias o programar publicaciones para todas las semanas de agosto.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* 6. Admin Panel Modal */}
       {adminModalOpen && (
