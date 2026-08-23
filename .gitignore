@@ -34,3 +34,7 @@ dist-ssr/
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# Scratch and temp
+scratch/
+

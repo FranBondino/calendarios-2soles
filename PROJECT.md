@@ -16,6 +16,7 @@
 | 4 | Typography Integration | Load and apply Cinzel for headings and Plus Jakarta Sans for body and details. | M1 | DONE |
 | 5 | Mobile Responsiveness | Ensure layout adapts to screens < 640px, simplified indicators, no text truncation/cutoff. | M1 | DONE |
 | 6 | Verification & Production Build | Verify all interactions, clipboard copying, filtering, and build cleanly with `npm run build`. | M2, M3, M4, M5 | DONE |
+| 7 | September 2026 Planning | Configure September 2026 calendar grid, spring campaign guides, and structured strategic starter posts. | M6 | DONE |
 
 ## Interface Contracts
 ### Theme Toggle

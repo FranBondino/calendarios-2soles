@@ -31,6 +31,7 @@ import PostDetailDrawer from './PostDetailDrawer';
 
 // Base Structured Social Media Calendar Data (Fallback)
 const fallbackScheduleData = [
+  // Junio 2026
   { id: 1, date: 'Lun 08/06', format: 'Reel', content: 'Capacitación Truss: Resumen dinámico del evento.', target: 'B2B', objective: 'Fidelización', published: true },
   { id: 2, date: 'Mar 09/06', format: 'Story', content: 'Entrevista Truss: Fragmentos con sticker de preguntas.', target: 'B2B / B2C', objective: 'Autoridad', published: true },
   { id: 3, date: 'Mié 10/06', format: 'Story', content: 'Detrás de escena (Logística): Armado de pedidos.', target: 'B2B', objective: 'Confianza/Conversión' },
@@ -52,6 +53,32 @@ const fallbackScheduleData = [
   { id: 19, date: 'Dom 28/06', format: 'Story', content: 'This or That (B2C): Frizz vs. Pelo Opaco.', target: 'B2C', objective: 'Interacción' },
   { id: 20, date: 'Lun 29/06', format: 'Reel', content: 'Hair Therapy: Beneficios en la bacha.', target: 'B2B', objective: 'Venta de Servicio' },
   { id: 21, date: 'Mar 30/06', format: 'Post', content: 'Antes y Después (En casa): Mantenimiento.', target: 'B2C', objective: 'Prueba Social' },
+
+  // Septiembre 2026 - Planificación Estratégica Primavera Dos Soles
+  { id: 60, date: 'Mar 01/09', format: 'Reel', content: 'Bienvenido Septiembre: Anticipate a la temporada alta de salones con stock de nutrición y brillo.', target: 'B2B', objective: 'Venta/Planificación' },
+  { id: 61, date: 'Mié 02/09', format: 'Story', content: 'Trivia de Primavera: ¿Cuál es el servicio que más te piden en el salón cuando arranca el calor?', target: 'Ambos', objective: 'Interacción' },
+  { id: 62, date: 'Jue 03/09', format: 'Carrusel', content: 'Guía de Transición Invierno-Primavera: Cómo recuperar el cabello seco y dañado post-frío.', target: 'B2C', objective: 'Educación/Demanda' },
+  { id: 63, date: 'Vie 04/09', format: 'Reel', content: 'Showcase Truss Professional: Tratamiento Infusion & Night Spa para clientas exigentes.', target: 'B2B', objective: 'Venta Técnica' },
+  { id: 64, date: 'Sáb 05/09', format: 'Post', content: 'El poder de un cabello sano: Resultados y testimonios reales en salón con productos Dos Soles.', target: 'Ambos', objective: 'Prueba Social' },
+  { id: 65, date: 'Lun 07/09', format: 'Reel', content: 'Paso a paso Liss Expert: Técnicas de alisado orgánico y brillo espejo sin formol.', target: 'B2B', objective: 'Educación' },
+  { id: 66, date: 'Mar 08/09', format: 'Story', content: 'Caja de preguntas: Dudas técnicas sobre decoloración segura y fondos de aclaración.', target: 'B2B', objective: 'Engagement' },
+  { id: 67, date: 'Mié 09/09', format: 'Carrusel', content: 'Combos Mayoristas Dos Soles: Los 3 kits más rentables para revender en tu salón este mes.', target: 'B2B', objective: 'Venta Mayorista' },
+  { id: 68, date: 'Jue 10/09', format: 'Reel', content: 'Rutina en casa: 3 pasos clave para prolongar la duración de tu alisado o color.', target: 'B2C', objective: 'Retail/Deseo' },
+  { id: 69, date: 'Vie 11/09', format: 'Reel', content: 'Detrás de escena Logística: Despachando pedidos a salones de toda la región a tiempo.', target: 'Ambos', objective: 'Confianza' },
+  { id: 70, date: 'Sáb 12/09', format: 'Story', content: 'Encuesta Primavera: ¿Rubios manteca o Castaños iluminados para esta temporada?', target: 'Ambos', objective: 'Interacción' },
+  { id: 71, date: 'Lun 14/09', format: 'Reel', content: 'Capacitaciones Dos Soles: Calendario de workshops técnicos de primavera para estilistas.', target: 'B2B', objective: 'Comunidad' },
+  { id: 72, date: 'Mar 15/09', format: 'Carrusel', content: 'Si tu cabello se quiebra al peinar: 3 señales de que necesitás reconstrucción de aminoácidos.', target: 'B2C', objective: 'Educativo' },
+  { id: 73, date: 'Mié 16/09', format: 'Reel', content: 'Herramientas y equipamiento profesional: Planchas y secadores de alta gama para salones.', target: 'B2B', objective: 'Venta Técnica' },
+  { id: 74, date: 'Jue 17/09', format: 'Story', content: 'Sondeo B2B: ¿Ya armaste tu lista de pedidos mayoristas antes del pico de primavera?', target: 'B2B', objective: 'Conversión' },
+  { id: 75, date: 'Vie 18/09', format: 'Reel', content: 'Transformación de impacto: Balayage cálido + nutrición profunda en bacha.', target: 'Ambos', objective: 'Prueba Social' },
+  { id: 76, date: 'Sáb 19/09', format: 'Post', content: 'Tip de estilista: Por qué el protector térmico es imprescindible antes del secado.', target: 'B2C', objective: 'Cuidado Capilar' },
+  { id: 77, date: 'Lun 21/09', format: 'Video', content: '¡Feliz Día de la Primavera!: Celebramos la renovación, el color y la pasión por el estilismo.', target: 'Ambos', objective: 'Branding/Especial' },
+  { id: 78, date: 'Mar 22/09', format: 'Reel', content: 'Lanzamientos de Temporada: Nuevos matizadores y reflejos para la paleta de primavera.', target: 'B2B', objective: 'Novedad' },
+  { id: 79, date: 'Mié 23/09', format: 'Carrusel', content: 'Los 4 errores comunes al cuidar cabellos con color en primavera y cómo prevenirlos.', target: 'Ambos', objective: 'Valor' },
+  { id: 80, date: 'Vie 25/09', format: 'Reel', content: 'Secretos de Bacha: Cómo crear una experiencia sensorial inolvidable para tu clienta.', target: 'B2B', objective: 'Fidelización' },
+  { id: 81, date: 'Sáb 26/09', format: 'Carrusel', content: 'L\'Oréal Serie Expert & Truss: Los favoritos recomendados por profesionales para el hogar.', target: 'B2C', objective: 'Venta Retail' },
+  { id: 82, date: 'Lun 28/09', format: 'Reel', content: 'Cierre de mes y reposición: Prepará tu salón para el inicio de Octubre.', target: 'B2B', objective: 'Venta' },
+  { id: 83, date: 'Mié 30/09', format: 'Post', content: 'Gracias a toda la comunidad de profesionales por acompañarnos en un gran Septiembre.', target: 'Ambos', objective: 'Fidelización' },
 ];
 
 // Utility: Parses the day number from the date string, e.g. "Lun 08/06" -> 8
@@ -136,10 +163,11 @@ const MONTH_CONFIG = {
   '06': { name: 'Junio 2026', monthNum: 6, suffix: '/06', days: 30, offset: 0 },
   '07': { name: 'Julio 2026', monthNum: 7, suffix: '/07', days: 31, offset: 2 },
   '08': { name: 'Agosto 2026', monthNum: 8, suffix: '/08', days: 31, offset: 5 },
+  '09': { name: 'Septiembre 2026', monthNum: 9, suffix: '/09', days: 30, offset: 1 },
 };
 
 const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
-  const [activeMonthTab, setActiveMonthTab] = useState('06'); // '06' (June), '07' (July), or '08' (August)
+  const [activeMonthTab, setActiveMonthTab] = useState('09'); // Defaulting to '09' (Septiembre 2026) for immediate planning
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFormat, setSelectedFormat] = useState('All');
@@ -178,7 +206,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
           } catch(e) {}
         }
 
-        const response = await fetch('https://kvdb.io/EkzRKn42MmxEpmfnvPpCsL/calendar');
+        const response = await fetch('https://kvdb.io/9cJnVMJT6xbo8FCw7HhLXr/calendar');
         if (response.status === 404) throw new Error('No data found in cloud storage');
         if (!response.ok) throw new Error('Failed to fetch from cloud storage');
         let data = await response.json();
@@ -200,7 +228,19 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
           };
         }
 
+        // Ensure September posts are included if not present
+        const hasSeptember = data.posts.some(p => getMonthFromDate(p.date) === 9);
+        if (!hasSeptember) {
+          const septemberStarterPosts = fallbackScheduleData.filter(p => getMonthFromDate(p.date) === 9);
+          data.posts = [...data.posts, ...septemberStarterPosts];
+        }
+
         if (localData && localData.lastUpdated > data.lastUpdated) {
+          const localHasSeptember = localData.posts?.some(p => getMonthFromDate(p.date) === 9);
+          if (!localHasSeptember) {
+            const septemberStarterPosts = fallbackScheduleData.filter(p => getMonthFromDate(p.date) === 9);
+            localData.posts = [...(localData.posts || []), ...septemberStarterPosts];
+          }
           console.log('Using newer local changes');
           setDbData(localData);
         } else {
@@ -213,7 +253,13 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
         const localRaw = localStorage.getItem('dosSolesCalendarData');
         if (localRaw) {
           try {
-            setDbData(JSON.parse(localRaw));
+            const parsed = JSON.parse(localRaw);
+            const localHasSeptember = parsed.posts?.some(p => getMonthFromDate(p.date) === 9);
+            if (!localHasSeptember) {
+              const septemberStarterPosts = fallbackScheduleData.filter(p => getMonthFromDate(p.date) === 9);
+              parsed.posts = [...(parsed.posts || []), ...septemberStarterPosts];
+            }
+            setDbData(parsed);
             return;
           } catch(e) {}
         }
@@ -241,7 +287,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
     localStorage.setItem('dosSolesCalendarData', JSON.stringify(dataWithTimestamp));
     
     try {
-      const response = await fetch('https://kvdb.io/EkzRKn42MmxEpmfnvPpCsL/calendar', {
+      const response = await fetch('https://kvdb.io/9cJnVMJT6xbo8FCw7HhLXr/calendar', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -249,7 +295,14 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
         },
         body: JSON.stringify(dataWithTimestamp)
       });
-      if (!response.ok) throw new Error('Error de servidor: ' + response.statusText);
+      if (!response.ok) {
+        let errorDetails = response.statusText;
+        try {
+          const bodyText = await response.text();
+          if (bodyText) errorDetails += ` - ${bodyText}`;
+        } catch (e) {}
+        throw new Error(`Error ${response.status}: ${errorDetails}`);
+      }
       setDbData(dataWithTimestamp);
       return true;
     } catch (error) {
@@ -683,37 +736,20 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
       </div>
 
       {/* Month Switcher Tabs */}
-      <div className="flex space-x-2 p-1.5 mb-8 rounded-xl bg-brand-crimson-bg border border-brand-crimson-border/60 max-w-md">
-        <button
-          onClick={() => setActiveMonthTab('06')}
-          className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-extrabold uppercase tracking-wider text-center transition-all ${
-            activeMonthTab === '06'
-              ? toggleBtnActive
-              : 'text-gray-400 hover:text-gray-200'
-          }`}
-        >
-          Junio 2026
-        </button>
-        <button
-          onClick={() => setActiveMonthTab('07')}
-          className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-extrabold uppercase tracking-wider text-center transition-all ${
-            activeMonthTab === '07'
-              ? toggleBtnActive
-              : 'text-gray-400 hover:text-gray-200'
-          }`}
-        >
-          Julio 2026
-        </button>
-        <button
-          onClick={() => setActiveMonthTab('08')}
-          className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-extrabold uppercase tracking-wider text-center transition-all ${
-            activeMonthTab === '08'
-              ? toggleBtnActive
-              : 'text-gray-400 hover:text-gray-200'
-          }`}
-        >
-          Agosto 2026
-        </button>
+      <div className="flex space-x-2 p-1.5 mb-8 rounded-xl bg-brand-crimson-bg border border-brand-crimson-border/60 max-w-2xl overflow-x-auto scrollbar-none">
+        {Object.entries(MONTH_CONFIG).map(([key, config]) => (
+          <button
+            key={key}
+            onClick={() => setActiveMonthTab(key)}
+            className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-extrabold uppercase tracking-wider text-center transition-all whitespace-nowrap min-w-[110px] ${
+              activeMonthTab === key
+                ? toggleBtnActive
+                : 'text-gray-400 hover:text-gray-200'
+            }`}
+          >
+            {config.name}
+          </button>
+        ))}
       </div>
 
       {/* 2. Stats Dashboard Panel */}
@@ -884,10 +920,11 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                 : dbData.proposals.filter(p => p.postId === `NEW-${dayObj.day}-${activeMonthTab}` || p.postId === `NEW-${dayObj.day}`);
               const hasPendingProposal = postProposals.length > 0;
 
-              // Anniversary special background indicators or client review highlights (June 12 & 13)
-              const isAnniversaryDay = activeMonthTab === '06' && (dayObj.day === 12 || dayObj.day === 13);
+              // Anniversary special background indicators, Spring Day, or client review highlights
+              const isSpecialDay = (activeMonthTab === '06' && (dayObj.day === 12 || dayObj.day === 13)) ||
+                                   (activeMonthTab === '09' && dayObj.day === 21);
               let highlightClasses = '';
-              if (isAnniversaryDay) {
+              if (isSpecialDay) {
                 highlightClasses = 'ring-2 ring-brand-crimson-red/50 bg-brand-crimson-red/5';
               } else if (post?.needsReview) {
                 highlightClasses = 'ring-2 ring-amber-500/45 bg-amber-500/5 border-amber-500/30';
@@ -929,8 +966,8 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                           📝
                         </span>
                       )}
-                      {isAnniversaryDay && (
-                        <span className="flex h-1.5 w-1.5 sm:h-2 sm:w-2 relative">
+                      {isSpecialDay && (
+                        <span className="flex h-1.5 w-1.5 sm:h-2 sm:w-2 relative" title={activeMonthTab === '09' ? 'Día de la Primavera' : 'Aniversario 19'}>
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-brand-crimson-red"></span>
                           <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-brand-crimson-red"></span>
                         </span>
@@ -1182,7 +1219,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
         </div>
       </div>
 
-      {/* 5. Info Box (Anniversary Callout / July & August Planning Guide) */}
+      {/* 5. Info Box (Anniversary Callout / Monthly Planning Guides) */}
       {activeMonthTab === '06' ? (
         <div className="mt-8 p-4 md:p-5 rounded-2xl flex items-start space-x-3 md:space-x-4 border border-dashed bg-brand-crimson-red/5 border-brand-crimson-red/30 text-gray-200">
           <div className="text-brand-crimson-red shrink-0">
@@ -1207,7 +1244,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
             </p>
           </div>
         </div>
-      ) : (
+      ) : activeMonthTab === '08' ? (
         <div className="mt-8 p-4 md:p-5 rounded-2xl flex items-start space-x-3 md:space-x-4 border border-dashed bg-cyan-500/5 border-cyan-500/30 text-gray-200">
           <div className="text-cyan-400 shrink-0">
             <ClipboardList size={20} />
@@ -1216,6 +1253,18 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
             <h4 className="text-sm font-bold uppercase tracking-wider text-cyan-400">Planificación de Agosto: ¡Estructura de Agosto 2026 Lista!</h4>
             <p className="text-xs leading-relaxed text-gray-400">
               La estructura del mes de Agosto 2026 está completamente configurada y habilitada. Administradores y colaboradores pueden organizar la parrilla estratégica de contenidos, agregar sugerencias o programar publicaciones para todas las semanas de agosto.
+            </p>
+          </div>
+        </div>
+      ) : (
+        <div className="mt-8 p-4 md:p-5 rounded-2xl flex items-start space-x-3 md:space-x-4 border border-dashed bg-brand-crimson-red/5 border-brand-crimson-red/30 text-gray-200">
+          <div className="text-brand-crimson-red shrink-0">
+            <Sparkles size={20} />
+          </div>
+          <div className="space-y-1 text-left">
+            <h4 className="text-sm font-bold uppercase tracking-wider text-brand-crimson-red">Planificación de Septiembre: ¡Campaña de Primavera & Renovación Capilar!</h4>
+            <p className="text-xs leading-relaxed text-gray-400">
+              El cronograma de Septiembre 2026 está completamente estructurado para anticipar la temporada alta de salones. Prioriza tratamientos de reparación post-invierno, combos mayoristas B2B (Truss, Liss Expert, L'Oréal) y campañas de interacción por el Día de la Primavera (21/09). Podés editar, proponer o programar publicaciones directamente.
             </p>
           </div>
         </div>
