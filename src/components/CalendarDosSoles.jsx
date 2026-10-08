@@ -25,9 +25,11 @@ import {
   Plus,
   Edit,
   AlertTriangle,
-  ClipboardList
+  ClipboardList,
+  ArrowRight
 } from 'lucide-react';
 import PostDetailDrawer from './PostDetailDrawer';
+import MetaCampaignPlanner, { defaultOctoberCampaign } from './MetaCampaignPlanner';
 
 // Base Structured Social Media Calendar Data (Fallback)
 const fallbackScheduleData = [
@@ -164,10 +166,12 @@ const MONTH_CONFIG = {
   '07': { name: 'Julio 2026', monthNum: 7, suffix: '/07', days: 31, offset: 2 },
   '08': { name: 'Agosto 2026', monthNum: 8, suffix: '/08', days: 31, offset: 5 },
   '09': { name: 'Septiembre 2026', monthNum: 9, suffix: '/09', days: 30, offset: 1 },
+  '10': { name: 'Octubre 2026', monthNum: 10, suffix: '/10', days: 31, offset: 3 },
 };
 
 const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
-  const [activeMonthTab, setActiveMonthTab] = useState('09'); // Defaulting to '09' (Septiembre 2026) for immediate planning
+  const [activeMonthTab, setActiveMonthTab] = useState('10'); // Defaulting to '10' (Octubre 2026)
+  const [mainSection, setMainSection] = useState('calendar'); // 'calendar' or 'meta_ads'
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFormat, setSelectedFormat] = useState('All');
@@ -181,7 +185,12 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
   const [logoError, setLogoError] = useState(false);
 
   // Cloud database states
-  const [dbData, setDbData] = useState({ posts: [], proposals: [], auditLog: [] });
+  const [dbData, setDbData] = useState({ 
+    posts: [], 
+    proposals: [], 
+    auditLog: [],
+    metaCampaigns: [defaultOctoberCampaign]
+  });
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [adminModalOpen, setAdminModalOpen] = useState(false);
@@ -217,6 +226,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
             posts: data,
             proposals: [],
             auditLog: [],
+            metaCampaigns: [defaultOctoberCampaign],
             lastUpdated: 0
           };
         } else {
@@ -224,6 +234,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
             posts: data.posts || [],
             proposals: data.proposals || [],
             auditLog: data.auditLog || [],
+            metaCampaigns: (data.metaCampaigns && data.metaCampaigns.length > 0) ? data.metaCampaigns : [defaultOctoberCampaign],
             lastUpdated: data.lastUpdated || 0
           };
         }
@@ -240,6 +251,9 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
           if (!localHasSeptember) {
             const septemberStarterPosts = fallbackScheduleData.filter(p => getMonthFromDate(p.date) === 9);
             localData.posts = [...(localData.posts || []), ...septemberStarterPosts];
+          }
+          if (!localData.metaCampaigns || localData.metaCampaigns.length === 0) {
+            localData.metaCampaigns = data.metaCampaigns || [defaultOctoberCampaign];
           }
           console.log('Using newer local changes');
           setDbData(localData);
@@ -259,6 +273,9 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
               const septemberStarterPosts = fallbackScheduleData.filter(p => getMonthFromDate(p.date) === 9);
               parsed.posts = [...(parsed.posts || []), ...septemberStarterPosts];
             }
+            if (!parsed.metaCampaigns || parsed.metaCampaigns.length === 0) {
+              parsed.metaCampaigns = [defaultOctoberCampaign];
+            }
             setDbData(parsed);
             return;
           } catch(e) {}
@@ -267,7 +284,8 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
         setDbData({
           posts: fallbackScheduleData,
           proposals: [],
-          auditLog: []
+          auditLog: [],
+          metaCampaigns: [defaultOctoberCampaign]
         });
       } finally {
         setLoading(false);
@@ -312,6 +330,34 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
       return true; // Return true so drawer closes and flow continues
     }
   };
+
+  // Save Meta Ads Campaign changes to state and cloud
+  const handleSaveMetaCampaign = async (updatedCampaign) => {
+    const existingCampaigns = dbData.metaCampaigns || [defaultOctoberCampaign];
+    const exists = existingCampaigns.some(c => c.id === updatedCampaign.id);
+    const updatedCampaigns = exists
+      ? existingCampaigns.map(c => c.id === updatedCampaign.id ? updatedCampaign : c)
+      : [...existingCampaigns, updatedCampaign];
+
+    const timestamp = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
+    const auditEntry = {
+      id: `audit-${Date.now()}`,
+      timestamp,
+      user: adminName ? `${adminName} (Admin)` : 'Usuario (Editor)',
+      action: 'Ajuste Campaña Meta Ads',
+      details: `Actualizó la planificación de "${updatedCampaign.name}"`
+    };
+
+    const updatedData = {
+      ...dbData,
+      metaCampaigns: updatedCampaigns,
+      auditLog: [auditEntry, ...(dbData.auditLog || [])].slice(0, 50)
+    };
+
+    setDbData(updatedData);
+    await saveToCloud(updatedData);
+  };
+
   // Direct edit/create (Admin only)
   const handleSavePostDirectly = async (editedPost, editorName) => {
     if (!editorName) {
@@ -735,22 +781,103 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
         </div>
       </div>
 
-      {/* Month Switcher Tabs */}
-      <div className="flex space-x-2 p-1.5 mb-8 rounded-xl bg-brand-crimson-bg border border-brand-crimson-border/60 max-w-2xl overflow-x-auto scrollbar-none">
-        {Object.entries(MONTH_CONFIG).map(([key, config]) => (
+      {/* Main Mode Switcher: Orgánico vs Meta Ads */}
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-6 p-2 rounded-2xl bg-black/40 border border-brand-crimson-border/60">
+        <div className="flex items-center space-x-2">
           <button
-            key={key}
-            onClick={() => setActiveMonthTab(key)}
-            className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-extrabold uppercase tracking-wider text-center transition-all whitespace-nowrap min-w-[110px] ${
-              activeMonthTab === key
-                ? toggleBtnActive
-                : 'text-gray-400 hover:text-gray-200'
+            onClick={() => setMainSection('calendar')}
+            className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
+              mainSection === 'calendar'
+                ? 'bg-brand-crimson-red text-white shadow-lg shadow-brand-crimson-red/25'
+                : 'text-gray-400 hover:text-white hover:bg-zinc-800/60'
             }`}
           >
-            {config.name}
+            <CalendarDays size={15} />
+            <span>Contenido Orgánico</span>
           </button>
-        ))}
+          <button
+            onClick={() => setMainSection('meta_ads')}
+            className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
+              mainSection === 'meta_ads'
+                ? 'bg-brand-crimson-red text-white shadow-lg shadow-brand-crimson-red/25'
+                : 'text-gray-400 hover:text-white hover:bg-zinc-800/60'
+            }`}
+          >
+            <Target size={15} className="text-amber-400" />
+            <span>Planificador Meta Ads</span>
+            <span className="px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              Octubre
+            </span>
+          </button>
+        </div>
+
+        <div className="hidden md:flex items-center space-x-2 text-xs text-gray-400 px-3">
+          {mainSection === 'calendar' ? (
+            <span>Parrilla: <strong className="text-white">{MONTH_CONFIG[activeMonthTab]?.name}</strong></span>
+          ) : (
+            <span>Estrategia: <strong className="text-amber-400">Pauta Publicitaria & WhatsApp B2B</strong></span>
+          )}
+        </div>
       </div>
+
+      {mainSection === 'meta_ads' ? (
+        <MetaCampaignPlanner
+          campaign={dbData.metaCampaigns?.[0] || defaultOctoberCampaign}
+          onSaveCampaign={handleSaveMetaCampaign}
+        />
+      ) : (
+        <>
+          {/* Month Switcher Tabs */}
+          <div className="flex space-x-2 p-1.5 mb-6 rounded-xl bg-brand-crimson-bg border border-brand-crimson-border/60 max-w-2xl overflow-x-auto scrollbar-none">
+            {Object.entries(MONTH_CONFIG).map(([key, config]) => (
+              <button
+                key={key}
+                onClick={() => setActiveMonthTab(key)}
+                className={`flex-1 py-2.5 px-3 rounded-lg text-xs font-extrabold uppercase tracking-wider text-center transition-all whitespace-nowrap min-w-[110px] ${
+                  activeMonthTab === key
+                    ? toggleBtnActive
+                    : 'text-gray-400 hover:text-gray-200'
+                }`}
+              >
+                {config.name}
+              </button>
+            ))}
+          </div>
+
+          {/* October 2026 Special Banner & Meta Ads connection */}
+          {activeMonthTab === '10' && (
+            <div className="mb-8 p-4 md:p-5 rounded-2xl border border-brand-crimson-red/40 bg-gradient-to-r from-brand-crimson-red/15 via-[#151518] to-amber-500/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
+              <div className="flex items-center space-x-3.5">
+                <div className="p-2.5 rounded-xl bg-brand-crimson-red/25 text-brand-crimson-red border border-brand-crimson-red/40 shrink-0 shadow">
+                  <Target size={22} />
+                </div>
+                <div>
+                  <div className="flex items-center space-x-2">
+                    <h3 className="text-xs sm:text-sm font-bold text-white font-serif tracking-wide">
+                      Octubre 2026: Parrilla Lista
+                    </h3>
+                    <span className="px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 uppercase">
+                      Abierto para planificar
+                    </span>
+                    <span className="px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-pink-500/15 text-pink-400 border border-pink-500/30 uppercase hidden sm:inline">
+                      🌸 18/10 Día de la Madre
+                    </span>
+                  </div>
+                  <p className="text-[11px] sm:text-xs text-gray-400 mt-1 leading-relaxed">
+                    Hacé clic en cualquier casillero vacío para cargar publicaciones cuando quieras. También tenés a disposición el módulo de <strong>Meta Ads</strong> para diagramar la pauta de salones y WhatsApp.
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setMainSection('meta_ads')}
+                className="px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-crimson-red hover:bg-brand-crimson-darkred text-white flex items-center justify-center space-x-2 transition-all shrink-0 shadow-lg shadow-brand-crimson-red/20"
+              >
+                <Target size={14} className="text-amber-300" />
+                <span>Planificar Campaña de Meta</span>
+                <ArrowRight size={14} />
+              </button>
+            </div>
+          )}
 
       {/* 2. Stats Dashboard Panel */}
       <div className={`grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 p-6 rounded-2xl ${containerClass}`}>
@@ -920,9 +1047,10 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                 : dbData.proposals.filter(p => p.postId === `NEW-${dayObj.day}-${activeMonthTab}` || p.postId === `NEW-${dayObj.day}`);
               const hasPendingProposal = postProposals.length > 0;
 
-              // Anniversary special background indicators, Spring Day, or client review highlights
+              // Anniversary special background indicators, Spring Day, Mother's Day, or client review highlights
               const isSpecialDay = (activeMonthTab === '06' && (dayObj.day === 12 || dayObj.day === 13)) ||
-                                   (activeMonthTab === '09' && dayObj.day === 21);
+                                   (activeMonthTab === '09' && dayObj.day === 21) ||
+                                   (activeMonthTab === '10' && dayObj.day === 18);
               let highlightClasses = '';
               if (isSpecialDay) {
                 highlightClasses = 'ring-2 ring-brand-crimson-red/50 bg-brand-crimson-red/5';
@@ -967,7 +1095,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                         </span>
                       )}
                       {isSpecialDay && (
-                        <span className="flex h-1.5 w-1.5 sm:h-2 sm:w-2 relative" title={activeMonthTab === '09' ? 'Día de la Primavera' : 'Aniversario 19'}>
+                        <span className="flex h-1.5 w-1.5 sm:h-2 sm:w-2 relative" title={activeMonthTab === '10' ? 'Día de la Madre' : activeMonthTab === '09' ? 'Día de la Primavera' : 'Aniversario 19'}>
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 bg-brand-crimson-red"></span>
                           <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-brand-crimson-red"></span>
                         </span>
@@ -1043,7 +1171,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
                       )}
                       <div className="flex items-center justify-center">
                         <span className="hidden sm:inline text-[9px] md:text-[10px] uppercase font-bold tracking-widest text-gray-400 dark:text-zinc-800">
-                          {dayObj.weekday === 'Dom' && dayObj.day !== 28 ? 'Descanso' : 'Sin post'}
+                          {dayObj.weekday === 'Dom' ? (dayObj.day === 18 && activeMonthTab === '10' ? '🌸 Día de la Madre' : (dayObj.day === 28 && activeMonthTab === '06' ? 'Sin post' : 'Descanso')) : 'Sin post'}
                         </span>
                         <span className="sm:hidden h-1.5 w-1.5 rounded-full bg-zinc-700/60" />
                       </div>
@@ -1256,7 +1384,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
             </p>
           </div>
         </div>
-      ) : (
+      ) : activeMonthTab === '09' ? (
         <div className="mt-8 p-4 md:p-5 rounded-2xl flex items-start space-x-3 md:space-x-4 border border-dashed bg-brand-crimson-red/5 border-brand-crimson-red/30 text-gray-200">
           <div className="text-brand-crimson-red shrink-0">
             <Sparkles size={20} />
@@ -1268,6 +1396,20 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
             </p>
           </div>
         </div>
+      ) : (
+        <div className="mt-8 p-4 md:p-5 rounded-2xl flex items-start space-x-3 md:space-x-4 border border-dashed bg-brand-crimson-red/5 border-brand-crimson-red/30 text-gray-200">
+          <div className="text-brand-crimson-red shrink-0">
+            <Target size={20} />
+          </div>
+          <div className="space-y-1 text-left">
+            <h4 className="text-sm font-bold uppercase tracking-wider text-brand-crimson-red">Planificación de Octubre: ¡Día de la Madre & Pauta Meta Ads!</h4>
+            <p className="text-xs leading-relaxed text-gray-400">
+              La parrilla de Octubre 2026 está lista y limpia para cargar publicaciones conforme se definan. En simultáneo, tenés habilitada la pestaña <strong>"Planificador Meta Ads"</strong> en el encabezado para diagramar la pauta publicitaria de WhatsApp B2B, segmentación de salones y kits de regalo para el Día de la Madre (18/10).
+            </p>
+          </div>
+        </div>
+      )}
+        </>
       )}
 
       {/* 6. Admin Panel Modal */}
