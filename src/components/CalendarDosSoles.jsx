@@ -220,6 +220,14 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
         if (!response.ok) throw new Error('Failed to fetch from cloud storage');
         let data = await response.json();
         
+        const cleanMetaCampaigns = (campaigns) => {
+          if (!campaigns || !Array.isArray(campaigns) || campaigns.length === 0) return [defaultOctoberCampaign];
+          if (campaigns.some(c => c.ads?.some(a => a.id === 'ad-101') || c.name?.includes('Captación Salones'))) {
+            return [defaultOctoberCampaign];
+          }
+          return campaigns;
+        };
+
         // Handle fallback/migration from legacy flat array
         if (Array.isArray(data)) {
           data = {
@@ -234,7 +242,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
             posts: data.posts || [],
             proposals: data.proposals || [],
             auditLog: data.auditLog || [],
-            metaCampaigns: (data.metaCampaigns && data.metaCampaigns.length > 0) ? data.metaCampaigns : [defaultOctoberCampaign],
+            metaCampaigns: cleanMetaCampaigns(data.metaCampaigns),
             lastUpdated: data.lastUpdated || 0
           };
         }
@@ -252,9 +260,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
             const septemberStarterPosts = fallbackScheduleData.filter(p => getMonthFromDate(p.date) === 9);
             localData.posts = [...(localData.posts || []), ...septemberStarterPosts];
           }
-          if (!localData.metaCampaigns || localData.metaCampaigns.length === 0) {
-            localData.metaCampaigns = data.metaCampaigns || [defaultOctoberCampaign];
-          }
+          localData.metaCampaigns = cleanMetaCampaigns(localData.metaCampaigns);
           console.log('Using newer local changes');
           setDbData(localData);
         } else {
@@ -273,7 +279,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
               const septemberStarterPosts = fallbackScheduleData.filter(p => getMonthFromDate(p.date) === 9);
               parsed.posts = [...(parsed.posts || []), ...septemberStarterPosts];
             }
-            if (!parsed.metaCampaigns || parsed.metaCampaigns.length === 0) {
+            if (!parsed.metaCampaigns || parsed.metaCampaigns.length === 0 || parsed.metaCampaigns.some(c => c.ads?.some(a => a.id === 'ad-101'))) {
               parsed.metaCampaigns = [defaultOctoberCampaign];
             }
             setDbData(parsed);
@@ -844,41 +850,6 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
             ))}
           </div>
 
-          {/* October 2026 Special Banner & Meta Ads connection */}
-          {activeMonthTab === '10' && (
-            <div className="mb-8 p-4 md:p-5 rounded-2xl border border-brand-crimson-red/40 bg-gradient-to-r from-brand-crimson-red/15 via-[#151518] to-amber-500/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xl">
-              <div className="flex items-center space-x-3.5">
-                <div className="p-2.5 rounded-xl bg-brand-crimson-red/25 text-brand-crimson-red border border-brand-crimson-red/40 shrink-0 shadow">
-                  <Target size={22} />
-                </div>
-                <div>
-                  <div className="flex items-center space-x-2">
-                    <h3 className="text-xs sm:text-sm font-bold text-white font-serif tracking-wide">
-                      Octubre 2026: Parrilla Lista
-                    </h3>
-                    <span className="px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 uppercase">
-                      Abierto para planificar
-                    </span>
-                    <span className="px-2 py-0.5 text-[9px] font-extrabold rounded-full bg-pink-500/15 text-pink-400 border border-pink-500/30 uppercase hidden sm:inline">
-                      🌸 18/10 Día de la Madre
-                    </span>
-                  </div>
-                  <p className="text-[11px] sm:text-xs text-gray-400 mt-1 leading-relaxed">
-                    Hacé clic en cualquier casillero vacío para cargar publicaciones cuando quieras. También tenés a disposición el módulo de <strong>Meta Ads</strong> para diagramar la pauta de salones y WhatsApp.
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => setMainSection('meta_ads')}
-                className="px-4 py-2.5 rounded-xl text-xs font-bold bg-brand-crimson-red hover:bg-brand-crimson-darkred text-white flex items-center justify-center space-x-2 transition-all shrink-0 shadow-lg shadow-brand-crimson-red/20"
-              >
-                <Target size={14} className="text-amber-300" />
-                <span>Planificar Campaña de Meta</span>
-                <ArrowRight size={14} />
-              </button>
-            </div>
-          )}
-
       {/* 2. Stats Dashboard Panel */}
       <div className={`grid grid-cols-2 md:grid-cols-4 gap-4 mb-8 p-6 rounded-2xl ${containerClass}`}>
         <div className="space-y-1">
@@ -1347,7 +1318,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
         </div>
       </div>
 
-      {/* 5. Info Box (Anniversary Callout / Monthly Planning Guides) */}
+      {/* 5. Info Box (Anniversary & Special Milestones) */}
       {activeMonthTab === '06' ? (
         <div className="mt-8 p-4 md:p-5 rounded-2xl flex items-start space-x-3 md:space-x-4 border border-dashed bg-brand-crimson-red/5 border-brand-crimson-red/30 text-gray-200">
           <div className="text-brand-crimson-red shrink-0">
@@ -1360,55 +1331,19 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
             </p>
           </div>
         </div>
-      ) : activeMonthTab === '07' ? (
-        <div className="mt-8 p-4 md:p-5 rounded-2xl flex items-start space-x-3 md:space-x-4 border border-dashed bg-emerald-500/5 border-emerald-500/30 text-gray-200">
-          <div className="text-emerald-400 shrink-0">
-            <ClipboardList size={20} />
-          </div>
-          <div className="space-y-1 text-left">
-            <h4 className="text-sm font-bold uppercase tracking-wider text-emerald-400">Planificación de Julio: ¡Calendario Abierto!</h4>
-            <p className="text-xs leading-relaxed text-gray-400">
-              Este espacio está listo para la diagramación de contenidos de Julio 2026. Los administradores pueden agregar posteos oficiales directamente, y el resto del equipo o clientes pueden dejar sugerencias y propuestas utilizando el botón correspondiente en cada día.
-            </p>
-          </div>
-        </div>
-      ) : activeMonthTab === '08' ? (
-        <div className="mt-8 p-4 md:p-5 rounded-2xl flex items-start space-x-3 md:space-x-4 border border-dashed bg-cyan-500/5 border-cyan-500/30 text-gray-200">
-          <div className="text-cyan-400 shrink-0">
-            <ClipboardList size={20} />
-          </div>
-          <div className="space-y-1 text-left">
-            <h4 className="text-sm font-bold uppercase tracking-wider text-cyan-400">Planificación de Agosto: ¡Estructura de Agosto 2026 Lista!</h4>
-            <p className="text-xs leading-relaxed text-gray-400">
-              La estructura del mes de Agosto 2026 está completamente configurada y habilitada. Administradores y colaboradores pueden organizar la parrilla estratégica de contenidos, agregar sugerencias o programar publicaciones para todas las semanas de agosto.
-            </p>
-          </div>
-        </div>
       ) : activeMonthTab === '09' ? (
         <div className="mt-8 p-4 md:p-5 rounded-2xl flex items-start space-x-3 md:space-x-4 border border-dashed bg-brand-crimson-red/5 border-brand-crimson-red/30 text-gray-200">
           <div className="text-brand-crimson-red shrink-0">
             <Sparkles size={20} />
           </div>
           <div className="space-y-1 text-left">
-            <h4 className="text-sm font-bold uppercase tracking-wider text-brand-crimson-red">Planificación de Septiembre: ¡Campaña de Primavera & Renovación Capilar!</h4>
+            <h4 className="text-sm font-bold uppercase tracking-wider text-brand-crimson-red">Hito de Septiembre: Renovación & Campaña Primavera</h4>
             <p className="text-xs leading-relaxed text-gray-400">
-              El cronograma de Septiembre 2026 está completamente estructurado para anticipar la temporada alta de salones. Prioriza tratamientos de reparación post-invierno, combos mayoristas B2B (Truss, Liss Expert, L'Oréal) y campañas de interacción por el Día de la Primavera (21/09). Podés editar, proponer o programar publicaciones directamente.
+              Tratamientos de reparación post-invierno, combos mayoristas B2B (Truss, Liss Expert, L'Oréal) y publicaciones especiales por el Día de la Primavera (21/09).
             </p>
           </div>
         </div>
-      ) : (
-        <div className="mt-8 p-4 md:p-5 rounded-2xl flex items-start space-x-3 md:space-x-4 border border-dashed bg-brand-crimson-red/5 border-brand-crimson-red/30 text-gray-200">
-          <div className="text-brand-crimson-red shrink-0">
-            <Target size={20} />
-          </div>
-          <div className="space-y-1 text-left">
-            <h4 className="text-sm font-bold uppercase tracking-wider text-brand-crimson-red">Planificación de Octubre: ¡Día de la Madre & Pauta Meta Ads!</h4>
-            <p className="text-xs leading-relaxed text-gray-400">
-              La parrilla de Octubre 2026 está lista y limpia para cargar publicaciones conforme se definan. En simultáneo, tenés habilitada la pestaña <strong>"Planificador Meta Ads"</strong> en el encabezado para diagramar la pauta publicitaria de WhatsApp B2B, segmentación de salones y kits de regalo para el Día de la Madre (18/10).
-            </p>
-          </div>
-        </div>
-      )}
+      ) : null}
         </>
       )}
 

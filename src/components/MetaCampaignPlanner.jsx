@@ -21,146 +21,32 @@ import {
   ExternalLink,
   ChevronDown,
   X,
-  FileText,
-  PackageCheck
+  FileText
 } from 'lucide-react';
 
 export const defaultOctoberCampaign = {
   id: 'camp-oct-2026',
-  name: 'Campaña Meta Ads: Octubre 2026 • Captación Salones & Especial Día de la Madre',
-  status: 'Planificada', // 'Borrador', 'Planificada', 'En Revisión', 'Activa en Meta', 'Pausada'
+  name: 'Campaña Meta Ads: Octubre 2026',
+  status: 'Borrador', // 'Borrador', 'Planificada', 'En Revisión', 'Activa en Meta', 'Pausada'
   month: '10',
   objective: 'OUTCOME_LEADS',
-  objectiveName: 'Generación de Leads (WhatsApp Business Mayorista)',
+  objectiveName: 'Generación de Leads (WhatsApp Business)',
   budgetType: 'CBO', // CBO (Advantage+ Budget) o ABO
-  dailyBudget: 18000, // ARS por día
-  totalBudget: 558000, // ARS (31 días x $18.000)
+  dailyBudget: 0,
+  totalBudget: 0,
   currency: 'ARS',
   startDate: '2026-10-01',
   endDate: '2026-10-31',
-  adAccountId: 'act_dossoles_2026',
-  whatsappNumber: '+54 9 351 XXX-XXXX',
+  adAccountId: '',
+  whatsappNumber: '',
   kpis: {
-    targetCpl: 1400,
-    estimatedLeads: 398,
-    estimatedReach: 85000,
+    targetCpl: 0,
+    estimatedLeads: 0,
+    estimatedReach: 0,
   },
-  adSets: [
-    {
-      id: 'adset-1',
-      name: 'AdSet 01: [B2B Frío] Salones, Coloristas & Estilistas',
-      target: 'B2B Salones',
-      locations: 'Córdoba, Santa Fe, Buenos Aires (Zona distribución)',
-      ageRange: '24 - 55 años',
-      gender: 'Todos',
-      interests: 'Peluquería, L\'Oréal Professionnel, Truss Professional, Balayage, Alisado de cabello, Salones de belleza',
-      placements: 'Instagram Reels & Stories (9:16) + Feed de Instagram',
-      budgetShare: '50%',
-      dailyBudget: 9000,
-      status: 'Listo para pauta'
-    },
-    {
-      id: 'adset-2',
-      name: 'AdSet 02: [B2B Retargeting] Clientes y Visitantes del Perfil (90d)',
-      target: 'B2B Retargeting',
-      locations: 'Zona de cobertura Dos Soles',
-      ageRange: '22 - 60 años',
-      gender: 'Todos',
-      interests: 'Interacción con @dossoles_ok en últimos 90 días + Base de clientes WhatsApp',
-      placements: 'Feed de Instagram, Stories, Facebook Feed',
-      budgetShare: '25%',
-      dailyBudget: 4500,
-      status: 'Listo para pauta'
-    },
-    {
-      id: 'adset-3',
-      name: 'AdSet 03: [B2B / B2C] Especial Día de la Madre (Kits Reventa)',
-      target: 'Kits Día de la Madre',
-      locations: 'Argentina (Envíos a todo el país)',
-      ageRange: '25 - 54 años',
-      gender: 'Mujeres (Peluqueras y clientas premium)',
-      interests: 'Tratamiento capilar, Cosmética capilar, Regalos Día de la Madre, Truss Night Spa',
-      placements: 'Instagram Reels & Stories',
-      budgetShare: '25%',
-      dailyBudget: 4500,
-      status: 'Listo para pauta'
-    }
-  ],
-  ads: [
-    {
-      id: 'ad-101',
-      adSetId: 'adset-1',
-      name: 'Anuncio 01: Hook Rentabilidad en Bacha (Liss Expert)',
-      format: 'Reel 9:16',
-      status: 'Guión Listo',
-      angle: 'Rentabilidad & Eficiencia para Salones',
-      hookText: '¿Cuánto tiempo y dinero estás perdiendo en tu salón con alisados que tienen formol y humo insoportable?',
-      primaryText: 'Transformá la experiencia de tu bacha con Liss Expert ✨ Alisado 100% orgánico, brillo espejo y sin vapores tóxicos.\n\nEn Dos Soles somos distribuidores directos para salones y estilistas. Pedí tu lista mayorista y recibí asesoramiento técnico personalizado en tu salón.\n\n📲 Tocá el botón de abajo y chateá con un asesor mayorista por WhatsApp.',
-      headline: 'Stock directo para Salones y Peluquerías 💈',
-      cta: 'Enviar mensaje de WhatsApp',
-      whatsappPrefill: '¡Hola Dos Soles! Vi el anuncio de Liss Expert y quiero recibir la lista de precios mayorista para mi salón.',
-      visualConcept: 'Peluquero aplicando el producto sin máscara ni molestias; plano detalle del pelo con brillo reflectivo como agua; texto en pantalla con números de rentabilidad.'
-    },
-    {
-      id: 'ad-102',
-      adSetId: 'adset-1',
-      name: 'Anuncio 02: Showcase Truss Infusion & Night Spa',
-      format: 'Reel 9:16',
-      status: 'Idea',
-      angle: 'Lujo & Tratamiento de Alta Demanda',
-      hookText: 'El tratamiento que tus clientas ven en TikTok y te van a pedir toda la primavera...',
-      primaryText: 'Truss Professional es sinónimo de cabello de alfombra roja. ¿Ya tenés en tu bacha Infusion y Night Spa?\n\nBrindale a tus clientas la reconstrucción capilar más codiciada del mercado y aumentá el ticket promedio de cada turno.\n\n📦 Envíos express a salones de toda la región con respaldo oficial Dos Soles.',
-      headline: 'Truss Oficial • Precios Mayoristas Salones',
-      cta: 'Enviar mensaje de WhatsApp',
-      whatsappPrefill: 'Hola! Quiero información sobre la línea Truss Professional para incorporar en mi peluquería.',
-      visualConcept: 'B-roll cinemático aplicando Truss en la bacha, textura untuosa del producto, clienta sonriendo frente al espejo tocándose el pelo.'
-    },
-    {
-      id: 'ad-103',
-      adSetId: 'adset-3',
-      name: 'Anuncio 03: Carrusel Kits Día de la Madre (Reventa)',
-      format: 'Carrusel 1:1',
-      status: 'Guión Listo',
-      angle: 'Oportunidad Comercial Reventa en Salón',
-      hookText: 'Estilista: No te quedes afuera de la fecha con más ventas del año para tu peluquería.',
-      primaryText: 'El Día de la Madre es la oportunidad perfecta para llenar tu exhibidor y generar ingresos extra sin sumar horas de trabajo en bacha 💆‍♀️🛍️\n\nArmamos 3 combos exclusivos de reventa mayorista (Truss, L\'Oréal y Liss Expert) con margen preferencial para que tus clientas se lleven su regalo perfecto.\n\n👇 Tocá para descargar el catálogo con los packs del Día de la Madre.',
-      headline: 'Kits Especiales Día de la Madre • Margen Salón',
-      cta: 'Más información',
-      whatsappPrefill: 'Hola Dos Soles, quiero conocer los packs y precios especiales para el Día de la Madre.',
-      visualConcept: 'Cards de carrusel con estética elegante (fondo oscuro, dorado y carmesí), foto de cada kit con su packaging de regalo y margen de ganancia.'
-    },
-    {
-      id: 'ad-104',
-      adSetId: 'adset-2',
-      name: 'Anuncio 04: Retargeting - Reposición Primavera Express',
-      format: 'Video 4:5',
-      status: 'Idea',
-      angle: 'Urgencia & Confianza Logística',
-      hookText: '¿Te estás quedando sin stock justo antes del fin de semana?',
-      primaryText: 'En Dos Soles conocemos los tiempos del salón. Por eso despachamos en 24-48 hs para que nunca te falte producto en los días de mayor movimiento.\n\nRevisá tu stock de oxidantes, decolorantes y tratamientos hoy mismo.\n\n💬 Escribinos y tu pedido sale hoy mismo hacia tu salón.',
-      headline: 'Despacho Rápido a Salones • Dos Soles',
-      cta: 'Enviar mensaje de WhatsApp',
-      whatsappPrefill: 'Hola equipo Dos Soles! Necesito hacer un pedido de reposición para mi peluquería.',
-      visualConcept: 'Cajas con faja Dos Soles preparándose en el depósito, camioneta de logística y estilista recibiendo el paquete en la puerta de su salón.'
-    }
-  ],
-  featuredKits: [
-    {
-      title: 'Kit 1: Alisado Orgánico Liss Expert (1L + Mantenimiento)',
-      description: 'Pack de alto margen en salón: rinde más de 15 aplicaciones con brillo espejo y cero formol.',
-      idealTarget: 'Salones especializados en alisados y botox'
-    },
-    {
-      title: 'Kit 2: Truss Night Spa + Infusion Serum',
-      description: 'El combo premium estrella para servicios de nutrición intensa y reventa para el Día de la Madre.',
-      idealTarget: 'Salones premium y clientas exigentes'
-    },
-    {
-      title: 'Kit 3: L\'Oréal Professionnel Metal Detox & Absolut Repair',
-      description: 'Línea de rescate capilar imprescindible antes y después de decoloraciones o balayage.',
-      idealTarget: 'Coloristas y especialistas en rubios'
-    }
-  ]
+  adSets: [],
+  ads: [],
+  featuredKits: []
 };
 
 const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign }) => {
@@ -187,6 +73,7 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
 
   // Copy text to clipboard with temporary feedback
   const handleCopy = (text, id) => {
+    if (!text) return;
     navigator.clipboard.writeText(text);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
@@ -200,38 +87,46 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
     output += `CAMPAÑA: ${currentCampaign.name}\n`;
     output += `ESTADO: ${currentCampaign.status}\n`;
     output += `OBJETIVO: ${currentCampaign.objectiveName} (${currentCampaign.objective})\n`;
-    output += `PRESUPUESTO: $${currentCampaign.dailyBudget.toLocaleString('es-AR')} ${currentCampaign.currency}/día ($${currentCampaign.totalBudget.toLocaleString('es-AR')} total) [${currentCampaign.budgetType}]\n`;
+    output += `PRESUPUESTO: $${(currentCampaign.dailyBudget || 0).toLocaleString('es-AR')} ${currentCampaign.currency}/día ($${(currentCampaign.totalBudget || 0).toLocaleString('es-AR')} total) [${currentCampaign.budgetType}]\n`;
     output += `FECHAS: ${currentCampaign.startDate} al ${currentCampaign.endDate}\n\n`;
 
     output += `----------------------------------------------------\n`;
     output += `1. CONJUNTOS DE ANUNCIOS (AD SETS) - (${currentCampaign.adSets.length})\n`;
     output += `----------------------------------------------------\n`;
-    currentCampaign.adSets.forEach((adSet, i) => {
-      output += `\n[ADSET ${i + 1}]: ${adSet.name}\n`;
-      output += `• Público: ${adSet.target} (${adSet.ageRange} - ${adSet.gender})\n`;
-      output += `• Ubicación Geográfica: ${adSet.locations}\n`;
-      output += `• Intereses Clave: ${adSet.interests}\n`;
-      output += `• Placements Meta: ${adSet.placements}\n`;
-      output += `• Presupuesto Estimado: ${adSet.budgetShare} ($${adSet.dailyBudget?.toLocaleString('es-AR')} /día)\n`;
-    });
+    if (currentCampaign.adSets.length === 0) {
+      output += `(Sin conjuntos cargados aún)\n`;
+    } else {
+      currentCampaign.adSets.forEach((adSet, i) => {
+        output += `\n[ADSET ${i + 1}]: ${adSet.name}\n`;
+        output += `• Público: ${adSet.target} (${adSet.ageRange} - ${adSet.gender})\n`;
+        output += `• Ubicación Geográfica: ${adSet.locations}\n`;
+        output += `• Intereses Clave: ${adSet.interests}\n`;
+        output += `• Placements Meta: ${adSet.placements}\n`;
+        output += `• Presupuesto Estimado: ${adSet.budgetShare} ($${(adSet.dailyBudget || 0).toLocaleString('es-AR')} /día)\n`;
+      });
+    }
 
     output += `\n----------------------------------------------------\n`;
     output += `2. CREATIVOS Y ANUNCIOS (ADS MATRIX) - (${currentCampaign.ads.length})\n`;
     output += `----------------------------------------------------\n`;
-    currentCampaign.ads.forEach((ad, i) => {
-      const adSet = currentCampaign.adSets.find(s => s.id === ad.adSetId);
-      output += `\n[ANUNCIO ${i + 1}]: ${ad.name}\n`;
-      output += `• Formato: ${ad.format} | Estado: ${ad.status}\n`;
-      output += `• Conjunto Asociado: ${adSet ? adSet.name : 'General'}\n`;
-      output += `• Ángulo: ${ad.angle}\n`;
-      output += `• Gancho Inicial (Hook): "${ad.hookText}"\n`;
-      output += `• Headline (Título): ${ad.headline}\n`;
-      output += `• CTA: ${ad.cta}\n`;
-      output += `• Prefill WhatsApp: "${ad.whatsappPrefill}"\n`;
-      output += `• Concepto Visual: ${ad.visualConcept}\n`;
-      output += `• Texto Principal (Copy):\n${ad.primaryText}\n`;
-      output += `----------------------------------------------------\n`;
-    });
+    if (currentCampaign.ads.length === 0) {
+      output += `(Sin anuncios cargados aún)\n`;
+    } else {
+      currentCampaign.ads.forEach((ad, i) => {
+        const adSet = currentCampaign.adSets.find(s => s.id === ad.adSetId);
+        output += `\n[ANUNCIO ${i + 1}]: ${ad.name}\n`;
+        output += `• Formato: ${ad.format} | Estado: ${ad.status}\n`;
+        output += `• Conjunto Asociado: ${adSet ? adSet.name : 'General'}\n`;
+        output += `• Ángulo: ${ad.angle}\n`;
+        output += `• Gancho Inicial (Hook): "${ad.hookText}"\n`;
+        output += `• Headline (Título): ${ad.headline}\n`;
+        output += `• CTA: ${ad.cta}\n`;
+        output += `• Prefill WhatsApp: "${ad.whatsappPrefill}"\n`;
+        output += `• Concepto Visual: ${ad.visualConcept}\n`;
+        output += `• Texto Principal (Copy):\n${ad.primaryText}\n`;
+        output += `----------------------------------------------------\n`;
+      });
+    }
 
     navigator.clipboard.writeText(output);
     setCopiedExport(true);
@@ -273,7 +168,7 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
 
   // Delete Ad
   const handleDeleteAd = (adId) => {
-    if (confirm('¿Estás seguro de eliminar este anuncio de la planificación?')) {
+    if (confirm('¿Eliminar este anuncio de la planificación?')) {
       const updatedAds = currentCampaign.ads.filter(a => a.id !== adId);
       updateAndSave({ ...currentCampaign, ads: updatedAds });
     }
@@ -314,13 +209,13 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
             <div className="flex flex-wrap items-center gap-2">
               <span className="flex items-center space-x-1.5 px-3 py-1 rounded-full text-xs font-bold bg-brand-crimson-red/20 text-brand-crimson-red border border-brand-crimson-red/30">
                 <Target size={13} />
-                <span>Meta Ads Manager • Octubre 2026</span>
+                <span>Meta Ads • Octubre 2026</span>
               </span>
               <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${getStatusBadge(currentCampaign.status)}`}>
                 {currentCampaign.status}
               </span>
               <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-zinc-800 text-zinc-300 border border-zinc-700">
-                {currentCampaign.budgetType} • CBO
+                {currentCampaign.budgetType}
               </span>
             </div>
 
@@ -329,7 +224,7 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
             </h2>
 
             <p className="text-xs sm:text-sm text-gray-400 leading-relaxed">
-              Objetivo: <strong className="text-gray-200">{currentCampaign.objectiveName}</strong>. Campaña de prospección y reactivación de salones de belleza + empuje comercial de kits para el Día de la Madre.
+              Objetivo: <strong className="text-gray-200">{currentCampaign.objectiveName}</strong>. Panel de planificación de creativos, audiencias y presupuesto.
             </p>
           </div>
 
@@ -341,22 +236,22 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
               title="Copiar texto estructurado para el media buyer o Ads Manager"
             >
               {copiedExport ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
-              <span>{copiedExport ? '¡Copiado al Portapapeles!' : 'Exportar Ficha para Ads'}</span>
+              <span>{copiedExport ? '¡Copiado!' : 'Exportar Ficha para Ads'}</span>
             </button>
 
             <button
               onClick={() => {
                 setEditingAd({
-                  name: `Anuncio ${currentCampaign.ads.length + 1}: `,
+                  name: '',
                   adSetId: currentCampaign.adSets[0]?.id || '',
                   format: 'Reel 9:16',
                   status: 'Idea',
-                  angle: 'Diferenciación & Rentabilidad',
+                  angle: '',
                   hookText: '',
                   primaryText: '',
-                  headline: 'Dos Soles • Distribuidora Oficial',
+                  headline: '',
                   cta: 'Enviar mensaje de WhatsApp',
-                  whatsappPrefill: 'Hola Dos Soles! Vi el anuncio y quiero asesoramiento.',
+                  whatsappPrefill: '',
                   visualConcept: ''
                 });
                 setIsAdModalOpen(true);
@@ -377,10 +272,10 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
               <span>Inversión Octubre</span>
             </div>
             <div className="mt-1 text-lg sm:text-xl font-bold text-white">
-              ${currentCampaign.totalBudget.toLocaleString('es-AR')} <span className="text-xs text-gray-400 font-normal">ARS</span>
+              {currentCampaign.totalBudget > 0 ? `$${currentCampaign.totalBudget.toLocaleString('es-AR')}` : '$0'} <span className="text-xs text-gray-400 font-normal">ARS</span>
             </div>
             <div className="text-[10px] text-gray-400 mt-0.5">
-              ${currentCampaign.dailyBudget.toLocaleString('es-AR')} /día (31 días)
+              {currentCampaign.dailyBudget > 0 ? `$${currentCampaign.dailyBudget.toLocaleString('es-AR')} /día` : 'Sin presupuesto fijado'}
             </div>
           </div>
 
@@ -390,23 +285,23 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
               <span>Leads WhatsApp Est.</span>
             </div>
             <div className="mt-1 text-lg sm:text-xl font-bold text-emerald-400">
-              ~{currentCampaign.kpis.estimatedLeads} <span className="text-xs text-gray-400 font-normal">consultas</span>
+              {currentCampaign.kpis?.estimatedLeads > 0 ? `~${currentCampaign.kpis.estimatedLeads}` : '-'} <span className="text-xs text-gray-400 font-normal">consultas</span>
             </div>
             <div className="text-[10px] text-gray-400 mt-0.5">
-              CPL proyectado: ${currentCampaign.kpis.targetCpl.toLocaleString('es-AR')}
+              {currentCampaign.kpis?.targetCpl > 0 ? `CPL objetivo: $${currentCampaign.kpis.targetCpl.toLocaleString('es-AR')}` : 'Sin CPL objetivo'}
             </div>
           </div>
 
           <div className="p-3.5 rounded-xl bg-black/40 border border-zinc-800/80">
             <div className="flex items-center space-x-1.5 text-gray-400 text-[11px] font-semibold uppercase tracking-wider">
               <Users size={13} className="text-purple-400" />
-              <span>Alcance Proyectado</span>
+              <span>Públicos Definidos</span>
             </div>
             <div className="mt-1 text-lg sm:text-xl font-bold text-white">
-              +{currentCampaign.kpis.estimatedReach.toLocaleString('es-AR')}
+              {currentCampaign.adSets.length} {currentCampaign.adSets.length === 1 ? 'conjunto' : 'conjuntos'}
             </div>
             <div className="text-[10px] text-gray-400 mt-0.5">
-              Estilistas y público belleza
+              segmentaciones configuradas
             </div>
           </div>
 
@@ -419,7 +314,7 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
               {currentCampaign.ads.length} anuncios
             </div>
             <div className="text-[10px] text-gray-400 mt-0.5">
-              en {currentCampaign.adSets.length} conjuntos de anuncios
+              en la matriz de contenido
             </div>
           </div>
         </div>
@@ -464,153 +359,191 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
             <span>Configuración de Campaña</span>
           </button>
         </div>
-
-        {/* Featured Kits quick preview */}
-        <div className="hidden lg:flex items-center space-x-2 text-xs text-gray-400">
-          <PackageCheck size={14} className="text-brand-crimson-red" />
-          <span>Focos comerciales: <strong className="text-gray-300">Liss Expert, Truss Night Spa, Día de la Madre</strong></span>
-        </div>
       </div>
 
       {/* 4. Tab Content: Ads Matrix */}
       {activeTab === 'ads' && (
         <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {currentCampaign.ads.map((ad, idx) => {
-              const matchedAdSet = currentCampaign.adSets.find(s => s.id === ad.adSetId);
-              return (
-                <div
-                  key={ad.id}
-                  className="rounded-2xl border border-brand-crimson-border/80 bg-brand-crimson-card/90 p-5 flex flex-col justify-between space-y-4 hover:border-brand-crimson-red/50 transition-all duration-300 shadow-lg group relative"
-                >
-                  {/* Top Bar of Card */}
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="flex items-center space-x-2">
-                        <span className="flex items-center space-x-1 text-[10px] font-bold px-2 py-0.5 rounded-md bg-pink-500/10 text-pink-400 border border-pink-500/20 uppercase tracking-wider">
-                          <Instagram size={11} />
-                          <span>{ad.format}</span>
-                        </span>
-                        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md border uppercase tracking-wider ${getStatusBadge(ad.status)}`}>
-                          {ad.status}
-                        </span>
+          {currentCampaign.ads.length === 0 ? (
+            <div className="p-12 text-center rounded-2xl border border-dashed border-zinc-800 bg-black/20 flex flex-col items-center justify-center space-y-3">
+              <div className="p-3.5 rounded-full bg-zinc-800/80 text-gray-400">
+                <Megaphone size={28} />
+              </div>
+              <div className="space-y-1">
+                <h4 className="text-sm font-bold text-white">No hay anuncios cargados</h4>
+                <p className="text-xs text-gray-400 max-w-sm">
+                  La lista está vacía para que cargues los anuncios a medida que los vayas definiendo.
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setEditingAd({
+                    name: '',
+                    adSetId: currentCampaign.adSets[0]?.id || '',
+                    format: 'Reel 9:16',
+                    status: 'Idea',
+                    angle: '',
+                    hookText: '',
+                    primaryText: '',
+                    headline: '',
+                    cta: 'Enviar mensaje de WhatsApp',
+                    whatsappPrefill: '',
+                    visualConcept: ''
+                  });
+                  setIsAdModalOpen(true);
+                }}
+                className="mt-2 px-4 py-2 rounded-xl text-xs font-bold bg-brand-crimson-red hover:bg-brand-crimson-darkred text-white transition-all shadow"
+              >
+                + Cargar Primer Anuncio
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              {currentCampaign.ads.map((ad) => {
+                const matchedAdSet = currentCampaign.adSets.find(s => s.id === ad.adSetId);
+                return (
+                  <div
+                    key={ad.id}
+                    className="rounded-2xl border border-brand-crimson-border/80 bg-brand-crimson-card/90 p-5 flex flex-col justify-between space-y-4 hover:border-brand-crimson-red/50 transition-all duration-300 shadow-lg group relative"
+                  >
+                    {/* Top Bar of Card */}
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="flex items-center space-x-2">
+                          <span className="flex items-center space-x-1 text-[10px] font-bold px-2 py-0.5 rounded-md bg-pink-500/10 text-pink-400 border border-pink-500/20 uppercase tracking-wider">
+                            <Instagram size={11} />
+                            <span>{ad.format}</span>
+                          </span>
+                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md border uppercase tracking-wider ${getStatusBadge(ad.status)}`}>
+                            {ad.status}
+                          </span>
+                        </div>
+
+                        {/* Action buttons */}
+                        <div className="flex items-center space-x-1">
+                          <button
+                            onClick={() => {
+                              setEditingAd(ad);
+                              setIsAdModalOpen(true);
+                            }}
+                            className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-zinc-800 transition-colors"
+                            title="Editar Anuncio"
+                          >
+                            <Edit3 size={14} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteAd(ad.id)}
+                            className="p-1.5 rounded-lg text-gray-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                            title="Eliminar Anuncio"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
                       </div>
 
-                      {/* Action buttons */}
-                      <div className="flex items-center space-x-1">
-                        <button
-                          onClick={() => {
-                            setEditingAd(ad);
-                            setIsAdModalOpen(true);
-                          }}
-                          className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-zinc-800 transition-colors"
-                          title="Editar Anuncio"
-                        >
-                          <Edit3 size={14} />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteAd(ad.id)}
-                          className="p-1.5 rounded-lg text-gray-500 hover:text-red-400 hover:bg-red-500/10 transition-colors"
-                          title="Eliminar Anuncio"
-                        >
-                          <Trash2 size={14} />
-                        </button>
+                      <h3 className="text-sm font-bold text-white group-hover:text-brand-crimson-red transition-colors">
+                        {ad.name || 'Sin título'}
+                      </h3>
+
+                      <div className="text-[11px] text-gray-400 flex items-center space-x-1">
+                        <span>Público:</span>
+                        <span className="font-semibold text-gray-300">{matchedAdSet ? matchedAdSet.target : 'General'}</span>
+                        {ad.angle && (
+                          <>
+                            <span>•</span>
+                            <span className="text-amber-400 font-medium">{ad.angle}</span>
+                          </>
+                        )}
                       </div>
                     </div>
 
-                    <h3 className="text-sm font-bold text-white group-hover:text-brand-crimson-red transition-colors">
-                      {ad.name}
-                    </h3>
-
-                    <div className="text-[11px] text-gray-400 flex items-center space-x-1">
-                      <span>Público:</span>
-                      <span className="font-semibold text-gray-300">{matchedAdSet ? matchedAdSet.target : 'General'}</span>
-                      <span>•</span>
-                      <span className="text-amber-400 font-medium">{ad.angle}</span>
-                    </div>
-                  </div>
-
-                  {/* Hook callout box */}
-                  <div className="p-3 rounded-xl bg-brand-crimson-bg/90 border border-brand-crimson-border/60 space-y-1">
-                    <div className="flex items-center space-x-1 text-[10px] font-bold uppercase tracking-wider text-amber-400">
-                      <Sparkles size={11} />
-                      <span>Gancho / Hook (Primeros 3 seg):</span>
-                    </div>
-                    <p className="text-xs text-white font-medium italic">
-                      "{ad.hookText}"
-                    </p>
-                  </div>
-
-                  {/* Primary text / Copy snippet */}
-                  <div className="space-y-1.5">
-                    <div className="flex items-center justify-between text-[11px] text-gray-400 font-semibold">
-                      <span>Texto Principal (Primary Copy):</span>
-                      <button
-                        onClick={() => handleCopy(ad.primaryText, `copy-${ad.id}`)}
-                        className="flex items-center space-x-1 text-brand-crimson-red hover:text-white text-[10px] font-bold transition-colors"
-                      >
-                        {copiedId === `copy-${ad.id}` ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
-                        <span>{copiedId === `copy-${ad.id}` ? 'Copiado' : 'Copiar Copy'}</span>
-                      </button>
-                    </div>
-                    <div className="p-3 rounded-xl bg-black/40 border border-zinc-800/80 text-xs text-gray-300 whitespace-pre-wrap font-sans max-h-36 overflow-y-auto scrollbar-thin">
-                      {ad.primaryText}
-                    </div>
-                  </div>
-
-                  {/* Bottom Meta details: Headline + CTA + WhatsApp prefill */}
-                  <div className="pt-3 border-t border-zinc-800/80 space-y-2 text-xs">
-                    <div className="flex items-center justify-between gap-2">
-                      <div className="truncate">
-                        <span className="text-[10px] text-gray-500 uppercase font-bold block">Título (Headline):</span>
-                        <span className="font-semibold text-white truncate block">{ad.headline}</span>
+                    {/* Hook callout box */}
+                    {ad.hookText && (
+                      <div className="p-3 rounded-xl bg-brand-crimson-bg/90 border border-brand-crimson-border/60 space-y-1">
+                        <div className="flex items-center space-x-1 text-[10px] font-bold uppercase tracking-wider text-amber-400">
+                          <Sparkles size={11} />
+                          <span>Gancho / Hook:</span>
+                        </div>
+                        <p className="text-xs text-white font-medium italic">
+                          "{ad.hookText}"
+                        </p>
                       </div>
-                      <span className="px-2.5 py-1 rounded-lg bg-zinc-800 text-[10px] font-bold text-gray-300 border border-zinc-700 shrink-0">
-                        CTA: {ad.cta}
-                      </span>
-                    </div>
+                    )}
 
-                    {ad.whatsappPrefill && (
-                      <div className="p-2 rounded-lg bg-emerald-950/20 border border-emerald-900/30 text-[11px] text-emerald-300 flex items-start space-x-1.5">
-                        <MessageCircle size={13} className="shrink-0 mt-0.5 text-emerald-400" />
-                        <span className="line-clamp-2">Prefill WhatsApp: <em>"{ad.whatsappPrefill}"</em></span>
+                    {/* Primary text / Copy snippet */}
+                    {ad.primaryText && (
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-between text-[11px] text-gray-400 font-semibold">
+                          <span>Texto Principal (Primary Copy):</span>
+                          <button
+                            onClick={() => handleCopy(ad.primaryText, `copy-${ad.id}`)}
+                            className="flex items-center space-x-1 text-brand-crimson-red hover:text-white text-[10px] font-bold transition-colors"
+                          >
+                            {copiedId === `copy-${ad.id}` ? <Check size={11} className="text-emerald-400" /> : <Copy size={11} />}
+                            <span>{copiedId === `copy-${ad.id}` ? 'Copiado' : 'Copiar Copy'}</span>
+                          </button>
+                        </div>
+                        <div className="p-3 rounded-xl bg-black/40 border border-zinc-800/80 text-xs text-gray-300 whitespace-pre-wrap font-sans max-h-36 overflow-y-auto scrollbar-thin">
+                          {ad.primaryText}
+                        </div>
                       </div>
                     )}
 
-                    {ad.visualConcept && (
-                      <div className="text-[11px] text-gray-400">
-                        <strong className="text-gray-300">Rodaje/Visual:</strong> {ad.visualConcept}
+                    {/* Bottom Meta details: Headline + CTA + WhatsApp prefill */}
+                    <div className="pt-3 border-t border-zinc-800/80 space-y-2 text-xs">
+                      <div className="flex items-center justify-between gap-2">
+                        <div className="truncate">
+                          <span className="text-[10px] text-gray-500 uppercase font-bold block">Título (Headline):</span>
+                          <span className="font-semibold text-white truncate block">{ad.headline || '-'}</span>
+                        </div>
+                        <span className="px-2.5 py-1 rounded-lg bg-zinc-800 text-[10px] font-bold text-gray-300 border border-zinc-700 shrink-0">
+                          CTA: {ad.cta}
+                        </span>
                       </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
 
-          {/* Quick Add Ad Placeholder */}
-          <button
-            onClick={() => {
-              setEditingAd({
-                name: `Anuncio ${currentCampaign.ads.length + 1}: `,
-                adSetId: currentCampaign.adSets[0]?.id || '',
-                format: 'Reel 9:16',
-                status: 'Idea',
-                angle: 'Conversión Directa Salones',
-                hookText: '',
-                primaryText: '',
-                headline: 'Dos Soles • Mayorista Capilar',
-                cta: 'Enviar mensaje de WhatsApp',
-                whatsappPrefill: 'Hola Dos Soles! Quiero información mayorista.',
-                visualConcept: ''
-              });
-              setIsAdModalOpen(true);
-            }}
-            className="w-full py-4 border-2 border-dashed border-zinc-800 hover:border-brand-crimson-red/50 rounded-2xl flex items-center justify-center space-x-2 text-xs font-bold text-gray-400 hover:text-white transition-all bg-black/20 hover:bg-black/40"
-          >
-            <Plus size={16} className="text-brand-crimson-red" />
-            <span>+ Agregar otro Anuncio a la Planificación</span>
-          </button>
+                      {ad.whatsappPrefill && (
+                        <div className="p-2 rounded-lg bg-emerald-950/20 border border-emerald-900/30 text-[11px] text-emerald-300 flex items-start space-x-1.5">
+                          <MessageCircle size={13} className="shrink-0 mt-0.5 text-emerald-400" />
+                          <span className="line-clamp-2">Prefill WhatsApp: <em>"{ad.whatsappPrefill}"</em></span>
+                        </div>
+                      )}
+
+                      {ad.visualConcept && (
+                        <div className="text-[11px] text-gray-400">
+                          <strong className="text-gray-300">Rodaje/Visual:</strong> {ad.visualConcept}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {currentCampaign.ads.length > 0 && (
+            <button
+              onClick={() => {
+                setEditingAd({
+                  name: '',
+                  adSetId: currentCampaign.adSets[0]?.id || '',
+                  format: 'Reel 9:16',
+                  status: 'Idea',
+                  angle: '',
+                  hookText: '',
+                  primaryText: '',
+                  headline: '',
+                  cta: 'Enviar mensaje de WhatsApp',
+                  whatsappPrefill: '',
+                  visualConcept: ''
+                });
+                setIsAdModalOpen(true);
+              }}
+              className="w-full py-4 border-2 border-dashed border-zinc-800 hover:border-brand-crimson-red/50 rounded-2xl flex items-center justify-center space-x-2 text-xs font-bold text-gray-400 hover:text-white transition-all bg-black/20 hover:bg-black/40"
+            >
+              <Plus size={16} className="text-brand-crimson-red" />
+              <span>+ Agregar otro Anuncio</span>
+            </button>
+          )}
         </div>
       )}
 
@@ -624,16 +557,16 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
             <button
               onClick={() => {
                 setEditingAdSet({
-                  name: `AdSet 0${currentCampaign.adSets.length + 1}: `,
-                  target: 'B2B Salones',
-                  locations: 'Córdoba, Santa Fe, Buenos Aires',
+                  name: '',
+                  target: '',
+                  locations: '',
                   ageRange: '25 - 55 años',
                   gender: 'Todos',
-                  interests: 'Peluquería, Belleza, Salones',
+                  interests: '',
                   placements: 'Instagram Reels & Stories',
-                  budgetShare: '25%',
-                  dailyBudget: 4500,
-                  status: 'Listo para pauta'
+                  budgetShare: '',
+                  dailyBudget: 0,
+                  status: 'Borrador'
                 });
                 setIsAdSetModalOpen(true);
               }}
@@ -644,79 +577,119 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
             </button>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {currentCampaign.adSets.map((adSet) => {
-              const countAds = currentCampaign.ads.filter(a => a.adSetId === adSet.id).length;
-              return (
-                <div
-                  key={adSet.id}
-                  className="rounded-2xl border border-brand-crimson-border bg-brand-crimson-card p-5 space-y-4 flex flex-col justify-between shadow-lg"
-                >
-                  <div className="space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                        {adSet.target}
-                      </span>
-                      <div className="flex items-center space-x-1">
-                        <button
-                          onClick={() => {
-                            setEditingAdSet(adSet);
-                            setIsAdSetModalOpen(true);
-                          }}
-                          className="p-1 rounded text-gray-400 hover:text-white"
-                          title="Editar Conjunto"
-                        >
-                          <Edit3 size={13} />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteAdSet(adSet.id)}
-                          className="p-1 rounded text-gray-500 hover:text-red-400"
-                          title="Eliminar Conjunto"
-                        >
-                          <Trash2 size={13} />
-                        </button>
+          {currentCampaign.adSets.length === 0 ? (
+            <div className="p-12 text-center rounded-2xl border border-dashed border-zinc-800 bg-black/20 flex flex-col items-center justify-center space-y-3">
+              <div className="p-3.5 rounded-full bg-zinc-800/80 text-gray-400">
+                <Users size={28} />
+              </div>
+              <div className="space-y-1">
+                <h4 className="text-sm font-bold text-white">No hay conjuntos de anuncios definidos</h4>
+                <p className="text-xs text-gray-400 max-w-sm">
+                  Creá los conjuntos de anuncios para definir las audiencias, ubicaciones geográficas e intereses.
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setEditingAdSet({
+                    name: '',
+                    target: '',
+                    locations: '',
+                    ageRange: '25 - 55 años',
+                    gender: 'Todos',
+                    interests: '',
+                    placements: 'Instagram Reels & Stories',
+                    budgetShare: '',
+                    dailyBudget: 0,
+                    status: 'Borrador'
+                  });
+                  setIsAdSetModalOpen(true);
+                }}
+                className="mt-2 px-4 py-2 rounded-xl text-xs font-bold bg-brand-crimson-red hover:bg-brand-crimson-darkred text-white transition-all shadow"
+              >
+                + Cargar Primer Conjunto
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              {currentCampaign.adSets.map((adSet) => {
+                const countAds = currentCampaign.ads.filter(a => a.adSetId === adSet.id).length;
+                return (
+                  <div
+                    key={adSet.id}
+                    className="rounded-2xl border border-brand-crimson-border bg-brand-crimson-card p-5 space-y-4 flex flex-col justify-between shadow-lg"
+                  >
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                          {adSet.target || 'Audiencia'}
+                        </span>
+                        <div className="flex items-center space-x-1">
+                          <button
+                            onClick={() => {
+                              setEditingAdSet(adSet);
+                              setIsAdSetModalOpen(true);
+                            }}
+                            className="p-1 rounded text-gray-400 hover:text-white"
+                            title="Editar Conjunto"
+                          >
+                            <Edit3 size={13} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteAdSet(adSet.id)}
+                            className="p-1 rounded text-gray-500 hover:text-red-400"
+                            title="Eliminar Conjunto"
+                          >
+                            <Trash2 size={13} />
+                          </button>
+                        </div>
+                      </div>
+
+                      <h4 className="text-sm font-bold text-white">
+                        {adSet.name || 'Sin nombre'}
+                      </h4>
+
+                      <div className="p-3 rounded-xl bg-black/40 border border-zinc-800/80 space-y-2 text-xs text-gray-300">
+                        {adSet.locations && (
+                          <div>
+                            <span className="text-[10px] font-bold text-gray-500 uppercase block">Ubicaciones Geográficas:</span>
+                            <p className="font-medium text-white">{adSet.locations}</p>
+                          </div>
+                        )}
+                        <div>
+                          <span className="text-[10px] font-bold text-gray-500 uppercase block">Demografía:</span>
+                          <p>{adSet.ageRange} • {adSet.gender}</p>
+                        </div>
+                        {adSet.interests && (
+                          <div>
+                            <span className="text-[10px] font-bold text-gray-500 uppercase block">Intereses / Segmentación:</span>
+                            <p className="text-amber-300/90 leading-snug">{adSet.interests}</p>
+                          </div>
+                        )}
+                        {adSet.placements && (
+                          <div>
+                            <span className="text-[10px] font-bold text-gray-500 uppercase block">Placements Meta:</span>
+                            <p className="text-gray-400">{adSet.placements}</p>
+                          </div>
+                        )}
                       </div>
                     </div>
 
-                    <h4 className="text-sm font-bold text-white">
-                      {adSet.name}
-                    </h4>
-
-                    <div className="p-3 rounded-xl bg-black/40 border border-zinc-800/80 space-y-2 text-xs text-gray-300">
+                    <div className="pt-3 border-t border-zinc-800 flex items-center justify-between text-xs">
                       <div>
-                        <span className="text-[10px] font-bold text-gray-500 uppercase block">Ubicaciones Geográficas:</span>
-                        <p className="font-medium text-white">{adSet.locations}</p>
+                        <span className="text-[10px] text-gray-500 uppercase block">Presupuesto Asignado:</span>
+                        <span className="font-bold text-emerald-400">
+                          {adSet.budgetShare || '-'} {adSet.dailyBudget > 0 ? `($${adSet.dailyBudget.toLocaleString('es-AR')}/d)` : ''}
+                        </span>
                       </div>
-                      <div>
-                        <span className="text-[10px] font-bold text-gray-500 uppercase block">Demografía:</span>
-                        <p>{adSet.ageRange} • {adSet.gender}</p>
-                      </div>
-                      <div>
-                        <span className="text-[10px] font-bold text-gray-500 uppercase block">Intereses / Lookalikes:</span>
-                        <p className="text-amber-300/90 leading-snug">{adSet.interests}</p>
-                      </div>
-                      <div>
-                        <span className="text-[10px] font-bold text-gray-500 uppercase block">Placements Meta:</span>
-                        <p className="text-gray-400">{adSet.placements}</p>
-                      </div>
+                      <span className="px-2 py-1 rounded bg-zinc-800 text-[11px] font-bold text-gray-300">
+                        {countAds} {countAds === 1 ? 'anuncio' : 'anuncios'}
+                      </span>
                     </div>
                   </div>
-
-                  <div className="pt-3 border-t border-zinc-800 flex items-center justify-between text-xs">
-                    <div>
-                      <span className="text-[10px] text-gray-500 uppercase block">Presupuesto Asignado:</span>
-                      <span className="font-bold text-emerald-400">
-                        {adSet.budgetShare} (~${adSet.dailyBudget?.toLocaleString('es-AR')}/d)
-                      </span>
-                    </div>
-                    <span className="px-2 py-1 rounded bg-zinc-800 text-[11px] font-bold text-gray-300">
-                      {countAds} {countAds === 1 ? 'anuncio' : 'anuncios'}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
 
@@ -779,17 +752,19 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
                   <label className="text-gray-300 font-bold block mb-1">Presupuesto Diario (ARS):</label>
                   <input
                     type="number"
-                    value={currentCampaign.dailyBudget}
+                    value={currentCampaign.dailyBudget || ''}
+                    placeholder="0"
                     onChange={(e) => {
                       const daily = parseInt(e.target.value, 10) || 0;
                       const total = daily * 31;
+                      const cpl = currentCampaign.kpis?.targetCpl || 1;
                       updateAndSave({
                         ...currentCampaign,
                         dailyBudget: daily,
                         totalBudget: total,
                         kpis: {
                           ...currentCampaign.kpis,
-                          estimatedLeads: Math.round(total / currentCampaign.kpis.targetCpl)
+                          estimatedLeads: cpl > 0 ? Math.round(total / cpl) : 0
                         }
                       });
                     }}
@@ -801,8 +776,9 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
                   <label className="text-gray-300 font-bold block mb-1">Inversión Total Mes (ARS):</label>
                   <input
                     type="number"
-                    value={currentCampaign.totalBudget}
+                    value={currentCampaign.totalBudget || ''}
                     disabled
+                    placeholder="0"
                     className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900/60 border border-zinc-800 text-gray-400 font-mono"
                   />
                 </div>
@@ -845,39 +821,22 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
                 <label className="text-gray-300 font-bold block mb-1">Costo por Lead Objetivo (CPL ARS):</label>
                 <input
                   type="number"
-                  value={currentCampaign.kpis.targetCpl}
+                  value={currentCampaign.kpis?.targetCpl || ''}
+                  placeholder="0"
                   onChange={(e) => {
-                    const cpl = parseInt(e.target.value, 10) || 1;
+                    const cpl = parseInt(e.target.value, 10) || 0;
                     updateAndSave({
                       ...currentCampaign,
                       kpis: {
                         ...currentCampaign.kpis,
                         targetCpl: cpl,
-                        estimatedLeads: Math.round(currentCampaign.totalBudget / cpl)
+                        estimatedLeads: cpl > 0 ? Math.round(currentCampaign.totalBudget / cpl) : 0
                       }
                     });
                   }}
                   className="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:border-brand-crimson-red focus:outline-none font-mono"
                 />
               </div>
-            </div>
-          </div>
-
-          {/* Featured Kits Box */}
-          <div className="pt-4 border-t border-zinc-800 space-y-3">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-brand-crimson-red">
-              Kits y Ofertas Principales Promovidas en Anuncios
-            </h4>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              {currentCampaign.featuredKits?.map((kit, i) => (
-                <div key={i} className="p-3.5 rounded-xl bg-black/40 border border-zinc-800 space-y-1">
-                  <h5 className="text-xs font-bold text-white">{kit.title}</h5>
-                  <p className="text-[11px] text-gray-400">{kit.description}</p>
-                  <span className="text-[10px] text-amber-400 font-semibold block pt-1">
-                    🎯 {kit.idealTarget}
-                  </span>
-                </div>
-              ))}
             </div>
           </div>
         </div>
@@ -890,7 +849,7 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
             <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
               <h3 className="text-base font-bold text-white flex items-center space-x-2">
                 <Megaphone size={16} className="text-brand-crimson-red" />
-                <span>{editingAd.id ? 'Editar Anuncio / Creativo' : 'Nuevo Anuncio / Creativo'}</span>
+                <span>{editingAd.id ? 'Editar Anuncio' : 'Nuevo Anuncio'}</span>
               </h3>
               <button
                 onClick={() => setIsAdModalOpen(false)}
@@ -909,17 +868,18 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
                     value={editingAd.name}
                     onChange={(e) => setEditingAd({ ...editingAd, name: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:border-brand-crimson-red focus:outline-none"
-                    placeholder="Ej. Anuncio 05: Hook Alisados..."
+                    placeholder="Ej. Anuncio 01: Hook Alisados..."
                   />
                 </div>
 
                 <div>
-                  <label className="text-gray-300 font-bold block mb-1">Conjunto de Anuncios (Público):</label>
+                  <label className="text-gray-300 font-bold block mb-1">Conjunto de Anuncios:</label>
                   <select
                     value={editingAd.adSetId}
                     onChange={(e) => setEditingAd({ ...editingAd, adSetId: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:border-brand-crimson-red focus:outline-none"
                   >
+                    <option value="">General / Sin conjunto asignado</option>
                     {currentCampaign.adSets.map(s => (
                       <option key={s.id} value={s.id}>{s.name}</option>
                     ))}
@@ -951,7 +911,7 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
                     className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:border-brand-crimson-red focus:outline-none"
                   >
                     <option value="Idea">Idea</option>
-                    <option value="Guión Listo">Guión Listo</option>
+                    <option value="Guión Listo">Guión</option>
                     <option value="En Grabación">En Grabación</option>
                     <option value="Editado">Editado</option>
                     <option value="Aprobado">Aprobado</option>
@@ -981,7 +941,7 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
                   value={editingAd.angle}
                   onChange={(e) => setEditingAd({ ...editingAd, angle: e.target.value })}
                   className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:border-brand-crimson-red focus:outline-none"
-                  placeholder="Ej. Rentabilidad de bacha / Oportunidad Día de la Madre"
+                  placeholder="Ej. Rentabilidad de bacha / Reposición express..."
                 />
               </div>
 
@@ -992,7 +952,7 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
                   value={editingAd.hookText}
                   onChange={(e) => setEditingAd({ ...editingAd, hookText: e.target.value })}
                   className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:border-brand-crimson-red focus:outline-none italic"
-                  placeholder="La frase o pregunta con la que arranca el video para detener el scroll..."
+                  placeholder="La frase o pregunta con la que arranca el video..."
                 />
               </div>
 
@@ -1003,7 +963,7 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
                   value={editingAd.primaryText}
                   onChange={(e) => setEditingAd({ ...editingAd, primaryText: e.target.value })}
                   className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:border-brand-crimson-red focus:outline-none font-sans"
-                  placeholder="Escribí el texto persuasivo completo que acompañará al anuncio..."
+                  placeholder="Escribí el texto persuasivo completo del anuncio..."
                 />
               </div>
 
@@ -1015,6 +975,7 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
                     value={editingAd.headline}
                     onChange={(e) => setEditingAd({ ...editingAd, headline: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:border-brand-crimson-red focus:outline-none"
+                    placeholder="Ej. Stock directo para Salones"
                   />
                 </div>
 
@@ -1025,7 +986,7 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
                     value={editingAd.whatsappPrefill}
                     onChange={(e) => setEditingAd({ ...editingAd, whatsappPrefill: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:border-brand-crimson-red focus:outline-none"
-                    placeholder="El texto que aparecerá escrito al abrir el chat..."
+                    placeholder="El texto que aparecerá al abrir el chat..."
                   />
                 </div>
               </div>
@@ -1085,6 +1046,7 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
                   value={editingAdSet.name}
                   onChange={(e) => setEditingAdSet({ ...editingAdSet, name: e.target.value })}
                   className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:border-brand-crimson-red focus:outline-none"
+                  placeholder="Ej. AdSet 01: Dueños de Salones..."
                 />
               </div>
 
@@ -1119,6 +1081,7 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
                   value={editingAdSet.locations}
                   onChange={(e) => setEditingAdSet({ ...editingAdSet, locations: e.target.value })}
                   className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:border-brand-crimson-red focus:outline-none"
+                  placeholder="Córdoba, Santa Fe, Buenos Aires..."
                 />
               </div>
 
@@ -1130,6 +1093,7 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
                     value={editingAdSet.ageRange}
                     onChange={(e) => setEditingAdSet({ ...editingAdSet, ageRange: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:border-brand-crimson-red focus:outline-none"
+                    placeholder="25 - 55 años"
                   />
                 </div>
                 <div>
@@ -1139,6 +1103,7 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
                     value={editingAdSet.gender}
                     onChange={(e) => setEditingAdSet({ ...editingAdSet, gender: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:border-brand-crimson-red focus:outline-none"
+                    placeholder="Todos / Mujeres"
                   />
                 </div>
               </div>
@@ -1150,6 +1115,7 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
                   value={editingAdSet.interests}
                   onChange={(e) => setEditingAdSet({ ...editingAdSet, interests: e.target.value })}
                   className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:border-brand-crimson-red focus:outline-none"
+                  placeholder="Peluquería, belleza, alisados..."
                 />
               </div>
 
@@ -1161,13 +1127,15 @@ const MetaCampaignPlanner = ({ campaign = defaultOctoberCampaign, onSaveCampaign
                     value={editingAdSet.budgetShare}
                     onChange={(e) => setEditingAdSet({ ...editingAdSet, budgetShare: e.target.value })}
                     className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:border-brand-crimson-red focus:outline-none"
+                    placeholder="50%"
                   />
                 </div>
                 <div>
                   <label className="text-gray-300 font-bold block mb-1">Presupuesto Diario Sugerido (ARS):</label>
                   <input
                     type="number"
-                    value={editingAdSet.dailyBudget}
+                    value={editingAdSet.dailyBudget || ''}
+                    placeholder="0"
                     onChange={(e) => setEditingAdSet({ ...editingAdSet, dailyBudget: parseInt(e.target.value, 10) || 0 })}
                     className="w-full px-3 py-2 rounded-xl bg-zinc-900 border border-zinc-800 text-white focus:border-brand-crimson-red focus:outline-none font-mono"
                   />
