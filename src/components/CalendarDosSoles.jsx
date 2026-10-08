@@ -29,7 +29,7 @@ import {
   ArrowRight
 } from 'lucide-react';
 import PostDetailDrawer from './PostDetailDrawer';
-import MetaCampaignPlanner, { defaultOctoberCampaign } from './MetaCampaignPlanner';
+import MetaCampaignPlanner, { defaultCampaignsData, defaultOctoberCampaign } from './MetaCampaignPlanner';
 
 // Base Structured Social Media Calendar Data (Fallback)
 const fallbackScheduleData = [
@@ -189,7 +189,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
     posts: [], 
     proposals: [], 
     auditLog: [],
-    metaCampaigns: [defaultOctoberCampaign]
+    metaCampaigns: defaultCampaignsData
   });
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -221,9 +221,9 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
         let data = await response.json();
         
         const cleanMetaCampaigns = (campaigns) => {
-          if (!campaigns || !Array.isArray(campaigns) || campaigns.length === 0) return [defaultOctoberCampaign];
+          if (!campaigns || !Array.isArray(campaigns) || campaigns.length < 2) return defaultCampaignsData;
           if (campaigns.some(c => c.ads?.some(a => a.id === 'ad-101') || c.name?.includes('Captación Salones'))) {
-            return [defaultOctoberCampaign];
+            return defaultCampaignsData;
           }
           return campaigns;
         };
@@ -234,7 +234,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
             posts: data,
             proposals: [],
             auditLog: [],
-            metaCampaigns: [defaultOctoberCampaign],
+            metaCampaigns: defaultCampaignsData,
             lastUpdated: 0
           };
         } else {
@@ -279,8 +279,8 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
               const septemberStarterPosts = fallbackScheduleData.filter(p => getMonthFromDate(p.date) === 9);
               parsed.posts = [...(parsed.posts || []), ...septemberStarterPosts];
             }
-            if (!parsed.metaCampaigns || parsed.metaCampaigns.length === 0 || parsed.metaCampaigns.some(c => c.ads?.some(a => a.id === 'ad-101'))) {
-              parsed.metaCampaigns = [defaultOctoberCampaign];
+            if (!parsed.metaCampaigns || !Array.isArray(parsed.metaCampaigns) || parsed.metaCampaigns.length < 2 || parsed.metaCampaigns.some(c => c.ads?.some(a => a.id === 'ad-101') || c.name?.includes('Captación Salones'))) {
+              parsed.metaCampaigns = defaultCampaignsData;
             }
             setDbData(parsed);
             return;
@@ -291,7 +291,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
           posts: fallbackScheduleData,
           proposals: [],
           auditLog: [],
-          metaCampaigns: [defaultOctoberCampaign]
+          metaCampaigns: defaultCampaignsData
         });
       } finally {
         setLoading(false);
@@ -337,21 +337,15 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
     }
   };
 
-  // Save Meta Ads Campaign changes to state and cloud
-  const handleSaveMetaCampaign = async (updatedCampaign) => {
-    const existingCampaigns = dbData.metaCampaigns || [defaultOctoberCampaign];
-    const exists = existingCampaigns.some(c => c.id === updatedCampaign.id);
-    const updatedCampaigns = exists
-      ? existingCampaigns.map(c => c.id === updatedCampaign.id ? updatedCampaign : c)
-      : [...existingCampaigns, updatedCampaign];
-
+  // Save Meta Ads Campaigns changes to state and cloud
+  const handleSaveMetaCampaigns = async (updatedCampaigns) => {
     const timestamp = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
     const auditEntry = {
       id: `audit-${Date.now()}`,
       timestamp,
       user: adminName ? `${adminName} (Admin)` : 'Usuario (Editor)',
-      action: 'Ajuste Campaña Meta Ads',
-      details: `Actualizó la planificación de "${updatedCampaign.name}"`
+      action: 'Ajuste Campañas Meta Ads',
+      details: `Actualizó la planificación de campañas Meta Ads (${updatedCampaigns.length} campañas activas)`
     };
 
     const updatedData = {
@@ -828,8 +822,8 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
 
       {mainSection === 'meta_ads' ? (
         <MetaCampaignPlanner
-          campaign={dbData.metaCampaigns?.[0] || defaultOctoberCampaign}
-          onSaveCampaign={handleSaveMetaCampaign}
+          campaigns={dbData.metaCampaigns || defaultCampaignsData}
+          onSaveCampaigns={handleSaveMetaCampaigns}
         />
       ) : (
         <>
