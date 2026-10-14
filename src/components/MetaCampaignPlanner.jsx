@@ -36,7 +36,7 @@ export const defaultCampaignsData = [
   {
     id: 'camp-b2b',
     type: 'B2B',
-    name: 'Campaña 1: [B2B] Salones & Profesionales • Venta Mayorista & Cursos',
+    name: 'Campaña 1: [B2B] Salones & Profesionales • Venta Mayorista Web & Herramientas',
     status: 'Planificada',
     objective: 'OUTCOME_LEADS',
     objectiveName: 'Clientes Potenciales (WhatsApp Asesor & Registro Mayorista)',
@@ -56,7 +56,7 @@ export const defaultCampaignsData = [
     adSets: [
       {
         id: 'adset-b2b-1',
-        name: 'Conjunto 1.1: Venta Mayorista Salones (Toda la Argentina)',
+        name: 'Conjunto 1.1: Venta Mayorista Salones & Barberías (Toda la Argentina)',
         target: 'Dueños de Salones, Barberos & Estilistas',
         locations: 'Toda la Argentina (Cobertura nacional de distribución mayorista)',
         ageRange: '23 - 58 años',
@@ -64,22 +64,8 @@ export const defaultCampaignsData = [
         interests: 'Peluquería, Salón de belleza, Estilista, L\'Oréal Professionnel, Matrix, Wahl',
         exclusions: 'Compradores web B2C (últimos 180 días) • Consumidor final',
         placements: 'Instagram Reels, Stories & Feed + Facebook Feed',
-        budgetShare: '70%',
-        dailyBudget: 2200,
-        status: 'Listo para pauta'
-      },
-      {
-        id: 'adset-b2b-2',
-        name: 'Conjunto 1.2: Capacitaciones & Academia (Rosario y Provincias Aledañas)',
-        target: 'Estilistas y Peluqueros en Perfeccionamiento Técnico',
-        locations: 'Rosario y provincias aledañas (Santa Fe, Entre Ríos, Córdoba este, Buenos Aires norte)',
-        ageRange: '21 - 50 años',
-        gender: 'Todos',
-        interests: 'Workshops de peluquería, Balayage, Alisados sin formol, Colorimetría avanzada',
-        exclusions: 'Personas fuera del radio de influencia presencial • Compradores B2C',
-        placements: 'Instagram Reels & Stories (9:16)',
-        budgetShare: '30%',
-        dailyBudget: 967,
+        budgetShare: '100%',
+        dailyBudget: 3167,
         status: 'Listo para pauta'
       }
     ],
@@ -118,13 +104,13 @@ export const defaultCampaignsData = [
       },
       {
         id: 'ad-b2b-3',
-        adSetId: 'adset-b2b-2',
+        adSetId: 'adset-b2b-1',
         name: 'Video 3: Capacitaciones & Academia Dos Soles',
         link: 'https://www.instagram.com/p/Ddpa-IsunuR/',
         linkStatus: 'ready',
         format: 'Reel / Video',
-        status: 'Listo',
-        angle: 'Técnica de Alto Nivel & Diferenciación',
+        status: 'Pausado',
+        angle: 'Técnica de Alto Nivel & Diferenciación (Pausado por ahora)',
         hookText: 'La diferencia entre un peluquero que compite por precio y un salón que cobra lo que vale... es la técnica.',
         primaryText: 'Capacitate con los mejores profesionales en la Academia Dos Soles 🎓\n\nWorkshops técnicos intensivos, práctica en vivo y técnicas de última tendencia en color, balayage y alisados orgánicos para que aumentes el ticket promedio de cada servicio en tu salón.\n\nCupos limitados por fecha para garantizar atención personalizada.\n\n📲 Tocá para consultar el calendario y asegurar tu lugar.',
         headline: 'Workshops Técnicos para Estilistas • Cupos Limitados 🎓',
@@ -268,8 +254,8 @@ const MetaCampaignPlanner = ({
     output += `PRESUPUESTO TOTAL SUGERIDO: $175.000 ARS / mes (~$5.833 ARS/día)\n`;
     output += `ESTRUCTURA: 1 Cuenta • 2 Campañas aisladas (B2B $95.000 / B2C $80.000)\n\n`;
     output += `CRITERIOS ESTRATÉGICOS:\n`;
-    output += `1. Capacitaciones B2B: Exclusivo Rosario y provincias aledañas (asistencia presencial).\n`;
-    output += `2. Ventas B2B & B2C: Toda la Argentina (cobertura nacional de envíos).\n`;
+    output += `1. B2B Venta Mayorista: Toda la Argentina (100% del presupuesto B2B enfocado en abastecer salones con stock y máquinas).\n`;
+    output += `2. Capacitaciones: Pausada sin pauta activa por el momento.\n`;
     output += `3. Regla de Oro B2C: Excluir seguidores actuales de IG y FB de Dos Soles (100% tráfico frío).\n\n`;
 
     campaignList.forEach((camp, idx) => {
@@ -633,14 +619,14 @@ const MetaCampaignPlanner = ({
                 </span>
                 <div className="space-y-1.5 text-gray-300">
                   <div className="pb-1 border-b border-zinc-800">
-                    <span className="text-[10px] uppercase font-bold text-gray-400 block">Capacitaciones B2B:</span>
-                    <span className="font-semibold text-purple-300">Rosario y provincias aledañas</span>
-                    <span className="text-[10px] text-gray-400 block">Santa Fe, Entre Ríos, Córdoba este, Buenos Aires norte (asistencia presencial).</span>
+                    <span className="text-[10px] uppercase font-bold text-gray-400 block">Ventas B2B & B2C:</span>
+                    <span className="font-semibold text-emerald-300">Toda la Argentina (Nacional)</span>
+                    <span className="text-[10px] text-gray-400 block">Cobertura nacional con logística de despachos a salones y consumidor final.</span>
                   </div>
                   <div className="pt-0.5">
-                    <span className="text-[10px] uppercase font-bold text-gray-400 block">Ventas B2B & B2C:</span>
-                    <span className="font-semibold text-emerald-300">Toda la Argentina</span>
-                    <span className="text-[10px] text-gray-400 block">Cobertura nacional con logística de despachos y encomiendas.</span>
+                    <span className="text-[10px] uppercase font-bold text-gray-400 block">Capacitaciones Presenciales:</span>
+                    <span className="text-zinc-400 italic">Pausadas sin pauta por ahora</span>
+                    <span className="text-[10px] text-gray-500 block">No se limita presupuesto a Rosario por el momento.</span>
                   </div>
                 </div>
               </div>
@@ -675,17 +661,20 @@ const MetaCampaignPlanner = ({
                   <span>🗺️ Arquitectura Publicitaria en Meta Ads</span>
                 </h3>
                 <p className="text-xs text-gray-400 mt-0.5">
-                  1 Cuenta Publicitaria con Píxel centralizado en dossoles.net, dividida en 2 campañas aisladas para proteger el presupuesto profesional.
+                  1 Cuenta Publicitaria con Píxel centralizado en dossoles.net, dividida en 2 campañas aisladas. Capacitaciones en pausa sin pauta activa.
                 </p>
               </div>
               <div className="flex items-center space-x-2 text-xs">
                 <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold flex items-center space-x-1">
                   <CheckCircle2 size={12} />
-                  <span>2 Videos Listos</span>
+                  <span>1 Video Listo</span>
                 </span>
                 <span className="px-2.5 py-1 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20 font-semibold flex items-center space-x-1">
                   <Clock size={12} />
                   <span>3 Videos A Definir</span>
+                </span>
+                <span className="px-2.5 py-1 rounded-lg bg-zinc-800 text-zinc-400 border border-zinc-700 font-semibold flex items-center space-x-1">
+                  <span>⏸️ Capacitaciones Pausada</span>
                 </span>
               </div>
             </div>
@@ -727,7 +716,7 @@ const MetaCampaignPlanner = ({
                         Campaña 1: Salones & Profesionales
                       </h4>
                       <p className="text-[11px] text-gray-400">
-                        Objetivo: <strong className="text-gray-300">Clientes Potenciales (OUTCOME_LEADS)</strong> • WhatsApp Asesor
+                        Objetivo: <strong className="text-gray-300">Clientes Potenciales (OUTCOME_LEADS)</strong> • WhatsApp Asesor & Registro
                       </p>
                     </div>
                     <button
@@ -744,9 +733,9 @@ const MetaCampaignPlanner = ({
                     <div className="p-3.5 rounded-xl bg-black/40 border border-zinc-800 space-y-2.5">
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] font-bold text-amber-400">
-                          Conjunto 1.1: Venta Mayorista Salones (Toda la Argentina)
+                          Conjunto 1.1: Venta Mayorista Salones & Barberías (Toda la Argentina)
                         </span>
-                        <span className="text-[10px] text-emerald-400 font-mono font-bold">$2.200/día (70%)</span>
+                        <span className="text-[10px] text-emerald-400 font-mono font-bold">$3.167/día (100%)</span>
                       </div>
                       <div className="flex items-center space-x-2 text-[10px] text-gray-300">
                         <span className="px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 font-medium">📍 Toda la Argentina</span>
@@ -785,38 +774,15 @@ const MetaCampaignPlanner = ({
                       </div>
                     </div>
 
-                    {/* AdSet 1.2 */}
-                    <div className="p-3.5 rounded-xl bg-black/40 border border-zinc-800 space-y-2.5">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-bold text-purple-400">
-                          Conjunto 1.2: Capacitaciones & Academia (Rosario y Aledaños)
-                        </span>
-                        <span className="text-[10px] text-emerald-400 font-mono font-bold">$967/día (30%)</span>
-                      </div>
-                      <div className="flex items-center space-x-2 text-[10px] text-gray-300">
-                        <span className="px-2 py-0.5 rounded bg-purple-900/30 text-purple-300 border border-purple-800/40 font-medium">📍 Rosario y aledaños</span>
-                        <span className="text-gray-400 truncate">Santa Fe, Entre Ríos, Cba este, Bs As norte</span>
-                      </div>
-
-                      {/* Video Cards inside AdSet 1.2 */}
-                      <div className="space-y-1.5 pt-1">
-                        <div className="p-2.5 rounded-lg bg-zinc-900/90 border border-zinc-800 flex items-center justify-between gap-2 text-xs">
-                          <div className="flex items-center space-x-2 truncate">
-                            <span className="h-2 w-2 rounded-full bg-emerald-400 shrink-0" />
-                            <span className="font-semibold text-white truncate">Video 3: Capacitaciones Dos Soles</span>
-                          </div>
-                          <a
-                            href="https://www.instagram.com/p/Ddpa-IsunuR/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center space-x-1 px-2 py-0.5 rounded bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold transition-colors shrink-0"
-                          >
-                            <Instagram size={11} />
-                            <span>Ver Reel ↗</span>
-                          </a>
-                        </div>
-                      </div>
+                    {/* Notice of paused training */}
+                    <div className="p-2.5 rounded-xl bg-zinc-900/80 border border-zinc-800 text-[11px] text-zinc-400 flex items-center justify-between">
+                      <span className="flex items-center space-x-1.5">
+                        <span>⏸️</span>
+                        <span><strong>Capacitaciones & Academia:</strong> Pausada sin pauta activa por el momento.</span>
+                      </span>
+                      <span className="text-[10px] text-zinc-500 font-mono">$0/día</span>
                     </div>
+
                   </div>
 
                   {/* Destination */}

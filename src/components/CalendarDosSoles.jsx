@@ -222,7 +222,11 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
         
         const cleanMetaCampaigns = (campaigns) => {
           if (!campaigns || !Array.isArray(campaigns) || campaigns.length < 2) return defaultCampaignsData;
-          if (campaigns.some(c => c.ads?.some(a => a.id === 'ad-101') || c.name?.includes('Captación Salones'))) {
+          if (campaigns.some(c => 
+            c.ads?.some(a => a.id === 'ad-101') || 
+            c.name?.includes('Captación Salones') ||
+            (c.id === 'camp-b2b' && (c.adSets?.length > 1 || c.adSets?.[0]?.dailyBudget !== 3167))
+          )) {
             return defaultCampaignsData;
           }
           return campaigns;
@@ -279,7 +283,16 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
               const septemberStarterPosts = fallbackScheduleData.filter(p => getMonthFromDate(p.date) === 9);
               parsed.posts = [...(parsed.posts || []), ...septemberStarterPosts];
             }
-            if (!parsed.metaCampaigns || !Array.isArray(parsed.metaCampaigns) || parsed.metaCampaigns.length < 2 || parsed.metaCampaigns.some(c => c.ads?.some(a => a.id === 'ad-101') || c.name?.includes('Captación Salones'))) {
+            if (
+              !parsed.metaCampaigns ||
+              !Array.isArray(parsed.metaCampaigns) ||
+              parsed.metaCampaigns.length < 2 ||
+              parsed.metaCampaigns.some(c =>
+                c.ads?.some(a => a.id === 'ad-101') ||
+                c.name?.includes('Captación Salones') ||
+                (c.id === 'camp-b2b' && (c.adSets?.length > 1 || c.adSets?.[0]?.dailyBudget !== 3167))
+              )
+            ) {
               parsed.metaCampaigns = defaultCampaignsData;
             }
             setDbData(parsed);
