@@ -223,7 +223,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
         const cleanMetaCampaigns = (campaigns) => {
           if (!campaigns || !Array.isArray(campaigns) || campaigns.length < 2) return defaultCampaignsData;
           if (campaigns.some(c => 
-            c.ads?.some(a => a.id === 'ad-101') || 
+            c.ads?.some(a => a.id === 'ad-101' || (a.id === 'ad-b2b-2' && a.link === 'A definir')) || 
             c.name?.includes('Captación Salones') ||
             (c.id === 'camp-b2b' && (c.adSets?.length > 1 || c.adSets?.[0]?.dailyBudget !== 3167))
           )) {
@@ -288,7 +288,7 @@ const CalendarDosSoles = ({ activeTheme, onThemeToggle }) => {
               !Array.isArray(parsed.metaCampaigns) ||
               parsed.metaCampaigns.length < 2 ||
               parsed.metaCampaigns.some(c =>
-                c.ads?.some(a => a.id === 'ad-101') ||
+                c.ads?.some(a => a.id === 'ad-101' || (a.id === 'ad-b2b-2' && a.link === 'A definir')) ||
                 c.name?.includes('Captación Salones') ||
                 (c.id === 'camp-b2b' && (c.adSets?.length > 1 || c.adSets?.[0]?.dailyBudget !== 3167))
               )
