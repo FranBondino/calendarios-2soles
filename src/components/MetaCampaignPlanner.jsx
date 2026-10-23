@@ -36,27 +36,27 @@ export const defaultCampaignsData = [
   {
     id: 'camp-b2b',
     type: 'B2B',
-    name: 'Campaña 1: [B2B] Salones & Profesionales • Venta Mayorista Web & Herramientas',
+    name: 'Campaña 1: [B2B] Salones & Profesionales • Web Mayorista & Wahl (Test 7 Días)',
     status: 'Planificada',
-    objective: 'OUTCOME_LEADS',
-    objectiveName: 'Clientes Potenciales (WhatsApp Asesor & Registro Mayorista)',
+    objective: 'OUTCOME_SALES',
+    objectiveName: 'Tráfico & Conversión en Sitio Web (Portal Profesionales & Wahl en dossoles.net)',
     budgetType: 'CBO',
-    dailyBudget: 3167,
-    totalBudget: 95000,
+    dailyBudget: 3000,
+    totalBudget: 21000,
     currency: 'ARS',
-    startDate: '2026-10-01',
-    endDate: '2026-10-31',
+    startDate: '2026-10-23',
+    endDate: '2026-10-30',
     adAccountId: 'act_23843398705180592',
-    whatsappNumber: '+54 9 351 XXX-XXXX',
+    whatsappNumber: 'https://dossoles.net/mi-cuenta/',
     kpis: {
-      targetCpl: 1200,
-      estimatedLeads: 79,
-      estimatedReach: 35000,
+      targetCpl: 850,
+      estimatedLeads: 25,
+      estimatedReach: 14000,
     },
     adSets: [
       {
         id: 'adset-b2b-1',
-        name: 'Conjunto 1.1: Venta Mayorista Salones & Barberías (Toda la Argentina)',
+        name: 'Conjunto 1.1: Salones & Barberías -> Tráfico/Conversión Web (Toda la Argentina)',
         target: 'Dueños de Salones, Barberos & Estilistas',
         locations: 'Toda la Argentina (Cobertura nacional de distribución mayorista)',
         ageRange: '23 - 58 años',
@@ -65,7 +65,7 @@ export const defaultCampaignsData = [
         exclusions: 'Compradores web B2C (últimos 180 días) • Consumidor final',
         placements: 'Instagram Reels, Stories & Feed + Facebook Feed',
         budgetShare: '100%',
-        dailyBudget: 3167,
+        dailyBudget: 3000,
         status: 'Listo para pauta'
       }
     ],
@@ -73,86 +73,70 @@ export const defaultCampaignsData = [
       {
         id: 'ad-b2b-1',
         adSetId: 'adset-b2b-1',
-        name: 'Video 1: Máquinas Wahl Profesionales',
+        name: 'Video 1: Máquinas Wahl Profesionales -> Web (dossoles.net/tienda/?filter_marca=wahl)',
         link: 'https://www.instagram.com/p/DZ_GSPNNG3U/',
         linkStatus: 'ready',
         format: 'Reel / Video',
         status: 'Listo',
-        angle: 'Herramienta Profesional & Precio Gremio',
+        angle: 'Herramienta Profesional & Compra Directa en Web',
         hookText: 'Si sos barbero o estilista, sabés que trabajar con una máquina que tira o recalienta te hace perder tiempo y clientes.',
-        primaryText: 'Trabajá con la precisión y potencia que tu salón necesita 💈 En Dos Soles somos distribuidores de Wahl con garantía oficial de fábrica, cuchillas y repuestos originales.\n\nAccedé a precios gremio exclusivos para profesionales y equipá tu estación de trabajo con herramientas que duran años.\n\n📲 Escribinos por WhatsApp y recibí el catálogo con stock disponible para tu peluquería.',
-        headline: 'Wahl Oficial con Garantía • Precio Gremio Salones 💈',
-        cta: 'Enviar mensaje de WhatsApp',
-        whatsappPrefill: '¡Hola Dos Soles! Vi el anuncio de las máquinas Wahl y quiero consultar precios gremio para mi salón.',
-        visualConcept: 'Primeros planos de la máquina cortando, sonido del motor, modelos en mano (Magic Clip, Detailer, Legend).'
+        primaryText: 'Trabajá con la precisión y potencia que tu salón necesita 💈 En Dos Soles somos distribuidores de Wahl con garantía oficial de fábrica, cuchillas y repuestos originales.\n\nEntrá a nuestra nueva web, conocé toda la línea profesional disponible y accedé a beneficios exclusivos para salones y barberías.\n\n👇 Tocá en "Comprar" para ver las máquinas Wahl en dossoles.net',
+        headline: 'Máquinas Wahl Oficiales • Comprá en dossoles.net 💈',
+        cta: 'Comprar (Link Web: dossoles.net/tienda/?filter_marca=wahl)',
+        whatsappPrefill: 'https://dossoles.net/tienda/?filter_marca=wahl',
+        visualConcept: 'Primeros planos de la máquina cortando, sonido del motor, modelos en mano (Magic Clip, Detailer, Legend) con botón a la tienda online.'
       },
       {
         id: 'ad-b2b-2',
         adSetId: 'adset-b2b-1',
-        name: 'Video 2: Registro y Compra Web Profesionales (Paso a Paso)',
+        name: 'Video 2: Registro y Compra Web Profesionales -> Web (dossoles.net/mi-cuenta/)',
         link: 'https://www.instagram.com/p/DexbAaTNgUo/',
         linkStatus: 'ready',
         format: 'Screen Recording / Reel',
         status: 'Listo',
-        angle: 'Portal Exclusivo Profesionales & Reposición Ágil',
+        angle: 'Portal Exclusivo Profesionales & Reposición Ágil Online',
         hookText: 'Dos Soles tiene nueva web. Y ahora, comprar para tu negocio es más fácil.',
-        primaryText: 'Si sos profesional de la peluquería, accedé a nuestro portal exclusivo para consultar listas de precios mayoristas, reponer stock de tus marcas favoritas (Truss, L\'Oréal Professionnel, Liss Expert, Wahl) y hacer tus pedidos directo desde tu celular 📦\n\n1. Entrás a dossoles.net y solicitás tu alta como profesional.\n2. Una vez activada tu cuenta, ves todos los precios gremio exclusivos para salones.\n3. Armás tu pedido en minutos y te lo enviamos directo a tu peluquería.\n\n👇 Escribinos o entrá a la web para activar tu cuenta profesional.',
-        headline: 'Portal Exclusivo Profesionales • Precios Gremio Online 📦',
-        cta: 'Enviar mensaje de WhatsApp',
-        whatsappPrefill: '¡Hola Dos Soles! Vi el Reel de la nueva web y quiero activar mi cuenta profesional para mi peluquería.',
-        visualConcept: 'Recorrido paso a paso mostrando el registro de profesionales en dossoles.net y beneficios del portal mayorista.'
-      },
-      {
-        id: 'ad-b2b-3',
-        adSetId: 'adset-b2b-1',
-        name: 'Video 3: Capacitaciones & Academia Dos Soles',
-        link: 'https://www.instagram.com/p/Ddpa-IsunuR/',
-        linkStatus: 'ready',
-        format: 'Reel / Video',
-        status: 'Pausado',
-        angle: 'Técnica de Alto Nivel & Diferenciación (Pausado por ahora)',
-        hookText: 'La diferencia entre un peluquero que compite por precio y un salón que cobra lo que vale... es la técnica.',
-        primaryText: 'Capacitate con los mejores profesionales en la Academia Dos Soles 🎓\n\nWorkshops técnicos intensivos, práctica en vivo y técnicas de última tendencia en color, balayage y alisados orgánicos para que aumentes el ticket promedio de cada servicio en tu salón.\n\nCupos limitados por fecha para garantizar atención personalizada.\n\n📲 Tocá para consultar el calendario y asegurar tu lugar.',
-        headline: 'Workshops Técnicos para Estilistas • Cupos Limitados 🎓',
-        cta: 'Enviar mensaje de WhatsApp',
-        whatsappPrefill: 'Hola equipo Dos Soles! Quiero conocer las próximas fechas y temarios de capacitaciones para estilistas.',
-        visualConcept: 'Tomas del salón auditorio, profesor en acción en bacha y estilistas practicando con certificación.'
+        primaryText: 'Si sos profesional de la peluquería, accedé a nuestro portal exclusivo para consultar listas de precios mayoristas, reponer stock de tus marcas favoritas (Truss, L\'Oréal Professionnel, Liss Expert, Wahl) y hacer tus pedidos directo desde tu celular 📦\n\n1. Entrás a dossoles.net/mi-cuenta/ y solicitás tu alta como profesional.\n2. Una vez activada tu cuenta, ves todos los precios gremio exclusivos para salones.\n3. Armás tu pedido en minutos y te lo enviamos directo a tu peluquería.\n\n👇 Tocá acá para registrarte gratis como profesional en dossoles.net',
+        headline: 'Activá tu Cuenta Profesional en dossoles.net 📦',
+        cta: 'Registrarte (Link Web: dossoles.net/mi-cuenta/)',
+        whatsappPrefill: 'https://dossoles.net/mi-cuenta/',
+        visualConcept: 'Recorrido paso a paso mostrando el registro de profesionales en dossoles.net/mi-cuenta/ y beneficios del portal mayorista.'
       }
     ]
   },
   {
     id: 'camp-b2c',
     type: 'B2C',
-    name: 'Campaña 2: [B2C] E-commerce Minorista • Ventas Web',
+    name: 'Campaña 2: [B2C] E-commerce Minorista • Diagnóstico & Tienda Web (Test 7 Días)',
     status: 'Planificada',
     objective: 'OUTCOME_SALES',
-    objectiveName: 'Ventas en Tienda Online (Evento Purchase en WooCommerce)',
+    objectiveName: 'Ventas en Tienda Online (Evento Purchase en dossoles.net)',
     budgetType: 'CBO',
-    dailyBudget: 2667,
-    totalBudget: 80000,
+    dailyBudget: 2000,
+    totalBudget: 14000,
     currency: 'ARS',
-    startDate: '2026-10-01',
-    endDate: '2026-10-31',
+    startDate: '2026-10-23',
+    endDate: '2026-10-30',
     adAccountId: 'act_23843398705180592',
-    whatsappNumber: '+54 9 351 XXX-XXXX',
+    whatsappNumber: 'https://dossoles.net/',
     kpis: {
       targetCpl: 0,
       estimatedLeads: 0,
-      estimatedReach: 52000,
+      estimatedReach: 16000,
     },
     adSets: [
       {
         id: 'adset-b2c-1',
-        name: 'Conjunto 2.1: Tráfico Frío & Rutina Capilar (Excluye Seguidores)',
+        name: 'Conjunto 2.1: Tráfico Frío & Rutina Capilar -> Web (Excluye Seguidores)',
         target: 'Consumidor Final (Mujeres 20 a 55 años)',
         locations: 'Toda la Argentina (Envíos a todo el país vía e-commerce)',
         ageRange: '20 - 55 años',
         gender: 'Mujeres (principalmente)',
         interests: 'Cuidado del cabello, Tratamientos capilares, Belleza, Productos de salón',
-        exclusions: '🚨 EXCLUSIÓN CLAVE: Seguidores actuales de Instagram y Facebook de Dos Soles • Compradores web (últimos 30 días)',
+        exclusions: '🚨 EXCLUSIÓN CLAVE: Seguidores actuales de Instagram y Facebook de Dos Soles • Compradores web (últimos 180 días)',
         placements: 'Instagram Reels, Stories & Feed',
         budgetShare: '100%',
-        dailyBudget: 2667,
+        dailyBudget: 2000,
         status: 'Listo para pauta'
       }
     ],
@@ -160,34 +144,18 @@ export const defaultCampaignsData = [
       {
         id: 'ad-b2c-1',
         adSetId: 'adset-b2c-1',
-        name: 'Video 1: Diagnóstico Online & Tienda Web (Reel Dez8EgJhobp)',
+        name: 'Video 1: Diagnóstico Online & Tienda Web -> Web (dossoles.net)',
         link: 'https://www.instagram.com/p/Dez8EgJhobp/',
         linkStatus: 'ready',
         format: 'Reel / Video 9:16',
         status: 'Listo',
-        angle: 'Diagnóstico Capilar Online & Compra Guiada',
+        angle: 'Diagnóstico Capilar Online & Compra Guiada en Web',
         hookText: '¿No sabés qué productos necesita tu pelo? En la web de Dos Soles podés completar un diagnóstico online que te orienta según las necesidades de tu cabello.',
         primaryText: '¿No sabés qué productos necesita tu pelo? ✨\n\nEn la nueva web de Dos Soles podés completar un diagnóstico online gratuito que te orienta paso a paso para encontrar los productos ideales según las necesidades reales de tu cabello (hidratación, reconstrucción, nutrición, control de frizz o cuidado del color).\n\nElegís tu rutina con marcas profesionales de salón y te la enviamos directo a tu casa en todo el país 🚚\n\n👇 Entrá ahora a dossoles.net y descubrí lo que tu pelo necesita.',
-        headline: 'Hacé tu Diagnóstico Capilar Online • Tienda Dos Soles ✨',
-        cta: 'Comprar',
-        whatsappPrefill: '',
+        headline: 'Hacé tu Diagnóstico Capilar Online • dossoles.net ✨',
+        cta: 'Comprar (Link Web: dossoles.net)',
+        whatsappPrefill: 'https://dossoles.net/',
         visualConcept: 'Recorrido en el celular completando el diagnóstico capilar online en dossoles.net y mostrando las recomendaciones personalizadas.'
-      },
-      {
-        id: 'ad-b2c-2',
-        adSetId: 'adset-b2c-1',
-        name: 'Video 2: Formato UGC (Experiencia Real en Primera Persona)',
-        link: 'A definir',
-        linkStatus: 'pending',
-        format: 'Reel Selfie 9:16',
-        status: 'A vincular',
-        angle: 'Prueba Social & Resultado Real en Casa',
-        hookText: 'Mi peluquera me retó por comprar cualquier cosa en la farmacia y me dijo que pruebe esto...',
-        primaryText: 'Miren cómo refleja la luz y el brillo que tiene mi pelo sin usar planchita todos los días 💆‍♀️✨\n\nEmpecé a usar productos profesionales recomendados por estilistas y el cambio es de otro planeta. Lo pedí directo por la web de Dos Soles y me llegó en 48 horas a casa.\n\n👇 Les dejo el enlace con cuotas y envío a domicilio.',
-        headline: 'Calidad de Salón en tu Casa • Envío a Todo el País 🚚',
-        cta: 'Comprar',
-        whatsappPrefill: '',
-        visualConcept: 'Video estilo TikTok/Reel orgánico, luz natural en habitación o baño, textura del pelo en primer plano y unboxing.'
       }
     ]
   }
@@ -572,17 +540,17 @@ const MetaCampaignPlanner = ({
                 </span>
                 <div>
                   <h4 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
-                    <span>Sugerencia de Inversión Mensual:</span>
-                    <span className="text-emerald-400 font-mono font-extrabold text-base sm:text-lg">$175.000 ARS</span>
+                    <span>Semana 1 de Prueba (7 Días • 3 Videos con Link a Web):</span>
+                    <span className="text-emerald-400 font-mono font-extrabold text-base sm:text-lg">$35.000 ARS</span>
                   </h4>
                   <p className="text-xs text-gray-400">
-                    1 Cuenta Publicitaria con 2 Campañas aisladas para blindar el presupuesto mayorista del algoritmo masivo.
+                    Arranque gradual probando los 3 videos listos durante 7 días (~20% de la bolsa mensual de $175.000 ARS) con tráfico y conversión directo en dossoles.net.
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <span className="px-3 py-1 rounded-full text-xs font-bold bg-zinc-800 text-gray-200 border border-zinc-700 font-mono">
-                  ~$5.833 ARS / día total
+                  $5.000 ARS / día total
                 </span>
               </div>
             </div>
@@ -594,19 +562,19 @@ const MetaCampaignPlanner = ({
               <div className="p-3.5 rounded-xl bg-black/50 border border-zinc-800/90 space-y-2">
                 <span className="text-[11px] font-bold uppercase text-amber-400 flex items-center space-x-1.5">
                   <DollarSign size={13} />
-                  <span>Distribución del Presupuesto</span>
+                  <span>Presupuesto Semana de Prueba (7 Días)</span>
                 </span>
                 <div className="space-y-1.5 text-gray-300">
                   <div className="flex justify-between items-center pb-1 border-b border-zinc-800">
-                    <span className="font-semibold text-white">B2B Salones:</span>
-                    <span className="font-mono font-bold text-emerald-400">$95.000 ARS <span className="text-[10px] text-gray-400 font-normal">(~$3.167/día)</span></span>
+                    <span className="font-semibold text-white">B2B (2 Videos Web):</span>
+                    <span className="font-mono font-bold text-emerald-400">$21.000 ARS <span className="text-[10px] text-gray-400 font-normal">($3.000/día)</span></span>
                   </div>
                   <div className="flex justify-between items-center pb-1 border-b border-zinc-800">
-                    <span className="font-semibold text-white">B2C Tienda Online:</span>
-                    <span className="font-mono font-bold text-blue-400">$80.000 ARS <span className="text-[10px] text-gray-400 font-normal">(~$2.667/día)</span></span>
+                    <span className="font-semibold text-white">B2C (1 Video Web):</span>
+                    <span className="font-mono font-bold text-blue-400">$14.000 ARS <span className="text-[10px] text-gray-400 font-normal">($2.000/día)</span></span>
                   </div>
                   <p className="text-[11px] text-gray-400 pt-0.5 leading-snug">
-                    Evita que el gran volumen de clics de consumidores absorba los fondos destinados a salones y peluqueros.
+                    Todos los anuncios llevan link directo a dossoles.net (/mi-cuenta/, /tienda/?filter_marca=wahl y Home Diagnóstico).
                   </p>
                 </div>
               </div>
