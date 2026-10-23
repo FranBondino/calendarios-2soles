@@ -160,18 +160,18 @@ export const defaultCampaignsData = [
       {
         id: 'ad-b2c-1',
         adSetId: 'adset-b2c-1',
-        name: 'Video 1: Tienda Online & Armador de Rutina',
-        link: 'A definir',
-        linkStatus: 'pending',
-        format: 'Video Vertical 9:16',
-        status: 'Por grabar',
-        angle: 'Solución Guiada & Test Personalizado',
-        hookText: '¿Gastás en productos caros y sentís que el pelo te sigue quedando pesado, opaco o con frizz?',
-        primaryText: 'En Dos Soles creamos el Armador de Rutina Capilar ✨\n\nRespondé 3 preguntas rápidas sobre tu tipo de cabello (decolorado, seco, alisado o con frizz) y te armamos la combinación exacta de productos de salón que tu pelo realmente necesita.\n\nSin vueltas, con marcas profesionales y envío directo a tu casa en todo el país 🚚\n\n👇 Hacé el test gratis ahora en dossoles.net',
-        headline: 'Armá tu Rutina Capilar a Medida • Tienda Online ✨',
+        name: 'Video 1: Diagnóstico Online & Tienda Web (Reel Dez8EgJhobp)',
+        link: 'https://www.instagram.com/p/Dez8EgJhobp/',
+        linkStatus: 'ready',
+        format: 'Reel / Video 9:16',
+        status: 'Listo',
+        angle: 'Diagnóstico Capilar Online & Compra Guiada',
+        hookText: '¿No sabés qué productos necesita tu pelo? En la web de Dos Soles podés completar un diagnóstico online que te orienta según las necesidades de tu cabello.',
+        primaryText: '¿No sabés qué productos necesita tu pelo? ✨\n\nEn la nueva web de Dos Soles podés completar un diagnóstico online gratuito que te orienta paso a paso para encontrar los productos ideales según las necesidades reales de tu cabello (hidratación, reconstrucción, nutrición, control de frizz o cuidado del color).\n\nElegís tu rutina con marcas profesionales de salón y te la enviamos directo a tu casa en todo el país 🚚\n\n👇 Entrá ahora a dossoles.net y descubrí lo que tu pelo necesita.',
+        headline: 'Hacé tu Diagnóstico Capilar Online • Tienda Dos Soles ✨',
         cta: 'Comprar',
         whatsappPrefill: '',
-        visualConcept: 'Navegación en el celular completando el armador de rutina en dossoles.net y mostrando el carrito sugerido.'
+        visualConcept: 'Recorrido en el celular completando el diagnóstico capilar online en dossoles.net y mostrando las recomendaciones personalizadas.'
       },
       {
         id: 'ad-b2c-2',
